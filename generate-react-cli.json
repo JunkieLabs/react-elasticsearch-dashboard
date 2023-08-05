@@ -26,11 +26,11 @@
       "withLazy": true
     },
     "layout": {
-      "path": "src/ui/layouts",
+      "path": "src/app",
       "withStyle": true,
       "withTest": false,
       "withStory": false,
-      "withLazy": true
+      "withLazy": false
     }
   },
   "usesStyledComponents": false
