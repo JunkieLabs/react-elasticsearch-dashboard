@@ -1,0 +1,21 @@
+@function color($color-name) {
+    @return var(--#{$color-name});
+}
+
+@function hexToCssRGB($hex) {
+    @return red($hex), green($hex), blue($hex);
+}
+
+
+
+.WaterMark {
+
+    --color-primary: #ff0d4f;
+    --color-primary--rgb: #{hexToCssRGB(#ff0d4f)};
+
+    .blc{
+        background-color: var(--color-primary);
+    }
+
+
+}

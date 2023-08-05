@@ -1,6 +1,8 @@
-import './globals.css'
+import './globals.scss'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import { Box } from '@mui/system'
+import WaterMark from '@/ui/components/WaterMark/WaterMark'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -15,9 +17,19 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    
+
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+
+        <Box className={`td-relative`}>
+          <WaterMark/>
+          <Box>
+
+          </Box>
+          <Box className={`td-relative`}>{children}</Box>
+
+        </Box>
+      </body>
     </html>
   )
 }

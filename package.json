@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "gc:page": "npx generate-react-cli component --type=page",
+    "gc:common": "npx generate-react-cli component --type=common",
+    "gc:layout": "npx generate-react-cli component --type=layout",
+    "gc": "npx generate-react-cli component",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -20,6 +26,7 @@
     "autoprefixer": "10.4.14",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
+    "generate-react-cli": "^8.3.0",
     "next": "13.4.12",
     "next-redux-wrapper": "^8.1.0",
     "postcss": "8.4.27",
@@ -32,6 +39,16 @@
     "typescript": "5.1.6"
   },
   "devDependencies": {
-    "sass": "^1.64.2"
+    "@storybook/addon-essentials": "^7.2.1",
+    "@storybook/addon-interactions": "^7.2.1",
+    "@storybook/addon-links": "^7.2.1",
+    "@storybook/addon-onboarding": "^1.0.8",
+    "@storybook/blocks": "^7.2.1",
+    "@storybook/nextjs": "^7.2.1",
+    "@storybook/react": "^7.2.1",
+    "@storybook/testing-library": "^0.2.0",
+    "eslint-plugin-storybook": "^0.6.13",
+    "sass": "^1.64.2",
+    "storybook": "^7.2.1"
   }
 }
