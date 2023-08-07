@@ -18,7 +18,7 @@ const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
 const Pages: FC<PagesProps> = () =>{
   
-  const { data, error } = useSWR<any>(`/api/elastic`, fetcher);
+  const { data, error } = useSWR(`/api/elastic`, fetcher);
 
   // const searchs = useSearchs();
   // const onSearch = useCallback(

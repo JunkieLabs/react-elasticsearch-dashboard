@@ -1,9 +1,8 @@
 import { getElasticClient } from "@/data/elastic/elastic";
-import { NextApiRequest, NextApiResponse } from "next";
+import {  NextResponse } from "next/server";
 
 export async function GET(
-    req: NextApiRequest, 
-    res: NextApiResponse
+    req: Request, 
   ) {
     // const { q: query } = req.query;
 
@@ -29,5 +28,5 @@ export async function GET(
 
     console.log("result: " , result)
    
-    return res.json(tasks);
+    return NextResponse.json(tasks);
   }
