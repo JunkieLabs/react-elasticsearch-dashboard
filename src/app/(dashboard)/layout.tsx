@@ -1,6 +1,7 @@
 
 import { Inter } from 'next/font/google'
 import { Box } from '@mui/system'
+import SideNav from '@/ui/common/side-nav/side-nav'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -13,13 +14,18 @@ export default function DashboardLayout({
   return (
 
 
-        <Box className={`td-relative`}>
-          {/* <WaterMark /> */}
-          <Box>
+    <Box  sx={{ display: 'flex', minHeight: '100dvh' }}>
+      {/* <WaterMark /> */}
 
-          </Box>
-          <Box className={`td-relative`}>{children}</Box>
+      <SideNav />
 
-        </Box>
+      {/* <Box>
+
+      </Box> */}
+      <Box component="main" className="MainContent" flex={1}>
+
+        <Box className={`td-relative`}>{children}</Box>
+      </Box>
+    </Box>
   )
 }
