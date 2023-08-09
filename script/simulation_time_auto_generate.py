@@ -9,6 +9,7 @@ es = Elasticsearch(hosts=[{'host': '192.168.1.16', 'port': 9200, 'scheme': 'http
 
 # Define the mapping for the index
 mapping = {
+
     "mappings": {
         "properties": {
             "deviceId": {"type": "text"},
@@ -19,11 +20,7 @@ mapping = {
                 "store": True
             },
             "message": {"type": "text"}
-        }
-    },
-    "settings": {
-        "index.mapping.total_fields.limit": 2000,
-        "date_detection": True,
+        },
         "dynamic_templates": [
             {
                 "timestamps": {
@@ -35,16 +32,21 @@ mapping = {
                     }
                 }
             }
-        ]
+        ],
+        "date_detection": True
+    },
+    "settings": {
+        "index.mapping.total_fields.limit": 2000
     }
 }
 
+
 # Delete index if it exists
-if es.indices.exists(index="test_time"):
-    es.indices.delete(index="test_time")
+if es.indices.exists(index="tes_time"):
+    es.indices.delete(index="tes_time")
 
 # Create the index with the defined mapping
-es.indices.create(index="test_time", body=mapping)
+es.indices.create(index="tes_time", body=mapping)
 
 # Define the STB devices and user profiles
 deviceIds = [f'ZX98763{i:02d}' for i in range(1, 10)]
@@ -55,7 +57,7 @@ channel_prefixes = ["News", "Sport", "Kids", "Music", "Movies", "Education", "Fo
 channel_suffixes = ["Network", "Channel", "Central", "World", "Planet", "Hub"]
 
 channels = {}
-for i in range(100):
+for i in range(80):
     channel_name = f"{random.choice(channel_prefixes)} {random.choice(channel_suffixes)} {i + 1}"
     channels[i + 1] = {'lcn': f'LCN{i + 1:03d}', 'channel_name': channel_name}
 
@@ -127,7 +129,7 @@ def simulate_device(device_id):
         current_user_age = random.choice(user_profiles[device_id])
 
         # STB is powered on
-        es.index(index="test_time",
+        es.index(index="tes_time",
                  id=f'{device_id}_powered_on_{session_id}',
                  document=generate_log(device_id, current_user_age, "Powered On", channel=device_channels[device_id],
                                        volume=device_volumes[device_id]))
@@ -136,7 +138,7 @@ def simulate_device(device_id):
         # Generate heartbeat events for 1-2 hours
         end_time = time.time() + 60 * 60 * random.randint(1, 2)
         while time.time() < end_time:
-            es.index(index="test_time",
+            es.index(index="tes_time",
                      id=f'{device_id}_heartbeat_{session_id}',
                      document=generate_log(device_id, current_user_age, "Heartbeat", channel=device_channels[device_id],
                                            volume=device_volumes[device_id]))
@@ -148,20 +150,20 @@ def simulate_device(device_id):
                 if event_type == "Channel Zap":
                     channel = select_channel_based_on_age(current_user_age)
                     device_channels[device_id] = channel
-                    es.index(index="test_time",
+                    es.index(index="tes_time",
                              id=str(uuid.uuid4()),  # Random Elasticsearch ID
                              document=generate_log(device_id, current_user_age, event_type, channel=channel))
                 elif event_type == "Volume change":
                     old_volume = device_volumes[device_id]
                     new_volume = random.randint(0, 100)  # Assuming STB volume range is 0-100
                     device_volumes[device_id] = new_volume
-                    es.index(index="test_time",
+                    es.index(index="tes_time",
                              id=str(uuid.uuid4()),  # Random Elasticsearch ID
                              document=generate_log(device_id, current_user_age, event_type, volume=new_volume,
                                                    old_volume=old_volume))
                 elif event_type == "Profile Change":
                     current_user_age = random.choice(user_profiles[device_id])
-                    es.index(index="test_time",
+                    es.index(index="tes_time",
                              id=str(uuid.uuid4()),  # Random Elasticsearch ID
                              document=generate_log(device_id, current_user_age, event_type))
 
