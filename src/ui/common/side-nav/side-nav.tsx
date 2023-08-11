@@ -102,7 +102,7 @@ const SideNav: FC<SideNavProps> = (props) => (
         flexDirection: 'column',
       }}
     >
-      <List
+      <List key={1111}
         sx={{
           '--ListItem-radius': '8px',
           '--List-gap': '4px',
@@ -115,9 +115,9 @@ const SideNav: FC<SideNavProps> = (props) => (
           }
         }}
       >
-        <ListItem nested>
+        <ListItem nested  >
 
-          <ListSubheader>
+          <ListSubheader id="hed2">
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
               <ListItemDecorator>
                 <BarChartRounded />
@@ -156,7 +156,7 @@ const SideNav: FC<SideNavProps> = (props) => (
         <ListDivider inset={`gutter`} />
         <ListItem nested>
 
-          <ListSubheader> <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+          <ListSubheader id="hed3"> <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
             <ListItemDecorator>
               <PublicRounded />
             </ListItemDecorator>
@@ -173,15 +173,17 @@ const SideNav: FC<SideNavProps> = (props) => (
 
         <ListDivider inset={`gutter`} />
 
-        <ListItem nested>
+        <ListItem nested key={22}>
 
-          <ListSubheader><Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+          <ListSubheader id="hed4">
+            
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
             <ListItemDecorator>
               <TokenRounded />
             </ListItemDecorator>
             <ListItemContent>Actions</ListItemContent>
           </Box></ListSubheader>
-          <ListItemButton>
+          <ListItemButton key={3}>
             <ListItemDecorator>
               <Box className={`td-align-middle td-w-1 td-h-1 td-bg-gray-700`} ></Box>
             </ListItemDecorator>
@@ -193,7 +195,10 @@ const SideNav: FC<SideNavProps> = (props) => (
 
 
       </List>
+
+      
       <List
+       key={1122}
         sx={{
           mt: 'auto',
           flexGrow: 0,
@@ -224,7 +229,7 @@ const SideNav: FC<SideNavProps> = (props) => (
         <Typography level="body-xs">@smardtv</Typography>
       </Box>
       <IconButton variant="plain" color="neutral">
-        <i data-feather="log-out" />
+        {/* <i data-feather="log-out" /> */}
       </IconButton>
     </Box>
   </Sheet>

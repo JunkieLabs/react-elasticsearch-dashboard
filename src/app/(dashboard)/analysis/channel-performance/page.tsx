@@ -4,6 +4,7 @@ import React, { FC, useCallback } from 'react';
 
 import useSWR from 'swr';
 import styles from './styles.module.scss';
+import ChannelPerformance from '@/ui/layouts/ChannelPerformance/ChannelPerformance';
 
 interface PagesProps {}
 
@@ -34,7 +35,7 @@ const Pages: FC<PagesProps> = () =>{
   console.log("data", data);
  
   return ( <div className={styles.Main}>
-    Channel Performance Component
+   <ChannelPerformance></ChannelPerformance>
   </div>
 )
   };
