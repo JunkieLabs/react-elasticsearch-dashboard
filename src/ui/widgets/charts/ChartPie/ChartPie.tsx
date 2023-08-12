@@ -11,21 +11,32 @@ interface ChartPieProps {
 const ChartPie: FC<ChartPieProps> = ({ data }) => {
 
   const chartRef = useRef(null);
-  const chartInstance = useRef<Chart<"pie", number[], string>>(); // To store the Chart.js instance
+  // const chartInstance = useRef<Chart<"pie", number[], string>>(); // To store the Chart.js instance
 
+  const [chartInstance, setChartInstance] = useState<Chart<"pie", number[], string>>();
 
   useEffect(() => {
     const ctx = (chartRef.current as HTMLCanvasElement | null)?.getContext('2d');
+    let newChartInstance;
     if (ctx && chartInstance) {
-      chartInstance.current = new Chart(ctx, {
+       newChartInstance = new Chart(ctx, {
         type: 'pie',
         data: {
           labels: data?.labels ?? [],
           datasets: data?.data ?? [],
         },
       });
+
+      setChartInstance(newChartInstance);
+    
     }
 
+   
+    return () => {
+      if (chartInstance) {
+        chartInstance.destroy();
+      }
+    };
 
   }, [chartRef.current]);
 
@@ -36,22 +47,24 @@ const ChartPie: FC<ChartPieProps> = ({ data }) => {
 
   useEffect(() => {
     // Update chart data when 'data' prop changes
-    if (chartInstance.current) {
-      chartInstance.current.data.labels = data?.labels ?? [];
+    if (chartInstance) {
+      chartInstance.data.labels = data?.labels ?? [];
       if (data?.data && data?.data.length > 0) {
 
-        if (chartInstance.current.data.datasets && chartInstance.current.data.datasets.length > 0) {
-          chartInstance.current.data.datasets[0] = data!.data[0];
+        if (chartInstance.data.datasets && chartInstance.data.datasets.length > 0) {
+          chartInstance.data.datasets[0] = data!.data[0];
         } else {
-          chartInstance.current.data.datasets = data?.data ?? [];
+          chartInstance.data.datasets = data?.data ?? [];
         }
 
       } else {
-        chartInstance.current.data.datasets = [];
+        chartInstance.data.datasets = [];
       }
 
-      chartInstance.current.update();
+      chartInstance.update();
     }
+
+   
   }, [data]);
 
   return (

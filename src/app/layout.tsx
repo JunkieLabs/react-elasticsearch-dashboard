@@ -10,11 +10,12 @@ import { CssVarsProvider } from '@mui/joy/styles'
 import customTheme from '@/resources/themeing'
 
 import createCache from '@emotion/cache';
-import {Options as ThemeOptions} from '@emotion/cache';
+import { Options as ThemeOptions } from '@emotion/cache';
 import { useServerInsertedHTML } from 'next/navigation';
 import { CacheProvider } from '@emotion/react';
 import CssBaseline from '@mui/joy/CssBaseline';
 import React from 'react';
+import { Providers } from '@/domain/store/provider';
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -35,7 +36,7 @@ interface ThemeProps {
 
 // This implementation is from emotion-js
 // https://github.com/emotion-js/emotion/issues/2928#issuecomment-1319747902
-const  ThemeRegistry = (props: ThemeProps)=> {
+const ThemeRegistry = (props: ThemeProps) => {
   const { options, children } = props;
 
   const [{ cache, flush }] = React.useState(() => {
@@ -101,18 +102,20 @@ export default function RootLayout({
 
     <html lang="en">
       <body className={inter.className}>
-        <ThemeRegistry options={{ key: 'joy' }}>
+        <Providers>
+        {children}
+          <ThemeRegistry options={{ key: 'joy' }}>
 
-          <Box className={`td-relative`}>
-            {/* <WaterMark /> */}
-            <Box>
+            <Box className={`td-relative`}>
+              <Box>
+
+              </Box>
+              <Box className={`td-relative`}>{children}</Box>
 
             </Box>
-            <Box className={`td-relative`}>{children}</Box>
-
-          </Box>
-        </ThemeRegistry>
+          </ThemeRegistry> 
+        </Providers>
       </body>
     </html>
-  )
+  );
 }

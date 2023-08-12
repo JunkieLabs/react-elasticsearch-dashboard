@@ -21,3 +21,5 @@
  - npx generate-react-cli component --path=src/ui/widgets/charts/ChartPie ChartPie --flat --dry-run
 
  - npx generate-react-cli component --path=src/ui/widgets/charts ChartPie --dry-run
+
+
