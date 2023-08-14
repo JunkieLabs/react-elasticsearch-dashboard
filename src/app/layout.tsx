@@ -17,6 +17,9 @@ import CssBaseline from '@mui/joy/CssBaseline';
 import React from 'react';
 import { Providers } from '@/domain/store/provider';
 
+// import { Chart, registerables } from 'chart.js'
+
+// Chart.register(...registerables);
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -103,7 +106,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-        {children}
+        {/* {children} */}
           <ThemeRegistry options={{ key: 'joy' }}>
 
             <Box className={`td-relative`}>

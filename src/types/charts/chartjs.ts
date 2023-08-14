@@ -2,7 +2,7 @@ export interface ModelChartJsDataset {
 
     data: number[]
     label: string
-    backgroundColor: string | string[]
+    backgroundColor?: string | string[]
 
 }
 

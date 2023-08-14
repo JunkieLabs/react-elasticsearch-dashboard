@@ -1,78 +1,108 @@
 import React, { FC, useEffect, useRef, useState } from 'react';
 import styles from './ChartPie.module.scss';
 import { ModelChartJs } from '@/types/charts/chartjs';
-
-import { Chart } from 'chart.js';
+import { Box, Container, FormControl, Theme } from '@mui/joy';
+import { SxProps } from '@mui/material/styles';
+// import {Chart} from 'chart.js';
+import Chart from 'chart.js/auto';
 
 interface ChartPieProps {
-  data?: ModelChartJs
+  data?: ModelChartJs,
+
+  sx?: SxProps<Theme>;
 }
 
-const ChartPie: FC<ChartPieProps> = ({ data }) => {
+const ChartPie: FC<ChartPieProps> = (props) => {
 
-  const chartRef = useRef(null);
+  const canvasRef = useRef(null);
+  const chartRef = useRef<Chart<"pie", number[], string>>();
+  
   // const chartInstance = useRef<Chart<"pie", number[], string>>(); // To store the Chart.js instance
 
   const [chartInstance, setChartInstance] = useState<Chart<"pie", number[], string>>();
 
+  console.log("ChartPie data: ", props.data)
+
   useEffect(() => {
-    const ctx = (chartRef.current as HTMLCanvasElement | null)?.getContext('2d');
-    let newChartInstance;
-    if (ctx && chartInstance) {
-       newChartInstance = new Chart(ctx, {
-        type: 'pie',
-        data: {
-          labels: data?.labels ?? [],
-          datasets: data?.data ?? [],
-        },
-      });
+    const ctx = (canvasRef.current as HTMLCanvasElement | null)?.getContext('2d');
 
-      setChartInstance(newChartInstance);
-    
-    }
 
-   
-    return () => {
+    let newChartInstance: Chart<"pie", number[], string>;
+    if (ctx) {
       if (chartInstance) {
         chartInstance.destroy();
       }
+      newChartInstance = new Chart(ctx, {
+        type: 'pie',
+        data: {
+          labels: props.data?.labels ?? [],
+          datasets: props.data?.data ?? [],
+        },
+      });
+      console.log("chartInstance data: ", props.data)
+      chartRef.current = newChartInstance;
+      // setChartInstance(newChartInstance);
+
+    }
+
+
+    return () => {
+      if (chartRef) {
+        newChartInstance.destroy();
+        chartRef.current = undefined;
+
+        // chartInstance.destroy();
+      }
     };
 
-  }, [chartRef.current]);
+  }, [canvasRef.current]);
 
   // const drawChart = () => {
-  //   const ctx = chartRef.current.getContext('2d');
+  //   const ctx = canvasRef.current.getContext('2d');
   //   // Draw the chart
   // };
 
   useEffect(() => {
     // Update chart data when 'data' prop changes
-    if (chartInstance) {
-      chartInstance.data.labels = data?.labels ?? [];
-      if (data?.data && data?.data.length > 0) {
+    // const ctx = (canvasRef.current as HTMLCanvasElement | null)?.getContext('2d');
 
-        if (chartInstance.data.datasets && chartInstance.data.datasets.length > 0) {
-          chartInstance.data.datasets[0] = data!.data[0];
+    // console.log("ctx", ctx)
+    
+    // var chartIns = ctx ? ((ctx as CanvasRenderingContext2D).canvas as any)?.[`chart`] ?? undefined : undefined;
+    
+    var chartIns = chartRef.current
+    if (chartIns) {
+      chartIns.data.labels = props.data?.labels ?? [];
+      if (props.data?.data && props.data?.data.length > 0) {
+
+        if (chartIns.data.datasets && chartIns.data.datasets.length > 0) {
+          chartIns.data.datasets[0] = props.data!.data[0];
         } else {
-          chartInstance.data.datasets = data?.data ?? [];
+          chartIns.data.datasets = props.data?.data ?? [];
         }
 
       } else {
-        chartInstance.data.datasets = [];
+        chartIns.data.datasets = [];
       }
+      console.log('Canvas ref:', chartIns);
+      // console.log("chartInstance data: ", chartInstance.config, chartInstance.update)
 
-      chartInstance.update();
+
+      chartIns.update();
     }
 
-   
-  }, [data]);
+
+  }, [props.data, canvasRef.current]);
 
   return (
-
-
-    <div className={styles.ChartPie}>
-      <canvas ref={chartRef} />
-    </div>
+    <Box className={styles.ChartPie} sx={[props.sx ?? [] as any, {
+      // transform: `rotate(${degree}deg)`
+      display: `flex`,
+      height: '100%',
+      width:'100%'
+    }]}>
+      <canvas ref={canvasRef} />
+    </Box>
   );
 }
 
