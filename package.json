@@ -20,6 +20,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@fontsource/inter": "^5.0.7",
+    "@mui/base": "^5.0.0-beta.11",
     "@mui/icons-material": "^5.14.3",
     "@mui/joy": "^5.0.0-beta.0",
     "@reduxjs/toolkit": "^1.9.5",
@@ -35,6 +36,7 @@
     "next-redux-wrapper": "^8.1.0",
     "postcss": "8.4.27",
     "react": "18.2.0",
+    "react-date-range": "^1.4.0",
     "react-dom": "18.2.0",
     "react-redux": "^8.1.2",
     "redux": "^4.2.1",
@@ -52,6 +54,7 @@
     "@storybook/nextjs": "^7.2.1",
     "@storybook/react": "^7.2.1",
     "@storybook/testing-library": "^0.2.0",
+    "@types/react-date-range": "^1.4.4",
     "eslint-plugin-storybook": "^0.6.13",
     "sass": "^1.64.2",
     "storybook": "^7.2.1"
