@@ -14,8 +14,14 @@ import { Options as ThemeOptions } from '@emotion/cache';
 import { useServerInsertedHTML } from 'next/navigation';
 import { CacheProvider } from '@emotion/react';
 import CssBaseline from '@mui/joy/CssBaseline';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Providers } from '@/domain/store/provider';
+// import { useRouter } from 'next/router';
+// 'use client';
+
+import { usePathname } from 'next/navigation';
+import { useDispatch } from 'react-redux';
+import { appSetSectionFromPath } from '@/domain/store/app/reducer';
 
 // import { Chart, registerables } from 'chart.js'
 
@@ -82,6 +88,8 @@ const ThemeRegistry = (props: ThemeProps) => {
     );
   });
 
+
+
   return (
     <CacheProvider value={cache}>
       <CssVarsProvider theme={customTheme}>
@@ -94,29 +102,60 @@ const ThemeRegistry = (props: ThemeProps) => {
 }
 
 
+function ReduxLayout({ children,
+}: {
+  children: React.ReactNode
+}) {
 
+  const dispatch = useDispatch();
+  var router = usePathname()
+
+  console.log("router: ", router)
+
+  useEffect(() => {
+
+    // store.
+    dispatch(appSetSectionFromPath(router))
+
+
+    return () => { }
+
+  }, [router, dispatch]);
+
+
+  return (<ThemeRegistry options={{ key: 'joy' }}>
+
+    <Box className={`td-relative`}>
+      <Box>
+
+      </Box>
+      <Box className={`td-relative`}>{children}</Box>
+
+    </Box>
+  </ThemeRegistry>);
+
+}
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+
+
+  
+
+
   return (
 
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-        {/* {children} */}
-          <ThemeRegistry options={{ key: 'joy' }}>
+          {/* {children} */}
+          <ReduxLayout>
+            {children}
+          </ReduxLayout>
 
-            <Box className={`td-relative`}>
-              <Box>
-
-              </Box>
-              <Box className={`td-relative`}>{children}</Box>
-
-            </Box>
-          </ThemeRegistry> 
         </Providers>
       </body>
     </html>

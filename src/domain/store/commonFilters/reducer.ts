@@ -12,12 +12,12 @@ const commonFiltersSlice = createSlice({
   name: 'commonFilters',
   initialState,
   reducers: {
-    setCommonFilter: (state, action: PayloadAction<string>) => {
+    commonFilterSet: (state, action: PayloadAction<string>) => {
       state.value = action.payload;
     },
   },
 });
 
-export const { setCommonFilter } = commonFiltersSlice.actions;
+export const { commonFilterSet } = commonFiltersSlice.actions;
 
 export const CommonFiltersReducers =  commonFiltersSlice.reducer;

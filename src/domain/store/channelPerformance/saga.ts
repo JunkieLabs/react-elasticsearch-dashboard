@@ -1,6 +1,6 @@
 import { takeLatest, put, select, call, all, fork } from 'redux-saga/effects';
 import { setDummyChartData, setSubFilter } from './reducer';
-import { setCommonFilter } from '@/domain/store/commonFilters/reducer';
+import { commonFilterSet } from '@/domain/store/commonFilters/reducer';
 import { fetchChannelPerformanceDummyData } from '@/data/api/channelPerformance';
 import { RootState } from '../store';
 import { DummyData } from '@/types/store/dummyData';
@@ -26,7 +26,7 @@ function* handleSubFilterChange(action: ReturnType<typeof setSubFilter>) {
 }
 
 export function* watchCommonFilterChangeForDummyData() {
-    yield takeLatest([setCommonFilter.type, setSubFilter.type], handleCommonFilterChange);
+    yield takeLatest([commonFilterSet.type, setSubFilter.type], handleCommonFilterChange);
 }
 
 export function* watchSubFilterChange() {
