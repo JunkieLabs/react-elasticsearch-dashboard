@@ -14,7 +14,8 @@ const customTheme = extendTheme({
         primary: {
           50: '#fffbeb',
           100: '#fef3c7',
-          200: '#fde68a',
+          200: '#fef2c4',
+          300: '#fdc88a',
           500:'#78350f',
           // 300, 400, ..., 800,
           900: '#78350f',

@@ -13,7 +13,7 @@ import PublicRounded from '@mui/icons-material/PublicRounded';
 import TokenRounded from '@mui/icons-material/TokenRounded';
 import ElectricBoltRounded from '@mui/icons-material/ElectricBoltRounded';
 import RemoveRounded from '@mui/icons-material/RemoveRounded';
-import Link from '@mui/joy/Link';
+// import Link from '@mui/joy/Link';
 import LinearProgress from '@mui/joy/LinearProgress';
 import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
@@ -26,10 +26,23 @@ import Typography from '@mui/joy/Typography';
 import Sheet from '@mui/joy/Sheet';
 
 import styles from './styles.module.scss';
+import Link from 'next/link';
+import { RootState } from '@/domain/store/store';
+import { useSelector } from 'react-redux';
+import { UiNavigationConstants } from '@/ui/navigation.constants';
 
 export interface SideNavProps { }
 
-const SideNav: FC<SideNavProps> = (props) => (
+const SideNav: FC<SideNavProps> = (props) => 
+
+{
+
+  
+  const routePath = useSelector((state: RootState) => state.App.routePath);
+
+  console.log("SideNav: ", routePath);
+  
+  return (
   //   <div className={styles.Main}>
 
   <Sheet
@@ -125,31 +138,33 @@ const SideNav: FC<SideNavProps> = (props) => (
               <ListItemContent>Analysis</ListItemContent>
             </Box>
           </ListSubheader>
-          <ListItemButton>
+          <ListItemButton selected={routePath.includes(UiNavigationConstants.analysis.channelPerformance)}>
             <ListItemDecorator>
               <Box className={`td-align-middle td-w-1 td-h-1 td-bg-gray-700`} ></Box>
             </ListItemDecorator>
-            <ListItemContent>Channel Performance</ListItemContent>
+            <ListItemContent>
+            <Link href="/analysis/channel-performance">Channel Performance</Link></ListItemContent>
           </ListItemButton>
 
-          <ListItemButton>
+          <ListItemButton selected={routePath.includes(UiNavigationConstants.analysis.deviceMonitor)}>
             <ListItemDecorator>
               <Box className={`td-align-middle td-w-1 td-h-1 td-bg-gray-700`} ></Box>
             </ListItemDecorator>
             <ListItemContent>Device Monitor</ListItemContent>
           </ListItemButton>
 
-          <ListItemButton>
+          <ListItemButton selected={routePath.includes(UiNavigationConstants.analysis.topChannels)}>
             <ListItemDecorator>
               <Box className={`td-align-middle td-w-1 td-h-1 td-bg-gray-700`} ></Box>
             </ListItemDecorator>
-            <ListItemContent>Top Channel</ListItemContent>
+            <ListItemContent>
+            <Link href="/analysis/top-channels">Top Channels</Link></ListItemContent>
           </ListItemButton>
-          <ListItemButton>
+          <ListItemButton selected={routePath.includes(UiNavigationConstants.analysis.slowChannels)}>
             <ListItemDecorator>
               <Box className={`td-align-middle td-w-1 td-h-1 td-bg-gray-700`} ></Box>
             </ListItemDecorator>
-            <ListItemContent>Slow Channel</ListItemContent>
+            <ListItemContent>Slow Channels</ListItemContent>
           </ListItemButton>
         </ListItem>
 
@@ -162,7 +177,7 @@ const SideNav: FC<SideNavProps> = (props) => (
             </ListItemDecorator>
             <ListItemContent>Map</ListItemContent>
           </Box></ListSubheader>
-          <ListItemButton>
+          <ListItemButton selected={routePath.includes(UiNavigationConstants.map.topSlowChannels)}>
             <ListItemDecorator>
               <Box className={`td-align-middle td-w-1 td-h-1 td-bg-gray-700`} ></Box>
             </ListItemDecorator>
@@ -183,7 +198,7 @@ const SideNav: FC<SideNavProps> = (props) => (
             </ListItemDecorator>
             <ListItemContent>Actions</ListItemContent>
           </Box></ListSubheader>
-          <ListItemButton key={3}>
+          <ListItemButton key={3} selected={routePath.includes(UiNavigationConstants.actions.reportGeneration)}>
             <ListItemDecorator>
               <Box className={`td-align-middle td-w-1 td-h-1 td-bg-gray-700`} ></Box>
             </ListItemDecorator>
@@ -210,7 +225,7 @@ const SideNav: FC<SideNavProps> = (props) => (
 
         <ListDivider inset={`gutter`} />
         <ListItem>
-          <ListItemButton>
+          <ListItemButton selected={routePath.includes(UiNavigationConstants.configuration)}>
             <ListItemDecorator>
               <Box className={`td-align-middle td-w-1 td-h-1 td-bg-gray-700`} ></Box>
             </ListItemDecorator>
@@ -236,6 +251,7 @@ const SideNav: FC<SideNavProps> = (props) => (
 
   //   </div>
 );
+      }
 
 export default SideNav;
 

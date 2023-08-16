@@ -92,8 +92,8 @@ const TopNav: FC<TopNavProps> = () => {
           <BarChartRounded />
         </IconButton> */}
 
-        <h4 className={`td-text-md td-font-medium`}>
-          {section}
+        <h4 className={`td-text-md td-font-medium td-capitalize`}>
+          {section.replace("-", " ")}
         </h4>
         {
           subSection && 
@@ -105,8 +105,8 @@ const TopNav: FC<TopNavProps> = () => {
         {
           subSection && 
           
-          <h4 className={`td-text-sm`}>
-            {subSection}
+          <h4 className={`td-text-sm td-capitalize`}>
+            {subSection.replace("-", " ")}
           </h4>
         }
 

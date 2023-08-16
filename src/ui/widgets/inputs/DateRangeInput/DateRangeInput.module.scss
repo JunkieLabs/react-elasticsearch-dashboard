@@ -1,0 +1,14 @@
+.DateRangeInput {
+
+    .button{
+        // --joy-palette-primary-solidBg: #f6f6f6;
+        //     --joy-palette-primary-solidHoverBg: #f6f6f6;
+        //     --joy-palette-neutral-solidBg: #f6f6f6;
+            --joy-palette-primary-softColor: #000000ad;
+            // --joy-palette-primary-softActiveBg : var(--joy-palette-primary-300);
+            &:hover {
+                // background-color: rgba($color: #ffffff, $alpha: 0.1);
+            }
+    
+    }
+}
