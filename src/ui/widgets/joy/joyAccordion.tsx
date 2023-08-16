@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from "react";
 import * as Accordion from "@radix-ui/react-accordion";
 import { keyframes } from "@mui/system";
@@ -34,7 +36,9 @@ export const AccordionHeader = ({
    */
   isLast?: boolean;
 }) => (
-  <ListItemButton
+  // <Box >{children}</Box>
+  <ListItemButton 
+
     component={Accordion.Trigger}
     {...props}
     sx={[
@@ -98,7 +102,7 @@ export const AccordionContent = ({
     }}
   >
     <Box
-    //   variant="soft"
+      //   variant="soft"
       sx={{
         borderTop: "1px solid",
         borderColor: "divider",
