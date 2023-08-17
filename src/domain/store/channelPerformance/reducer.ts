@@ -1,3 +1,4 @@
+import { ModelChannelPerformanceFilters } from '@/types/store/channelPerformance';
 import { DummyData } from '@/types/store/dummyData';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -5,13 +6,16 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface ChannelPerformanceState {
     dummyData: DummyData[];
-    subFilter: string;
+    subFilter: ModelChannelPerformanceFilters;
 }
 
 
 const initialState: ChannelPerformanceState = {
     dummyData: [],
-    subFilter: ''
+    subFilter: {
+        gender: 'all',
+        pincodes: [],
+    }
 };
 
 const channelPerformanceSlice = createSlice({
@@ -21,11 +25,11 @@ const channelPerformanceSlice = createSlice({
         setDummyChartData: (state, action: PayloadAction<DummyData[]>) => {
             state.dummyData = action.payload;
         },
-        setSubFilter: (state, action: PayloadAction<string>) => {
+        channelPerformanceSetSubFilter: (state, action: PayloadAction<ModelChannelPerformanceFilters>) => {
             state.subFilter = action.payload;
         },
     },
 });
 
-export const { setDummyChartData, setSubFilter } = channelPerformanceSlice.actions;
+export const { setDummyChartData, channelPerformanceSetSubFilter } = channelPerformanceSlice.actions;
 export const ChannelPerformanceReducers = channelPerformanceSlice.reducer;

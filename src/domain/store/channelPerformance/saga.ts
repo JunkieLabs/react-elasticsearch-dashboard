@@ -1,5 +1,5 @@
 import { takeLatest, put, select, call, all, fork } from 'redux-saga/effects';
-import { setDummyChartData, setSubFilter } from './reducer';
+import { setDummyChartData, channelPerformanceSetSubFilter } from './reducer';
 import { commonFilterSet } from '@/domain/store/commonFilters/reducer';
 import { fetchChannelPerformanceDummyData } from '@/data/api/channelPerformance';
 import { RootState } from '../store';
@@ -14,25 +14,26 @@ function* handleCommonFilterChange() {
     yield put(setDummyChartData(channelPerformanceDummyData));
 }
 
-function* handleSubFilterChange(action: ReturnType<typeof setSubFilter>) {
+function* handleSubFilterChange(action: ReturnType<typeof channelPerformanceSetSubFilter>) {
     /*
       // TODO can be used to update subfilter
     
       const subFilterValue = action.payload;
-      yield put(setSubFilter(subFilterValue));
+      yield put(channelPerformanceSetSubFilter(subFilterValue));
      */
 
     yield call(handleCommonFilterChange); // Fetch again when sub-filter changes
 }
 
 export function* watchCommonFilterChangeForDummyData() {
-    yield takeLatest([commonFilterSet.type, setSubFilter.type], handleCommonFilterChange);
+    yield takeLatest([commonFilterSet.type, channelPerformanceSetSubFilter.type], handleCommonFilterChange);
 }
 
 export function* watchSubFilterChange() {
-    yield takeLatest(setSubFilter.type, handleSubFilterChange);
+    yield takeLatest(channelPerformanceSetSubFilter.type, handleSubFilterChange);
 }
 
 export function* watchChannelPerformance() {
     yield all([fork(watchSubFilterChange), fork(watchCommonFilterChangeForDummyData)]);
 }
+

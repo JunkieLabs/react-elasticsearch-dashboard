@@ -1,10 +1,13 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styles from './Filters.module.scss';
 import List from '@mui/joy/List';
 import { Autocomplete, AutocompleteOption, Box, Button, Chip, ChipDelete, Link, ListItem, Slider, SvgIcon, ToggleButtonGroup, Typography } from '@mui/joy';
 import * as Accordian from '@radix-ui/react-accordion';
 import { AccordionContent, AccordionHeader } from '@/ui/widgets/joy/joyAccordion';
 import ChipsInput from '@/ui/widgets/inputs/ChipsInput/ChipsInput';
+import { RootState } from '@/domain/store/store';
+import { useDispatch, useSelector } from 'react-redux';
+import { channelPerformanceSetSubFilter } from '@/domain/store/channelPerformance/reducer';
 
 interface FiltersProps { }
 
@@ -12,9 +15,34 @@ const Filters: FC<FiltersProps> = () => {
 
 
   const [filterGender, setFilterGender] = useState<string>('all');
-  const [filterAgeRange, setFilterAgeRange] = useState([30, 50]);
+  const [filterAgeRange, setFilterAgeRange] = useState<number[]>([]);// useState([30, 50]);
   const [filterPincode, setFilterPincode] = useState<string[]>([]);
   const [filterRegion, setFilterRegion] = useState<string>('');
+
+  const section = useSelector((state: RootState) => state.ChannelPerformance.subFilter);
+
+  const dispatch = useDispatch();
+  useEffect(()=>{
+    // filterGender.
+
+  }, [section])
+
+  useEffect(() => {
+
+    dispatch(channelPerformanceSetSubFilter({
+      gender: filterGender,
+      pincodes: filterPincode,
+      ageRange: filterAgeRange,
+      region: filterRegion
+
+    }))
+    
+
+
+    return () => { }
+
+  }, [filterGender, filterAgeRange, filterPincode, filterRegion]);
+
   return (
     <Box id='e4' className={styles.Filters}>
       <List id='232'
@@ -138,7 +166,7 @@ const Filters: FC<FiltersProps> = () => {
                     gap: `0.5rem`
                   }}>
 
-                  <h4 className='td-text-xs td-font-medium'>Select Gender</h4>
+                  <h4 className='td-text-xs td-font-medium'>Select Age</h4>
                   <Slider
                     getAriaLabel={() => 'Age range'}
                     value={filterAgeRange}
