@@ -7,6 +7,7 @@ import { fetcher } from '@/tools/apiHelper';
 import { ModelChartJs } from '@/types/charts/chartjs';
 import { DummyResultBucket } from '@/app/api/elastic/dummy/route';
 import { isNumeric } from '@/tools/parserTools';
+import ChartBar from '@/ui/widgets/charts/ChartBar/ChartBar';
 
 interface ChannelPerformanceProps { }
 
@@ -56,6 +57,19 @@ const ChannelPerformance: FC<ChannelPerformanceProps> = () => {
           <ChartPie data={chartData} sx={{
 
           }}></ChartPie>
+        </Box>
+
+        <Box sx={{
+          display: 'flex',
+          width: '100%',
+          
+          height: 300
+        }}>
+          <ChartBar data={chartData} sx={{
+
+          }}></ChartBar>
+
+
         </Box>
 
       </Box>
