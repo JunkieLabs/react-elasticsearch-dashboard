@@ -1,0 +1,41 @@
+.rdrDateRangePickerWrapper {
+    font-family: sans-serif;
+    display: flex;
+  }
+  .rdrStaticRangeLabel {
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+    line-height: 25px;
+    font-size: 14px;
+  }
+  .rdrDayToday .rdrDayNumber span:after {
+    background-color: #3f51b5;
+  }
+  .datePicker {
+    justify-content: space-around;
+  }
+  .rdrStaticRange {
+    border: none;
+  }
+  .rdrCalendarWrapper,
+  .rdrDefinedRangesWrapper {
+    flex: 1;
+    border: none;
+  }
+  @media (max-width: 1000px) {
+    .rdrMonths {
+      flex-direction: column;
+    }
+  }
+  @media (max-width: 600px) {
+    .rdrDateRangePickerWrapper {
+      display: block;
+    }
+    .datePicker {
+      display: flex;
+      flex-direction: column;
+    }
+    .rdrMonths {
+      flex-direction: column;
+    }
+  }
+  

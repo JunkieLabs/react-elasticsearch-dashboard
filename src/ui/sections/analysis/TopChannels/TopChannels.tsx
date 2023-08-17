@@ -17,11 +17,20 @@ const TopChannels: FC<TopChannelsProps> = () => (
         flexDirection: 'column'
 
       }}>
-        <Box sx={{ alignSelf: 'flex-end' }}>
+        <Box sx={{
+          display: "flex",
+          alignItems: "center",
+          flexDirection: "row"
+        }}>
+
+          <Box sx={{ flex: "1 1 0%" }}>
+            <h4 className="td-text-lg td-font-medium">Filters</h4>
+
+          </Box>
           <DateRangeInput></DateRangeInput>
         </Box>
         <Box sx={{ p: { xs: 1, sm: 1, md: 1 } }} ></Box>
-  
+
         <Filters></Filters>
 
       </Box>

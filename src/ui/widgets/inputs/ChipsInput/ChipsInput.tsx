@@ -45,6 +45,7 @@ return (
   placeholder={props.placeholder}
   // id="tags-filled"
   options={[]}
+
   freeSolo
   renderTags={(value, getTagProps) =>
       value.map((option, index) => {
@@ -67,6 +68,7 @@ return (
   }
   onChange={(event, values) => {
       // onChange(values);
+      props.setChips(values)
   }}
   
   />
