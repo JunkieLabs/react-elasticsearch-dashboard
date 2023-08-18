@@ -18,6 +18,9 @@ const commonFiltersSlice = createSlice({
     commonFilterSet: (state, action: PayloadAction<string>) => {
       state.value = action.payload;
     },
+    commonFilterAgeInit: (state, action: PayloadAction<void>) => {
+      
+    },
     commonFilterSetAgeRange: (state, action: PayloadAction<number[]>) => {
       state.ageRange = action.payload;
     },
@@ -27,6 +30,6 @@ const commonFiltersSlice = createSlice({
 
 });
 
-export const { commonFilterSet, commonFilterSetAgeRange } = commonFiltersSlice.actions;
+export const { commonFilterSet, commonFilterSetAgeRange, commonFilterAgeInit } = commonFiltersSlice.actions;
 
 export const CommonFiltersReducers =  commonFiltersSlice.reducer;

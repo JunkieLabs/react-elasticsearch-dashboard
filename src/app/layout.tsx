@@ -22,6 +22,7 @@ import { Providers } from '@/domain/store/provider';
 import { usePathname } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { appSetSectionFromPath } from '@/domain/store/app/reducer';
+import { commonFilterAgeInit } from '@/domain/store/commonFilters/reducer';
 
 // import { Chart, registerables } from 'chart.js'
 
@@ -121,6 +122,16 @@ function ReduxLayout({ children,
     return () => { }
 
   }, [router, dispatch]);
+
+  useEffect(() =>{
+
+
+
+    console.log("app startup: ", );
+    dispatch(commonFilterAgeInit())
+
+
+  }, []);
 
 
   return (<ThemeRegistry options={{ key: 'joy' }}>

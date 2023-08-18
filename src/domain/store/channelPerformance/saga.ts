@@ -10,7 +10,7 @@ function* handleCommonFilterChange() {
     // Fetch based on filter and sub-filter
     const filter: string = yield select((state: RootState) => state.CommonFilters.value);
     const subFilter: string = yield select((state: RootState) => state.ChannelPerformance.subFilter);
-    const channelPerformanceDummyData: DummyData[] = yield fetchChannelPerformanceDummyData(filter, subFilter);
+    const channelPerformanceDummyData: DummyData[] = yield fetchChannelPerformanceDummyData(filter, "subFilter");
     yield put(setDummyChartData(channelPerformanceDummyData));
 }
 

@@ -45,7 +45,7 @@ export async function GET(
     // we send back the list of documents found
     const tasks = (result.aggregations as DummyResult)?.result;//??[];//.map((item) => item._source);
 
-    console.log("result 2: " , result)
+    // console.log("result 2: " , result)
     console.log("result 3: " , tasks)
    
     return NextResponse.json(tasks);

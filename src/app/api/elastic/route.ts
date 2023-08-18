@@ -26,7 +26,7 @@ export async function GET(
     // we send back the list of documents found
     const tasks = result.hits.hits.map((item) => item._source);
 
-    console.log("result: " , result)
+    // console.log("result: " , result)
    
     return NextResponse.json(tasks);
   }
