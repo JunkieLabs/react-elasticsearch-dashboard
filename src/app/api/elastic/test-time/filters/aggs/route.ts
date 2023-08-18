@@ -7,12 +7,13 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { NextApiRequest, NextApiResponse } from 'next';
 import { TransformHelper } from '@/tools/parserTools';
+import { ModelElasticAggsStatsResult, ModelElasticAggsTermsResult } from '@/types/elastic/aggs';
 
 export async function GET(req: Request) {
 
-    console.log("GET req.query: ", req.url)
-    let {searchParams } = new URL(req.url);
-    console.log("GET req.query: ", searchParams)
+    // console.log("GET req.query: ", req.url)
+    let { searchParams } = new URL(req.url);
+    // console.log("GET req.query: ", searchParams)
 
     // let { field, datatype, skip, limit } = ((searchParams as any) ?? {});
 
@@ -21,10 +22,10 @@ export async function GET(req: Request) {
         max: 100,
         min: 0
     });
-    let datatype = searchParams.get('datatype') ;
-    let field = searchParams.get('field') ;
-   
-   
+    let datatype = searchParams.get('datatype');
+    let field = searchParams.get('field');
+
+
 
     const elastic = await getElasticClient();
 
@@ -43,7 +44,10 @@ export async function GET(req: Request) {
         });
     }
 
-    var response = {
+    var response: {
+        data: number[],
+        field: string
+    } = {
         data: [],
         field: field
     }
@@ -62,10 +66,10 @@ export async function GET(req: Request) {
                 }
             }
         });
-        // (result.aggregations as DummyResult)?.result
-        console.log("datatype result: ", result)
+        var stats = (result.aggregations as Result)?.result as ModelElasticAggsStatsResult
+        // console.log("number result: ", result)
 
-        response.data = []
+        response.data = [stats?.min ?? 0, stats?.max ?? 0]
 
 
 
@@ -83,21 +87,24 @@ export async function GET(req: Request) {
                 }
             }
         });
+        var terms = (result.aggregations as Result)?.result as ModelElasticAggsTermsResult
+        // console.log("string result: ", terms)
 
+        response.data = terms.buckets
 
+        // console.log("string result: ", result)
+
+      
     }
 
     return NextResponse.json(response);
 
 
-
-
-
-
-
-    // Get the data from the database
-    //   const data = await fetcher(page, limit, sortBy);
-
-    // Return the data as a JSON response
-    // res.json("data");
 };
+
+interface Result {
+
+    result?: ModelElasticAggsStatsResult | ModelElasticAggsTermsResult
+
+}
+

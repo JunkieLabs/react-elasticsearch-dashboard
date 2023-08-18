@@ -13,19 +13,25 @@ interface FiltersProps { }
 
 const Filters: FC<FiltersProps> = () => {
 
+  const filterAgeDefaultRange = useSelector((state: RootState) => state.CommonFilters.ageRange);
 
   const [filterGender, setFilterGender] = useState<string>('all');
-  const [filterAgeRange, setFilterAgeRange] = useState<number[]>([]);// useState([30, 50]);
+  const [filterAgeRange, setFilterAgeRange] = useState<number[]>([0, 100]);// useState([30, 50]);
   const [filterPincode, setFilterPincode] = useState<string[]>([]);
   const [filterRegion, setFilterRegion] = useState<string>('');
 
   const section = useSelector((state: RootState) => state.ChannelPerformance.subFilter);
 
   const dispatch = useDispatch();
-  useEffect(()=>{
+  useEffect(() => {
     // filterGender.
 
   }, [section])
+
+  // useEffect(()=>{
+  //   setFilterAgeRange(filterAgeDefaultRange)
+
+  // }, [filterAgeDefaultRange])
 
   useEffect(() => {
 
@@ -36,12 +42,14 @@ const Filters: FC<FiltersProps> = () => {
       region: filterRegion
 
     }))
-    
+
 
 
     return () => { }
 
   }, [filterGender, filterAgeRange, filterPincode, filterRegion]);
+
+  console.log("filterAgeRange: ", filterAgeRange, filterAgeDefaultRange, filterAgeDefaultRange === filterAgeRange)
 
   return (
     <Box id='e4' className={styles.Filters}>
@@ -73,14 +81,14 @@ const Filters: FC<FiltersProps> = () => {
                 className="td-capitalize"
               >{`Gender: ` + filterGender} </Chip>
 
-              <Chip
+              {filterAgeRange && <Chip
                 key={"Age"}
                 size="sm"
                 variant="soft"
                 color="neutral"
               >
-                Age: {filterAgeRange.join("-")}
-              </Chip>
+                Age: {filterAgeRange?.join("-")}
+              </Chip>}
 
               {filterRegion && <Chip
                 key={"Region"}
@@ -105,7 +113,7 @@ const Filters: FC<FiltersProps> = () => {
                 })
               }
 
-             
+
 
             </Box>
           </AccordionHeader>
@@ -170,12 +178,15 @@ const Filters: FC<FiltersProps> = () => {
                   <Slider
                     getAriaLabel={() => 'Age range'}
                     value={filterAgeRange}
-                    defaultValue={[0, 90]}
+                    defaultValue={filterAgeDefaultRange.length > 0 ? filterAgeDefaultRange : [0, 90]}
+
+                    max={filterAgeDefaultRange.length > 1 ? filterAgeDefaultRange[1] : 100}
+                    min={filterAgeDefaultRange.length > 1 ? filterAgeDefaultRange[0] : 0}
 
                     onChange={(event, newValue) => {
                       // setValue(newValue);
-                      console.log("ToggleButtonGroup gender: ", newValue);
-                      setFilterAgeRange((newValue as number[]) ?? [30, 50]);
+                      console.log("ToggleButtonGroup age: ", newValue, filterAgeDefaultRange);
+                      setFilterAgeRange((newValue as number[]) ?? filterAgeDefaultRange);
                     }}
                     valueLabelDisplay="auto"
                   // getAriaValueText={valueText}
