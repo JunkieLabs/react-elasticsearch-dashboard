@@ -32,6 +32,9 @@ mapping = {
                 "type": "date",
                 "store": True
             },
+            "location":{
+                "type": "geo_point"
+            },
             "message": {"type": "text"}
         },
         "dynamic_templates": [

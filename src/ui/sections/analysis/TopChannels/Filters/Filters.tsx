@@ -1,5 +1,7 @@
 import React, { FC, useEffect, useState } from 'react';
 import styles from './Filters.module.scss';
+import { useDebounce } from 'use-debounce';
+
 import List from '@mui/joy/List';
 import { Autocomplete, AutocompleteOption, Box, Button, Chip, ChipDelete, Link, ListItem, Slider, SvgIcon, ToggleButtonGroup, Typography } from '@mui/joy';
 import * as Accordian from '@radix-ui/react-accordion';
@@ -20,6 +22,7 @@ const Filters: FC<FiltersProps> = () => {
   const [filterPincode, setFilterPincode] = useState<string[]>([]);
   const [filterRegion, setFilterRegion] = useState<string>('');
 
+  const [filterAgeRangeDebaunced] = useDebounce(filterAgeRange, 1000);
   const section = useSelector((state: RootState) => state.ChannelPerformance.subFilter);
 
   const dispatch = useDispatch();
@@ -28,17 +31,25 @@ const Filters: FC<FiltersProps> = () => {
 
   }, [section])
 
-  // useEffect(()=>{
-  //   setFilterAgeRange(filterAgeDefaultRange)
+  useEffect(()=>{
+    setFilterAgeRange(filterAgeDefaultRange)
 
-  // }, [filterAgeDefaultRange])
+  }, [filterAgeDefaultRange])
+
+  useEffect(()=>{
+    // setFilterAgeRange(filterAgeDefaultRange)
+    // console.log("filterAgeRangeDebaunced: ", filterAgeRangeDebaunced)
+
+  }, [filterAgeRangeDebaunced])
+
 
   useEffect(() => {
+    // console.log("filterAgeRange: ", filterAgeRange, filterAgeDefaultRange, filterAgeDefaultRange === filterAgeRange)
 
     dispatch(channelPerformanceSetSubFilter({
       gender: filterGender,
       pincodes: filterPincode,
-      ageRange: filterAgeRange,
+      ageRange: filterAgeRangeDebaunced,
       region: filterRegion
 
     }))
@@ -47,10 +58,11 @@ const Filters: FC<FiltersProps> = () => {
 
     return () => { }
 
-  }, [filterGender, filterAgeRange, filterPincode, filterRegion]);
+  }, [filterGender, filterAgeRangeDebaunced, filterPincode, filterRegion]);
 
-  console.log("filterAgeRange: ", filterAgeRange, filterAgeDefaultRange, filterAgeDefaultRange === filterAgeRange)
+  // console.log("debounce filterAgeRangeDebaunced: ", filterAgeRangeDebaunced)
 
+ 
   return (
     <Box id='e4' className={styles.Filters}>
       <List id='232'
@@ -185,7 +197,7 @@ const Filters: FC<FiltersProps> = () => {
 
                     onChange={(event, newValue) => {
                       // setValue(newValue);
-                      console.log("ToggleButtonGroup age: ", newValue, filterAgeDefaultRange);
+                      // console.log("ToggleButtonGroup age: ", newValue, filterAgeDefaultRange);
                       setFilterAgeRange((newValue as number[]) ?? filterAgeDefaultRange);
                     }}
                     valueLabelDisplay="auto"
