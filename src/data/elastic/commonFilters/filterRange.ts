@@ -25,7 +25,7 @@ export const elasticCommonFilterAgeStats = async (): Promise< number[]> => {
 
   // 
 
-  if(!response.data){
+  if(!response.items){
     return []
   }
 
@@ -34,7 +34,7 @@ export const elasticCommonFilterAgeStats = async (): Promise< number[]> => {
   // }
 
 
-  return response.data as number[];
+  return response.items as number[];
 
   
 }

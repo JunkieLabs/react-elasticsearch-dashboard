@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { NextApiRequest, NextApiResponse } from 'next';
 import { TransformHelper } from '@/tools/parserTools';
-import { ModelElasticAggsStatsResult, ModelElasticAggsTermsResult } from '@/types/elastic/aggs';
+import { ModelElasticAggsResult, ModelElasticAggsStatsResult, ModelElasticAggsTermsResult } from '@/types/elastic/aggs';
 
 export async function GET(req: Request) {
 
@@ -44,11 +44,12 @@ export async function GET(req: Request) {
         });
     }
 
-    var response: {
-        data: number[],
-        field: string
-    } = {
-        data: [],
+    //{
+    //     items: number[],
+    //     field: string
+    // }
+    var response: ModelElasticAggsResult = {
+        items: [],
         field: field
     }
     if (datatype == ElasticConstants.datatype.number) {
@@ -69,7 +70,7 @@ export async function GET(req: Request) {
         var stats = (result.aggregations as Result)?.result as ModelElasticAggsStatsResult
         // console.log("number result: ", result)
 
-        response.data = [stats?.min ?? 0, stats?.max ?? 0]
+        response.items = [stats?.min ?? 0, stats?.max ?? 0]
 
 
 
@@ -90,7 +91,7 @@ export async function GET(req: Request) {
         var terms = (result.aggregations as Result)?.result as ModelElasticAggsTermsResult
         // console.log("string result: ", terms)
 
-        response.data = terms.buckets
+        response.items = terms.buckets
 
         // console.log("string result: ", result)
 

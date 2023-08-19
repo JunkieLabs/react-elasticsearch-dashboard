@@ -15,7 +15,8 @@ const initialState: ChannelPerformanceState = {
     subFilter: {
         gender: 'all',
         pincodes: [],
-    }
+    },
+    
 };
 
 const channelPerformanceSlice = createSlice({
