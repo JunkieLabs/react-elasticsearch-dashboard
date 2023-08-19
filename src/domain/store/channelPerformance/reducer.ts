@@ -13,8 +13,7 @@ interface ChannelPerformanceState {
 const initialState: ChannelPerformanceState = {
     dummyData: [],
     subFilter: {
-        gender: 'all',
-        pincodes: [],
+       bucket:''
     },
     
 };
@@ -26,11 +25,13 @@ const channelPerformanceSlice = createSlice({
         setDummyChartData: (state, action: PayloadAction<DummyData[]>) => {
             state.dummyData = action.payload;
         },
-        channelPerformanceSetSubFilter: (state, action: PayloadAction<ModelChannelPerformanceFilters>) => {
+        setSubFilter: (state, action: PayloadAction<ModelChannelPerformanceFilters>) => {
             state.subFilter = action.payload;
         },
     },
 });
 
-export const { setDummyChartData, channelPerformanceSetSubFilter } = channelPerformanceSlice.actions;
+// export const { setDummyChartData, channelPerformanceSetSubFilter } = channelPerformanceSlice.actions;
+export const StoreActionChannelPerformance = channelPerformanceSlice.actions;
+
 export const ChannelPerformanceReducers = channelPerformanceSlice.reducer;

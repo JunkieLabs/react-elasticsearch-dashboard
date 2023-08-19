@@ -9,7 +9,7 @@ import { AccordionContent, AccordionHeader } from '@/ui/widgets/joy/joyAccordion
 import ChipsInput from '@/ui/widgets/inputs/ChipsInput/ChipsInput';
 import { RootState } from '@/domain/store/store';
 import { useDispatch, useSelector } from 'react-redux';
-import { channelPerformanceSetSubFilter } from '@/domain/store/channelPerformance/reducer';
+import { StoreActionTopChannel } from '@/domain/store/topChannel/reducer';
 
 interface FiltersProps { }
 
@@ -46,7 +46,7 @@ const Filters: FC<FiltersProps> = () => {
   useEffect(() => {
     // console.log("filterAgeRange: ", filterAgeRange, filterAgeDefaultRange, filterAgeDefaultRange === filterAgeRange)
 
-    dispatch(channelPerformanceSetSubFilter({
+    dispatch(StoreActionTopChannel.setSubFilter({
       gender: filterGender,
       pincodes: filterPincode,
       ageRange: filterAgeRangeDebaunced,
@@ -60,7 +60,7 @@ const Filters: FC<FiltersProps> = () => {
 
   }, [filterGender, filterAgeRangeDebaunced, filterPincode, filterRegion]);
 
-  // console.log("debounce filterAgeRangeDebaunced: ", filterAgeRangeDebaunced)
+  console.log("debounce filterPincode: ", filterPincode)
 
  
   return (

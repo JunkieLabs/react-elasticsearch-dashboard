@@ -22,6 +22,14 @@ const ChipsInput: FC<ChipsInputProps> = (props) =>{
     // throw new Error('Function not implemented.');
 
     props.setChips(value)
+  } 
+  
+  const  onRemove = (option: string)=> {
+
+    // console.log("onRemove chips: ", option, props.chips)
+    var newChips = props.chips.filter(ch => ch != option)
+    props.setChips(newChips)
+    // console.log("onRemove chips 2: ",newChips)
   }
 
 
@@ -45,17 +53,21 @@ return (
   placeholder={props.placeholder}
   // id="tags-filled"
   options={[]}
+  value={props.chips}
+  
 
   freeSolo
   renderTags={(value, getTagProps) =>
       value.map((option, index) => {
+       
+
         return (
           <Chip
                 key={`ch-`+option}
                 size="sm"
                 variant="soft"
                 color="neutral"
-                endDecorator={<ChipDelete onDelete={() => alert('Delete')} />}
+                endDecorator={<ChipDelete onDelete={() => onRemove(option)} />}
               >{option}</Chip>
           // <Chip
           //   variant="outlined"

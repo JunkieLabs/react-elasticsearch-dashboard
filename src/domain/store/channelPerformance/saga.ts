@@ -1,41 +1,39 @@
 import { takeLatest, put, select, call, all, fork } from 'redux-saga/effects';
-import { setDummyChartData, channelPerformanceSetSubFilter } from './reducer';
+import { StoreActionChannelPerformance } from './reducer';
 import { StoreActionCommonFilters } from '@/domain/store/commonFilters/reducer';
 import { fetchChannelPerformanceDummyData } from '@/data/api/channelPerformance';
-import { ElasticPincodeRepo } from "@/data/elastic/pincodes/pincodes";
 import { RootState } from '../store';
 import { DummyData } from '@/types/store/dummyData';
 import { ModelChannelPerformanceFilters } from '@/types/store/channelPerformance';
-import { ModelElasticPincode } from '@/types/elastic/pincodes/pincodes';
 
 function* handleCommonFilterChange() {
 
     // Fetch based on filter and sub-filter
     const filter: string = yield select((state: RootState) => state.CommonFilters.value);
     const subFilter: ModelChannelPerformanceFilters = yield select((state: RootState) => state.ChannelPerformance.subFilter);
-    let pincodes: ModelElasticPincode[] =[]
-    if(subFilter.pincodes.length>0){
-        const pincodesResult: ModelElasticPincode[] = yield ElasticPincodeRepo.getAll(subFilter.pincodes);
-        pincodes = pincodesResult
+    // let pincodes: ModelElasticPincode[] =[]
+    // if(subFilter.pincodes.length>0){
+    //     const pincodesResult: ModelElasticPincode[] = yield ElasticPincodeRepo.getAll(subFilter.pincodes);
+    //     pincodes = pincodesResult
 
-    }else {
-        pincodes =[]
-    }
+    // }else {
+    //     pincodes =[]
+    // }
 
    
-    console.log("handleCommonFilterChange filter: ", filter)
+    // console.log("handleCommonFilterChange filter: ", filter)
 
-    console.log("handleCommonFilterChange Pincodes: ", pincodes)
+    // console.log("handleCommonFilterChange Pincodes: ", pincodes)
 
 
 
 
 
     const channelPerformanceDummyData: DummyData[] = yield fetchChannelPerformanceDummyData(filter, "subFilter");
-    yield put(setDummyChartData(channelPerformanceDummyData));
+    yield put(StoreActionChannelPerformance.setDummyChartData(channelPerformanceDummyData));
 }
 
-function* handleSubFilterChange(action: ReturnType<typeof channelPerformanceSetSubFilter>) {
+function* handleSubFilterChange(action: ReturnType<typeof StoreActionChannelPerformance.setSubFilter>) {
     /*
       // TODO can be used to update subfilter
     
@@ -49,7 +47,7 @@ function* handleSubFilterChange(action: ReturnType<typeof channelPerformanceSetS
 }
 
 export function* watchAllFilterChange() {
-    yield takeLatest([StoreActionCommonFilters.commonFilterSet.type, channelPerformanceSetSubFilter.type], handleCommonFilterChange);
+    yield takeLatest([StoreActionCommonFilters.commonFilterSet.type, StoreActionChannelPerformance.setSubFilter.type], handleCommonFilterChange);
 }
 
 // export function* watchSubFilterChange() {

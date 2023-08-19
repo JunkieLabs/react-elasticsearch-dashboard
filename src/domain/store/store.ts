@@ -4,6 +4,7 @@ import createSagaMiddleware from 'redux-saga';
 
 import { CommonFiltersReducers } from '@/domain/store/commonFilters/reducer';
 import { ChannelPerformanceReducers } from '@/domain/store/channelPerformance/reducer';
+import { TopChannelReducers } from '@/domain/store/topChannel/reducer';
 import { AppReducers } from '@/domain/store/app/reducer';
 import { configureStore } from '@reduxjs/toolkit'
 import { rootSaga } from './rootSaga';
@@ -16,7 +17,8 @@ export const store = configureStore({
     reducer: {
         App: AppReducers,
         CommonFilters : CommonFiltersReducers,
-        ChannelPerformance: ChannelPerformanceReducers
+        ChannelPerformance: ChannelPerformanceReducers,
+        TopChannel: TopChannelReducers
     },
     middleware:[sagaMiddleware]
 })
