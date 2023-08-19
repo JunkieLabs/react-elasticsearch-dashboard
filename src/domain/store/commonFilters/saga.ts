@@ -1,7 +1,7 @@
 import { all, fork, put, takeLatest } from "redux-saga/effects";
 // import { watchSubFilterChange, watchCommonFilterChangeForDummyData } from "../channelPerformance/saga";
-import { commonFilterAgeInit, commonFilterSetAgeRange } from "./reducer";
-import { elasticCommonFilterAgeStats } from "@/data/elastic/commonFilters/filterRange";
+import { StoreActionCommonFilters } from "./reducer";
+import { ElasticCommonFilterRepo } from "@/data/elastic/commonFilters/filterRange";
 
 export function* handleCommonFilterAgeRange() {
 
@@ -12,10 +12,10 @@ export function* handleCommonFilterAgeRange() {
     console.log("handleCommonFilterAgeRange e: ", e)
 
     try {
-        const result: any[] = yield elasticCommonFilterAgeStats()
+        const result: any[] = yield ElasticCommonFilterRepo.getAgeStats()
         console.log("handleCommonFilterAgeRange result: ", result)
         if (result.length > 0) {
-            yield put(commonFilterSetAgeRange(result));
+            yield put(StoreActionCommonFilters.commonFilterSetAgeRange(result));
 
         }
 
@@ -34,7 +34,7 @@ export function* handleCommonFilterAgeRange() {
 //     yield fork(handleCommonFilterAgeRange);
 // }
 export function* watchSubFilterChange() {
-    yield takeLatest(commonFilterAgeInit.type, handleCommonFilterAgeRange);
+    yield takeLatest(StoreActionCommonFilters.commonFilterAgeInit.type, handleCommonFilterAgeRange);
 }
 
 export function* watchCommonFilters() {

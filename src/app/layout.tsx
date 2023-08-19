@@ -22,7 +22,7 @@ import { Providers } from '@/domain/store/provider';
 import { usePathname } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { appSetSectionFromPath } from '@/domain/store/app/reducer';
-import { commonFilterAgeInit } from '@/domain/store/commonFilters/reducer';
+import { StoreActionCommonFilters } from '@/domain/store/commonFilters/reducer';
 
 // import { Chart, registerables } from 'chart.js'
 
@@ -128,7 +128,7 @@ function ReduxLayout({ children,
 
 
     console.log("app startup: ", );
-    dispatch(commonFilterAgeInit())
+    dispatch(StoreActionCommonFilters.commonFilterAgeInit())
 
 
   }, []);

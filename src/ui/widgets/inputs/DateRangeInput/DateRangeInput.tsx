@@ -18,17 +18,6 @@ import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
 const dateRangeDefineds = {
   last7Days: subDays(new Date(), 7),
   last30Days: subDays(new Date(), 30),
-  // endOfWeek: endOfWeek(new Date()),
-  // startOfLastWeek: startOfWeek(addDays(new Date(), -7)),
-  // endOfLastWeek: endOfWeek(addDays(new Date(), -7)),
-  // startOfToday: startOfDay(new Date()),
-  // endOfToday: endOfDay(new Date()),
-  // startOfYesterday: startOfDay(addDays(new Date(), -1)),
-  // endOfYesterday: endOfDay(addDays(new Date(), -1)),
-  // startOfMonth: startOfMonth(new Date()),
-  // endOfMonth: endOfMonth(new Date()),
-  // startOfLastMonth: startOfMonth(addMonths(new Date(), -1)),
-  // endOfLastMonth: endOfMonth(addMonths(new Date(), -1)),
 };
 
 const defaultStaticRanges = createStaticRanges([
@@ -54,9 +43,14 @@ interface DateRangePickerState {
   key: string
 }
 
-interface DateRangeInputProps { }
+interface DateRangeInputProps {
+  
+  setDateRange: React.Dispatch<React.SetStateAction<Date[]>>
+  
+  // Date[]
+ }
 
-const DateRangeInput: FC<DateRangeInputProps> = () => {
+const DateRangeInput: FC<DateRangeInputProps> = (props) => {
 
   // const [startDate, setStartDate] = useState(new Date());
   // const [endDate, setEndDate] = useState(new Date());
@@ -64,7 +58,7 @@ const DateRangeInput: FC<DateRangeInputProps> = () => {
   const [state, setState] = useState<DateRangePickerState[]>([
     {
       startDate: new Date(),
-      endDate: new Date(),
+      endDate: subDays(new Date(), 7),
       key: "selection",
     },
   ]);
@@ -85,9 +79,13 @@ const DateRangeInput: FC<DateRangeInputProps> = () => {
 
     var currentState = state[0];
 
+    console.log("currentState: ", currentState)
+
     var filtered = defaultStaticRanges.filter((val) => {
 
       var range = val.range()
+      
+    console.log("currentState range: ", range)
       var isSame = isSameDay(range.startDate ?? (new Date()), currentState.startDate)
       isSame = isSame ? isSameDay(range.endDate ?? (new Date()), currentState.endDate) : false
       return isSame;
@@ -101,6 +99,11 @@ const DateRangeInput: FC<DateRangeInputProps> = () => {
       );
 
     }
+
+    props.setDateRange([currentState.startDate, currentState.endDate])
+
+    
+
 
 
   }, state)

@@ -3,7 +3,7 @@ import { ClientOptions } from '@elastic/elasticsearch';
 
 const createElasticSearchClient = async (options: ClientOptions) => {
     const { Client } = await import('@elastic/elasticsearch');
-    console.log('====================================================', options);
+    // console.log('====================================================', options);
     var cl =  new Client(options);
 
     try {

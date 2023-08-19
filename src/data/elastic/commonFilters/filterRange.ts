@@ -2,10 +2,8 @@ import { fetcher } from "@/tools/apiHelper";
 import { ElasticConstants } from "../elastic.constants";
 import { ModelElasticAggsResult, ModelElasticAggsResultItem } from "@/types/elastic/aggs";
 
-export const elasticCommonFilterAgeStats = async (): Promise< number[]> => {
+ const getAgeStats = async (): Promise< number[]> => {
   // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
   
 
   var response: ModelElasticAggsResult = await fetcher('/api/elastic/test-time/filters/aggs?' + new URLSearchParams({
@@ -37,4 +35,10 @@ export const elasticCommonFilterAgeStats = async (): Promise< number[]> => {
   return response.items as number[];
 
   
+}
+
+
+export const ElasticCommonFilterRepo = {
+
+  getAgeStats: getAgeStats
 }
