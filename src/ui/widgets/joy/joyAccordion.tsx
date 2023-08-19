@@ -38,6 +38,7 @@ export const AccordionHeader = ({
 }) => (
   // <Box >{children}</Box>
   <ListItemButton 
+  // className="td-rounded-lg"
 
     component={Accordion.Trigger}
     {...props}
@@ -50,13 +51,13 @@ export const AccordionHeader = ({
           bgcolor: "background.surface"
         },
         ...(isFirst && {
-          borderTopLeftRadius: "3px",
-          borderTopRightRadius: "3px"
+          borderTopLeftRadius: "0.75rem",
+          borderTopRightRadius: "0.75rem"
         }),
         ...(isLast && {
           '&[data-state="closed"]': {
-            borderBottomLeftRadius: "3px",
-            borderBottomRightRadius: "3px"
+            borderBottomLeftRadius: "0.75rem",
+            borderBottomRightRadius: "0.75rem"
           }
         })
       },
@@ -85,14 +86,16 @@ export const AccordionContent = ({
   <Box
     component={Accordion.Content}
     sx={{
+      borderRadius:"0.75rem",
       overflow: "hidden",
       // p: 1.5, ⚠️ Cannot use padding here, otherwise the animation is lagging. Not sure why.
       '&[data-state="open"]': {
         animation: `${slideDown} 300ms cubic-bezier(0.87, 0, 0.13, 1)`,
         ...(isLast && {
           "& > div": {
-            borderBottomLeftRadius: "3px",
-            borderBottomRightRadius: "3px"
+            borderBottomLeftRadius: "0.75rem",
+            borderBottomRightRadius: "0.75rem",
+            
           }
         })
       },

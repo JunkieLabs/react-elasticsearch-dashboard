@@ -67,17 +67,18 @@ const Filters: FC<FiltersProps> = () => {
     <Box id='e4' className={styles.Filters}>
       <List id='232'
         variant="outlined"
+        className='td-bg-white td-shadow-sm '
         component={Accordian.Root}
         type="multiple"
         defaultValue={[]}
         sx={{
-          borderRadius: "xs",
+          borderRadius: "lg",
           "--ListDivider-gap": "0px",
           "--focus-outline-offset": "-2px"
         }}
       >
         <Accordian.Item key={1221} value="filtersAccordian" >
-          <AccordionHeader isFirst={true} >
+          <AccordionHeader isFirst={true} isLast={true} >
             <Box className="wase" sx={{
               display: 'flex',
               flexFlow: "row wrap",

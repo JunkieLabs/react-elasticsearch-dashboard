@@ -34,7 +34,13 @@ const ChartBar: FC<ChartBarProps> = (props) => {
       newChartInstance = new Chart(ctx, {
         type: 'bar',
         options: {
-
+          plugins:{
+            legend: {
+              display: false,//!this.mIsLabelHidden,
+              position: "bottom"
+  
+            }
+          },
           maintainAspectRatio:false,
           responsive: true,
           scales: {

@@ -16,7 +16,7 @@ const ChartPie: FC<ChartPieProps> = (props) => {
 
   const canvasRef = useRef(null);
   const chartRef = useRef<Chart<"pie", number[], string>>();
-  
+
   // const chartInstance = useRef<Chart<"pie", number[], string>>(); // To store the Chart.js instance
 
   const [chartInstance, setChartInstance] = useState<Chart<"pie", number[], string>>();
@@ -34,10 +34,23 @@ const ChartPie: FC<ChartPieProps> = (props) => {
       }
       newChartInstance = new Chart(ctx, {
         type: 'pie',
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins:{
+            legend: {
+              // display: !this.mIsLabelHidden,
+              position: "bottom"
+  
+            }
+          }
+         
+        },
         data: {
           labels: props.data?.labels ?? [],
           datasets: props.data?.data ?? [],
         },
+
       });
       console.log("chartInstance data: ", props.data)
       chartRef.current = newChartInstance;
@@ -67,9 +80,9 @@ const ChartPie: FC<ChartPieProps> = (props) => {
     // const ctx = (canvasRef.current as HTMLCanvasElement | null)?.getContext('2d');
 
     // console.log("ctx", ctx)
-    
+
     // var chartIns = ctx ? ((ctx as CanvasRenderingContext2D).canvas as any)?.[`chart`] ?? undefined : undefined;
-    
+
     var chartIns = chartRef.current
     if (chartIns) {
       chartIns.data.labels = props.data?.labels ?? [];
@@ -99,7 +112,7 @@ const ChartPie: FC<ChartPieProps> = (props) => {
       // transform: `rotate(${degree}deg)`
       display: `flex`,
       height: '100%',
-      width:'100%'
+      // width: '100%'
     }]}>
       <canvas ref={canvasRef} />
     </Box>
