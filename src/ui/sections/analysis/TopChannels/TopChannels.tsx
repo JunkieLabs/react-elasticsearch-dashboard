@@ -14,6 +14,8 @@ import { ModelChartCommonItem } from '@/types/charts/common';
 import { ChartHelper } from '@/domain/charts/helper';
 import ChartPie from '@/ui/widgets/charts/ChartPie/ChartPie';
 import ChartBar from '@/ui/widgets/charts/ChartBar/ChartBar';
+import ChartTable from './ChartTable/ChartTable';
+import AirBnbSlider from '@/ui/widgets/AirBnbSlider/AirBnbSlider';
 
 interface TopChannelsProps { }
 
@@ -148,9 +150,25 @@ const TopChannels: FC<TopChannelsProps> = () => {
               }}></ChartPie>
             </Box>
           </Box>
+
+          <Box sx={{ p: { xs: 2, sm: 2, md: 3 } }} ></Box>
+
+          <ChartTable data={chartCommonItems}></ChartTable>
+          <Box sx={{ p: { xs: 2, sm: 2, md: 3 } }} ></Box>
+
+          <Box className="td-bg-white td-shadow-sm td-px-4 td-py-3 td-border td-border-b-slate-300 td-rounded-lg">
+            <h4 className='td-text-md td-font-medium'>Details</h4>
+          </Box>
+
+
+          <Box sx={{ p: { xs: 2, sm: 2, md: 3 } }} ></Box>
+
+          <AirBnbSlider></AirBnbSlider>
+
+          <ChartTable data={chartCommonItems}></ChartTable>
+
+          
           <Box sx={{ p: { xs: 2, sm: 4, md: 6 } }} ></Box>
-
-
         </Box>
       </Container>
     </div>
