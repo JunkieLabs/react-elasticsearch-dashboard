@@ -7,7 +7,6 @@ import Filters from './Filters/Filters';
 import { subDays } from 'date-fns';
 import { useDispatch, useSelector } from 'react-redux';
 import { StoreActionCommonFilters } from '@/domain/store/commonFilters/reducer';
-import { ModelElasticAggsResultItem } from '@/types/elastic/aggs';
 import { RootState } from '@/domain/store/store';
 import { ModelChartJs } from '@/types/charts/chartjs';
 import { ModelChartCommonItem } from '@/types/charts/common';
@@ -165,9 +164,11 @@ const TopChannels: FC<TopChannelsProps> = () => {
 
           <AirBnbSlider></AirBnbSlider>
 
-          <ChartTable data={chartCommonItems}></ChartTable>
+          {/* <ChartTable data={chartCommonItems}></ChartTable> */}
 
-          
+          <ChartBar data={chartData} sx={{
+
+          }}></ChartBar>
           <Box sx={{ p: { xs: 2, sm: 4, md: 6 } }} ></Box>
         </Box>
       </Container>

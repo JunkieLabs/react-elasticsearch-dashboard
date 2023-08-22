@@ -10,7 +10,7 @@ export default function AuthLayout({
   return (
 
   
-        <Box className={`td-relative td-h-screen`}
+        <Box className={`td-relative td-min-h-screen`}
         sx={{
             display:"flex",
             alignItems:"center",

@@ -153,7 +153,7 @@ const SideNav: FC<SideNavProps> = (props) => {
               <ListItemContent>Device Monitor</ListItemContent>
             </ListItemButton>
 
-            <Link href="/analysis/top-channels"  legacyBehavior passHref>
+            <Link href="/analysis/top-channels" legacyBehavior passHref>
               <ListItemButton component="a" selected={routePath.includes(UiNavigationConstants.analysis.topChannels)}>
                 <ListItemDecorator>
                   <Box className={`td-align-middle td-w-1 td-h-1 td-bg-gray-700`} ></Box>
@@ -199,12 +199,16 @@ const SideNav: FC<SideNavProps> = (props) => {
                 </ListItemDecorator>
                 <ListItemContent>Actions</ListItemContent>
               </Box></ListSubheader>
-            <ListItemButton key={3} selected={routePath.includes(UiNavigationConstants.actions.reportGeneration)}>
-              <ListItemDecorator>
-                <Box className={`td-align-middle td-w-1 td-h-1 td-bg-gray-700`} ></Box>
-              </ListItemDecorator>
-              <ListItemContent>Report generation</ListItemContent>
-            </ListItemButton>
+            <Link href={'/' + UiNavigationConstants.actions.reportGeneration} legacyBehavior passHref >
+
+              <ListItemButton key={3} selected={routePath.includes(UiNavigationConstants.actions.reportGeneration)}>
+                <ListItemDecorator>
+                  <Box className={`td-align-middle td-w-1 td-h-1 td-bg-gray-700`} ></Box>
+                </ListItemDecorator>
+                <ListItemContent>Report generation</ListItemContent>
+              </ListItemButton>
+
+            </Link>
 
 
           </ListItem>
@@ -226,12 +230,14 @@ const SideNav: FC<SideNavProps> = (props) => {
 
           <ListDivider inset={`gutter`} />
           <ListItem>
-            <ListItemButton selected={routePath.includes(UiNavigationConstants.configuration)}>
-              <ListItemDecorator>
-                <Box className={`td-align-middle td-w-1 td-h-1 td-bg-gray-700`} ></Box>
-              </ListItemDecorator>
-              <ListItemContent>Configuration</ListItemContent>
-            </ListItemButton>
+            <Link href={'/' + UiNavigationConstants.configuration} legacyBehavior passHref >
+              <ListItemButton selected={routePath.includes(UiNavigationConstants.configuration)}>
+                <ListItemDecorator>
+                  <Box className={`td-align-middle td-w-1 td-h-1 td-bg-gray-700`} ></Box>
+                </ListItemDecorator>
+                <ListItemContent>Configuration</ListItemContent>
+              </ListItemButton>
+            </Link>
           </ListItem>
         </List>
 

@@ -64,11 +64,11 @@ mapping = {
 
 
 # Delete index if it exists
-if es.indices.exists(index="test_time"):
-    es.indices.delete(index="test_time")
+# if es.indices.exists(index="test_time"):
+#     es.indices.delete(index="test_time")
 
 # Create the index with the defined mapping
-es.indices.create(index="test_time", body=mapping)
+# es.indices.create(index="test_time", body=mapping)
 
 # Define the STB devices and user profiles
 deviceIds = [f'ZX98763{i:02d}' for i in range(1, 10)]
