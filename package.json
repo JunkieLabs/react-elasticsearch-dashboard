@@ -65,6 +65,7 @@
     "@types/react-date-range": "^1.4.4",
     "eslint-plugin-storybook": "^0.6.13",
     "sass": "^1.64.2",
-    "storybook": "^7.2.1"
+    "storybook": "^7.2.1",
+    "xlsx": "^0.18.5"
   }
 }

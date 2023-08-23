@@ -10,6 +10,7 @@ import ChipsInput from '@/ui/widgets/inputs/ChipsInput/ChipsInput';
 import { RootState } from '@/domain/store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { StoreActionTopChannel } from '@/domain/store/topChannel/reducer';
+import { ModelElasticCity } from '@/types/elastic/cities/cities';
 
 interface FiltersProps { }
 
@@ -20,7 +21,10 @@ const Filters: FC<FiltersProps> = () => {
   const [filterGender, setFilterGender] = useState<string>('all');
   const [filterAgeRange, setFilterAgeRange] = useState<number[]>([0, 100]);// useState([30, 50]);
   const [filterPincode, setFilterPincode] = useState<string[]>([]);
-  const [filterRegion, setFilterRegion] = useState<string>('');
+  const [filterRegion, setFilterRegion] = useState<ModelElasticCity | undefined>();
+
+  const regions = useSelector((state: RootState) => state.Cities.values);
+
 
   const [filterAgeRangeDebaunced] = useDebounce(filterAgeRange, 1000);
   const section = useSelector((state: RootState) => state.ChannelPerformance.subFilter);
@@ -31,12 +35,12 @@ const Filters: FC<FiltersProps> = () => {
 
   }, [section])
 
-  useEffect(()=>{
+  useEffect(() => {
     setFilterAgeRange(filterAgeDefaultRange)
 
   }, [filterAgeDefaultRange])
 
-  useEffect(()=>{
+  useEffect(() => {
     // setFilterAgeRange(filterAgeDefaultRange)
     // console.log("filterAgeRangeDebaunced: ", filterAgeRangeDebaunced)
 
@@ -60,9 +64,27 @@ const Filters: FC<FiltersProps> = () => {
 
   }, [filterGender, filterAgeRangeDebaunced, filterPincode, filterRegion]);
 
+  const handleRegionChange = async (regionName: string) => {
+
+    console.log("handleRegionChange: ", regionName);
+
+    if(regionName){
+      let i = regions.findIndex(val => val.city == regionName);
+      if (i >= 0) {
+        setFilterRegion(regions[i]);
+  
+      }
+    }else {
+      setFilterRegion(undefined)
+    }
+
+
+
+  }
+
   console.log("debounce filterPincode: ", filterPincode)
 
- 
+
   return (
     <Box id='e4' className={styles.Filters}>
       <List id='232'
@@ -109,7 +131,7 @@ const Filters: FC<FiltersProps> = () => {
                 variant="soft"
                 color="neutral"
               >
-                Region: {filterRegion}
+                Region: {filterRegion.city}
               </Chip>}
 
 
@@ -243,18 +265,20 @@ const Filters: FC<FiltersProps> = () => {
                       console.log("auto onChange: ", values)
                       // onChange(values);
                     }}
-                    inputValue={filterRegion}
+                    inputValue={filterRegion?.city??""}
                     onInputChange={(event, newInputValue) => {
-                      setFilterRegion(newInputValue);
+                      handleRegionChange(newInputValue);
                     }}
-                    freeSolo={true}
+
+                    getOptionLabel={(option) => option.city}
+                    freeSolo={false}
                     placeholder="Region"
-                    options={top7Region}
+                    options={regions}
                     renderOption={(props, option) => {
                       var { key, ...propsExc } = props as any;
                       return (
-                        <AutocompleteOption variant="soft" key={"op" + option.label}  {...propsExc}>
-                          {option.label}
+                        <AutocompleteOption variant="soft" key={"op" + option.city}  {...propsExc}>
+                          {option.city}
                         </AutocompleteOption>
                       );
                     }}

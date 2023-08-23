@@ -8,6 +8,7 @@ import { TopChannelReducers } from '@/domain/store/topChannel/reducer';
 import { AppReducers } from '@/domain/store/app/reducer';
 import { configureStore } from '@reduxjs/toolkit'
 import { rootSaga } from './rootSaga';
+import { CitiesReducers } from './cities/reducer';
 
 
 
@@ -16,6 +17,7 @@ const sagaMiddleware = createSagaMiddleware();
 export const store = configureStore({
     reducer: {
         App: AppReducers,
+        Cities: CitiesReducers,
         CommonFilters : CommonFiltersReducers,
         ChannelPerformance: ChannelPerformanceReducers,
         TopChannel: TopChannelReducers
