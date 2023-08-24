@@ -108,12 +108,12 @@ const ChartPie: FC<ChartPieProps> = (props) => {
   }, [props.data, canvasRef.current]);
 
   return (
-    <Box className={styles.ChartPie} sx={[props.sx ?? [] as any, {
+    <Box className={styles.ChartPie} sx={[ {
       // transform: `rotate(${degree}deg)`
       display: `flex`,
       height: '100%',
       // width: '100%'
-    }]}>
+    }, props.sx ?? [] as any]}>
       <canvas ref={canvasRef} />
     </Box>
   );

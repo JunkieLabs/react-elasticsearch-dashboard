@@ -123,7 +123,6 @@ const ChartBar: FC<ChartBarProps> = (props) => {
       // transform: `rotate(${degree}deg)`
       display: `flex`,
       height: '100%',
-      width: '100%'
     }]}>
       <canvas ref={canvasRef} />
     </Box>

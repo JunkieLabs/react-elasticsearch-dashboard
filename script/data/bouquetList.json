@@ -1,0 +1,86 @@
+[
+    {
+        "id": "0",
+        "name": "Tamil"
+    },
+    {
+        "id": "1",
+        "name": "Telugu"
+    },
+    {
+        "id": "2",
+        "name": "Malayalam"
+    },
+    {
+        "id": "3",
+        "name": "Kannada"
+    },
+    {
+        "id": "4",
+        "name": "Hindi"
+    },
+    {
+        "id": "5",
+        "name": "Kids"
+    },
+    {
+        "id": "6",
+        "name": "English Movies / Ent"
+    },
+    {
+        "id": "7",
+        "name": "News"
+    },
+    {
+        "id": "8",
+        "name": "Sports"
+    },
+    {
+        "id": "9",
+        "name": "Infotainment"
+    },
+    {
+        "id": "a",
+        "name": "Bangla"
+    },
+    {
+        "id": "b",
+        "name": "Odia"
+    },
+    {
+        "id": "c",
+        "name": "Marathi"
+    },
+    {
+        "id": "d",
+        "name": "Other Regional"
+    },
+    {
+        "id": "e",
+        "name": "Religion"
+    },
+    {
+        "id": "f",
+        "name": "HD Hindi"
+    },
+    {
+        "id": "10",
+        "name": "HD English"
+    },
+    {
+        "id": "11",
+        "name": "HD Infotainment "
+    },
+    {
+        "id": "12",
+        "name": "HD Sports"
+    },
+    {
+        "id": "13",
+        "name": "HD Malayalam / Kannada"
+    },
+    {
+        "id": "14",
+        "name": "HD Tamil / Telugu"
+    }
+]

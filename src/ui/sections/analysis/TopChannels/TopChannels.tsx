@@ -139,12 +139,18 @@ const TopChannels: FC<TopChannelsProps> = () => {
               }}></ChartBar>
             </Box>
             <Box sx={{
-              height: 400,
+              maxHeight: 400,
+              display: "flex",
+              alignItems:"center",
+              flexDirection:"column",
               flex: { xs: '1 1 calc( 100%  )', sm: '1 1 calc( 40% - 2rem )' },
               maxWidth: { xs: 'calc( 99% )', sm: 'calc( 40% - 2rem )' }
 
             }}>
               <ChartPie data={chartData} sx={{
+                maxHeight:"100%",
+                height: `unset`,
+                width:'100%'
 
               }}></ChartPie>
             </Box>
@@ -166,13 +172,22 @@ const TopChannels: FC<TopChannelsProps> = () => {
 
           {/* <ChartTable data={chartCommonItems}></ChartTable> */}
 
-          <ChartBar data={chartData} sx={{
+          <Box sx={{
+            height: 400,
+            display: "flex",
+            width: "100%",
+            maxWidth: 'calc( 99% )'
+          }
+          } >
+            <ChartBar data={chartData} sx={{
+              width:'100%'
 
-          }}></ChartBar>
-          <Box sx={{ p: { xs: 2, sm: 4, md: 6 } }} ></Box>
-        </Box>
-      </Container>
-    </div>
+            }}></ChartBar>
+          </Box>
+        <Box sx={{ p: { xs: 2, sm: 4, md: 6 } }} ></Box>
+      </Box>
+    </Container>
+    </div >
   )
 };
 

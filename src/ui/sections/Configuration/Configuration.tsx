@@ -1,8 +1,12 @@
 import React, { FC, FormEvent, useState } from 'react';
 import styles from './Configuration.module.scss';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { format, subDays } from 'date-fns';
-import { Container, Box, FormControl, Input, FormHelperText, Button } from '@mui/joy';
+import { Container, Box, FormControl, Input, FormHelperText, Button, Checkbox } from '@mui/joy';
+import { RootState } from '@/domain/store/store';
+import { ModelStoreConfigurationFilter } from '@/types/store/configuration';
+import { StoreActionConfiguration } from '@/domain/store/configuration/reducer';
+import { StoreSelectorsConfiguration } from '@/domain/store/configuration/selector';
 
 interface ConfigurationProps { }
 
@@ -12,6 +16,11 @@ const Configuration: FC<ConfigurationProps> = () => {
 
 
   const dispatch = useDispatch()
+
+  // const filtersState = useSelector((state: RootState) => state.Configuration.filters);
+  const filtersState = useSelector(StoreSelectorsConfiguration.filters);
+
+
   const [formData, setFormData] = useState({ topChannelCounts: "", slowChannelCounts: "" });
 
   const [error, setError] = useState({ topChannelCounts: "", slowChannelCounts: "" });
@@ -35,6 +44,31 @@ const Configuration: FC<ConfigurationProps> = () => {
     setLoding(true);
 
   }
+
+  const handleFilterSelection = (filterItem: ModelStoreConfigurationFilter) => (event: { target: { checked: boolean; }; }) => {
+    // const newSelections = [...filterItem.selections];
+
+    console.log("handleSelection: ", filterItem, event.target.checked)
+
+    // var index = filtersState.findIndex(val => val.name == filterItem.name);
+    // if(index >= 0){
+    //   var updatedFilter = filtersState[index];
+
+    //   updatedFilter.isEnabled = event.target.checked??true;
+    //   // dispatch(StoreActionConfiguration.setFilterState(updatedFilter));
+    // }
+    var filterItemUpdated =Object.assign({},filterItem,  {
+      isEnabled: event.target.checked
+    })
+    // filterItem
+    // filterItemUpdated.isEnabled = event.target.checked
+    dispatch(StoreActionConfiguration.updateFilter(filterItemUpdated));
+
+
+    // newSelections[index] = event.target.checked;
+    // props.setSelectedVerticals(newSelections);
+
+  };
 
   console.log("new Date().toUTCString()", format(new Date(), "dd-MM-yyyy"));
 
@@ -148,6 +182,33 @@ const Configuration: FC<ConfigurationProps> = () => {
             <h4 className='td-text-sm'>
               Enable Filter
             </h4>
+
+            {filtersState.map((filterItem, index) => {
+
+              return (
+                <Box key={filterItem.name}>
+                  <Checkbox
+                    size="sm"
+                    label={filterItem.label}
+
+                    // overlay
+                    variant='solid'
+                    checked={filterItem.isEnabled}
+                    onChange={handleFilterSelection(filterItem)}
+
+
+                    // slotProps={{
+                    //   label: { className: "tb-color--black-87 current-typo--h5-medium current-font--big-john" },
+                    //   root: { className: styles[`checkbox-root`] },
+                    //   checkbox: { className: styles[`checkbox`] }
+
+
+
+                    // }}
+                  />
+                </Box>
+              );
+            })}
 
 
 
