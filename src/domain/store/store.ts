@@ -10,6 +10,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { rootSaga } from './rootSaga';
 import { CitiesReducers } from './cities/reducer';
 import { ConfigurationReducers } from './configuration/reducer';
+import { PincodesReducers } from './pincodes/reducer';
 
 
 
@@ -20,6 +21,7 @@ export const store = configureStore({
         App: AppReducers,
         Configuration: ConfigurationReducers,
         Cities: CitiesReducers,
+        Pincodes: PincodesReducers,
         CommonFilters : CommonFiltersReducers,
         ChannelPerformance: ChannelPerformanceReducers,
         TopChannel: TopChannelReducers

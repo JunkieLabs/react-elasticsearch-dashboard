@@ -11,6 +11,7 @@ import { RootState } from '@/domain/store/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { StoreActionTopChannel } from '@/domain/store/topChannel/reducer';
 import { ModelElasticCity } from '@/types/elastic/cities/cities';
+import { StoreActionPincodes } from '@/domain/store/pincodes/reducer';
 
 interface FiltersProps { }
 
@@ -22,12 +23,15 @@ const Filters: FC<FiltersProps> = () => {
   const [filterAgeRange, setFilterAgeRange] = useState<number[]>([0, 100]);// useState([30, 50]);
   const [filterPincode, setFilterPincode] = useState<string[]>([]);
   const [filterRegion, setFilterRegion] = useState<ModelElasticCity | undefined>();
+  const [pincodeInputText, setPincodeInputText] = useState<string>('');
 
   const regions = useSelector((state: RootState) => state.Cities.values);
 
+  const pincodesAutoComplete = useSelector((state: RootState) => state.Pincodes.items);
 
-  const [filterAgeRangeDebaunced] = useDebounce(filterAgeRange, 1000);
   const section = useSelector((state: RootState) => state.ChannelPerformance.subFilter);
+  const [filterAgeRangeDebaunced] = useDebounce(filterAgeRange, 1000);
+
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -46,6 +50,14 @@ const Filters: FC<FiltersProps> = () => {
 
   }, [filterAgeRangeDebaunced])
 
+  useEffect(() => {
+
+    console.log("Pincodes in: ", pincodeInputText);
+    dispatch(StoreActionPincodes.search(pincodeInputText))
+    return () => { }
+
+  }, [pincodeInputText])
+
 
   useEffect(() => {
     // console.log("filterAgeRange: ", filterAgeRange, filterAgeDefaultRange, filterAgeDefaultRange === filterAgeRange)
@@ -57,17 +69,12 @@ const Filters: FC<FiltersProps> = () => {
       region: filterRegion
 
     }))
-
-
-
     return () => { }
 
   }, [filterGender, filterAgeRangeDebaunced, filterPincode, filterRegion]);
 
   const handleRegionChange = async (regionName: string) => {
-
     console.log("handleRegionChange: ", regionName);
-
     if(regionName){
       let i = regions.findIndex(val => val.city == regionName);
       if (i >= 0) {
@@ -77,10 +84,9 @@ const Filters: FC<FiltersProps> = () => {
     }else {
       setFilterRegion(undefined)
     }
-
-
-
   }
+
+ 
 
   console.log("debounce filterPincode: ", filterPincode)
 
@@ -298,7 +304,12 @@ const Filters: FC<FiltersProps> = () => {
                   }}>
 
                   <h4 className='td-text-xs td-font-medium'>Select Pincode</h4>
-                  <ChipsInput chips={filterPincode} setChips={setFilterPincode} placeholder='type pincode '></ChipsInput>
+                  <ChipsInput chips={filterPincode} 
+                  
+                  setChips={setFilterPincode} 
+                  onTextChange={setPincodeInputText}
+                  options={pincodesAutoComplete}
+                  placeholder='type pincode '></ChipsInput>
                 </Box>
 
 

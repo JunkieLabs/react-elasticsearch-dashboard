@@ -13,6 +13,7 @@ export interface ModelElasticAggsTermsResult {
 // Client Side
 export interface ModelElasticAggsResult {
     field?: string
+    total?: number
     items: ModelElasticAggsResultItem[] | number[]
 }
 

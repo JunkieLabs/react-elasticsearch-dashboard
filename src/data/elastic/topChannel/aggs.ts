@@ -5,10 +5,13 @@ import { ModelElasticPincode, ModelElasticPincodesResult } from "@/types/elastic
 import { ModelChannelPerformanceFilters } from "@/types/store/channelPerformance";
 import { ElasticConstants } from "../elastic.constants";
 
-const getTopN = async ({ n = 5, locations, ageRange, dateRange }: { n: number , locations: ModelElasticGeoPoint[], ageRange?: number[], dateRange: Date[] }): Promise<ModelElasticAggsResultItem[]> => {
+const getTopN = async ({ n = 5, locations, pincodes, ageRange, dateRange }:
+     { n: number , locations: ModelElasticGeoPoint[], ageRange?: number[], pincodes?: string[], dateRange: Date[] }): Promise<ModelElasticAggsResultItem[]> => {
     // Simulate API delay
 
     var searchParam = new URLSearchParams();
+
+    pincodes?.forEach(pincode => searchParam.append('pincode', pincode))
 
     locations.forEach(location => searchParam.append('location', JSON.stringify(location)))
     searchParam.append('field', ElasticConstants.indexes.testTime.channelName);
