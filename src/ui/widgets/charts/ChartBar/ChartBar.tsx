@@ -20,7 +20,7 @@ const ChartBar: FC<ChartBarProps> = (props) => {
 
   const [chartInstance, setChartInstance] = useState<Chart<"bar", number[], string>>();
 
-  console.log("ChartBar data: ", props.data)
+  // console.log("ChartBar data: ", props.data)
 
   useEffect(() => {
     const ctx = (canvasRef.current as HTMLCanvasElement | null)?.getContext('2d');
@@ -63,7 +63,7 @@ const ChartBar: FC<ChartBarProps> = (props) => {
           datasets: props.data?.data ?? [],
         },
       });
-      console.log("chartInstance data: ", props.data)
+      // console.log("chartInstance data: ", props.data)
       chartRef.current = newChartInstance;
       // setChartInstance(newChartInstance);
 
@@ -108,7 +108,7 @@ const ChartBar: FC<ChartBarProps> = (props) => {
       } else {
         chartIns.data.datasets = [];
       }
-      console.log('Canvas ref:', chartIns);
+      // console.log('Canvas ref:', chartIns);
       // console.log("chartInstance data: ", chartInstance.config, chartInstance.update)
 
 

@@ -12,37 +12,44 @@ import { useDispatch, useSelector } from 'react-redux';
 import { StoreActionTopChannel } from '@/domain/store/topChannel/reducer';
 import { ModelElasticCity } from '@/types/elastic/cities/cities';
 import { StoreActionPincodes } from '@/domain/store/pincodes/reducer';
+import { ModelTopChannelFilters } from '@/types/store/topChannel';
 
 interface FiltersProps { }
 
 const Filters: FC<FiltersProps> = () => {
 
-  const filterAgeDefaultRange = useSelector((state: RootState) => state.CommonFilters.ageRange);
+  const stateAgeRangeDefault = useSelector((state: RootState) => state.CommonFilters.ageRange);
+
+  const stateDefaultRegions = useSelector((state: RootState) => state.Cities.values);
+
+  const stateSubFilter = useSelector((state: RootState) => state.TopChannel.subFilter);
 
   const [filterGender, setFilterGender] = useState<string>('all');
   const [filterAgeRange, setFilterAgeRange] = useState<number[]>([0, 100]);// useState([30, 50]);
   const [filterPincode, setFilterPincode] = useState<string[]>([]);
-  const [filterRegion, setFilterRegion] = useState<ModelElasticCity | undefined>();
+  const [filterRegion, setFilterRegion] = useState<ModelElasticCity | null>(null);
   const [pincodeInputText, setPincodeInputText] = useState<string>('');
 
-  const regions = useSelector((state: RootState) => state.Cities.values);
 
   const pincodesAutoComplete = useSelector((state: RootState) => state.Pincodes.items);
 
-  const section = useSelector((state: RootState) => state.ChannelPerformance.subFilter);
   const [filterAgeRangeDebaunced] = useDebounce(filterAgeRange, 1000);
 
 
   const dispatch = useDispatch();
   useEffect(() => {
     // filterGender.
+    setFilterRegion(stateSubFilter.region ?? null)
+    setFilterPincode(stateSubFilter.pincodes)
+    setFilterGender(stateSubFilter.gender)
+    // = stateSubFilter.region
 
-  }, [section])
+  }, [stateSubFilter])
 
   useEffect(() => {
-    setFilterAgeRange(filterAgeDefaultRange)
+    setFilterAgeRange(stateAgeRangeDefault)
 
-  }, [filterAgeDefaultRange])
+  }, [stateAgeRangeDefault])
 
   useEffect(() => {
     // setFilterAgeRange(filterAgeDefaultRange)
@@ -58,35 +65,70 @@ const Filters: FC<FiltersProps> = () => {
 
   }, [pincodeInputText])
 
-
-  useEffect(() => {
-    // console.log("filterAgeRange: ", filterAgeRange, filterAgeDefaultRange, filterAgeDefaultRange === filterAgeRange)
-
-    dispatch(StoreActionTopChannel.setSubFilter({
-      gender: filterGender,
-      pincodes: filterPincode,
-      ageRange: filterAgeRangeDebaunced,
-      region: filterRegion
-
-    }))
-    return () => { }
-
-  }, [filterGender, filterAgeRangeDebaunced, filterPincode, filterRegion]);
-
-  const handleRegionChange = async (regionName: string) => {
-    console.log("handleRegionChange: ", regionName);
-    if(regionName){
-      let i = regions.findIndex(val => val.city == regionName);
-      if (i >= 0) {
-        setFilterRegion(regions[i]);
+  /*
+    useEffect(() => {
+      console.log("filterAgeRange: ", filterAgeRange, filterAgeDefaultRange, filterAgeDefaultRange === filterAgeRange)
   
+      // console.log("filterAgeRange: ", filterAgeRange, filterAgeDefaultRange, filterAgeDefaultRange === filterAgeRange)
+  
+      dispatch(StoreActionTopChannel.setSubFilter({
+        gender: filterGender,
+        pincodes: filterPincode,
+        ageRange: filterAgeRangeDebaunced,
+        region: filterRegion
+  
+      }))
+      return () => { }
+  
+    }, [filterGender, filterAgeRangeDebaunced, filterPincode, filterRegion]);
+  */
+
+  const handleStoreChange = async (topChannelFilters: ModelTopChannelFilters) => {
+    // return (){}
+
+    console.log("handleStoreChange: ", topChannelFilters)
+    dispatch(StoreActionTopChannel.setSubFilter(topChannelFilters))
+    // dispatch(StoreActionTopChannel.setSubFilter({
+    //   gender: filterGender,
+    //   pincodes: filterPincode,
+    //   ageRange: filterAgeRangeDebaunced,
+    //   region: filterRegion??undefined
+
+    // }))
+
+  }
+  const handleRegionChange = async (region: ModelElasticCity | undefined) => {
+    console.log("handleRegionChange: ", region);
+    if (region) {
+      let i = stateDefaultRegions.findIndex(val => val.city == region.city);
+      if (i >= 0) {
+        setFilterRegion(stateDefaultRegions[i]);
+
       }
-    }else {
-      setFilterRegion(undefined)
+    } else {
+      console.log("handleRegionChange 2: ");
+
+      setFilterRegion(null)
     }
+    handleStoreChange({ ...stateSubFilter, region: region })
   }
 
- 
+  const handlePincodesChange = async (pincodes: string[]) => {
+
+    setFilterPincode(pincodes)
+
+    handleStoreChange({ ...stateSubFilter, pincodes: pincodes })
+  }
+  const handleGenderChange = async (gender: string | null) => {
+    if (!gender) {
+      return;
+    }
+
+    setFilterGender(gender)
+
+    handleStoreChange({ ...stateSubFilter, gender: gender })
+  }
+
 
   console.log("debounce filterPincode: ", filterPincode)
 
@@ -195,7 +237,8 @@ const Filters: FC<FiltersProps> = () => {
                     onChange={(event, newValue) => {
                       // setValue(newValue);
                       console.log("ToggleButtonGroup gender: ", newValue);
-                      setFilterGender(newValue ?? 'all');
+                      handleGenderChange(newValue);
+                      // setFilterGender(newValue ?? 'all');
                     }}
                   >
                     <Button value="all">All</Button>
@@ -219,15 +262,15 @@ const Filters: FC<FiltersProps> = () => {
                   <Slider
                     getAriaLabel={() => 'Age range'}
                     value={filterAgeRange}
-                    defaultValue={filterAgeDefaultRange.length > 0 ? filterAgeDefaultRange : [0, 90]}
+                    defaultValue={stateAgeRangeDefault.length > 0 ? stateAgeRangeDefault : [0, 90]}
 
-                    max={filterAgeDefaultRange.length > 1 ? filterAgeDefaultRange[1] : 100}
-                    min={filterAgeDefaultRange.length > 1 ? filterAgeDefaultRange[0] : 0}
+                    max={stateAgeRangeDefault.length > 1 ? stateAgeRangeDefault[1] : 100}
+                    min={stateAgeRangeDefault.length > 1 ? stateAgeRangeDefault[0] : 0}
 
                     onChange={(event, newValue) => {
                       // setValue(newValue);
                       // console.log("ToggleButtonGroup age: ", newValue, filterAgeDefaultRange);
-                      setFilterAgeRange((newValue as number[]) ?? filterAgeDefaultRange);
+                      setFilterAgeRange((newValue as number[]) ?? stateAgeRangeDefault);
                     }}
                     valueLabelDisplay="auto"
                   // getAriaValueText={valueText}
@@ -264,7 +307,7 @@ const Filters: FC<FiltersProps> = () => {
                   }}>
 
                   <h4 className='td-text-xs td-font-medium'>Select Region</h4>
-                  <Autocomplete
+                  {/* <Autocomplete
 
                     onChange={(event, values) => {
 
@@ -289,6 +332,37 @@ const Filters: FC<FiltersProps> = () => {
                       );
                     }}
 
+                  /> */}
+
+                  <Autocomplete
+
+                    onChange={(event, values) => {
+
+                      console.log("auto onChange: ", values)
+                      // onChange(values);
+                      handleRegionChange(values ?? undefined);
+                    }}
+                    // defaultValue={filterRegion}
+                    value={filterRegion}
+                    // isOptionEqualToValue={(option ,  val) => option.city == val.city}
+                    // defaultValue={filterRegion?.city ?? ""}
+                    // onInputChange={(event, newInputValue) => {
+                    //   handleRegionChange(newInputValue);
+                    // }}
+
+                    getOptionLabel={(option) => option.city}
+                    // freeSolo={false}
+                    // placeholder="Region"
+                    options={stateDefaultRegions}
+                    renderOption={(props, option) => {
+                      var { key, ...propsExc } = props as any;
+                      return (
+                        <AutocompleteOption variant="soft" key={"op" + option.city}  {...propsExc}>
+                          {option.city}
+                        </AutocompleteOption>
+                      );
+                    }}
+
                   // sx={{ width: 300 }}
                   />
                 </Box>
@@ -304,12 +378,12 @@ const Filters: FC<FiltersProps> = () => {
                   }}>
 
                   <h4 className='td-text-xs td-font-medium'>Select Pincode</h4>
-                  <ChipsInput chips={filterPincode} 
-                  
-                  setChips={setFilterPincode} 
-                  onTextChange={setPincodeInputText}
-                  options={pincodesAutoComplete}
-                  placeholder='type pincode '></ChipsInput>
+                  <ChipsInput chips={filterPincode}
+
+                    onChipsChange={handlePincodesChange}
+                    onTextChange={setPincodeInputText}
+                    options={pincodesAutoComplete}
+                    placeholder='type pincode '></ChipsInput>
                 </Box>
 
 

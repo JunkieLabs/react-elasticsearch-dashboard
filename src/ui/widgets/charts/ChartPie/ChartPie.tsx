@@ -21,7 +21,7 @@ const ChartPie: FC<ChartPieProps> = (props) => {
 
   const [chartInstance, setChartInstance] = useState<Chart<"pie", number[], string>>();
 
-  console.log("ChartPie data: ", props.data)
+  // console.log("ChartPie data: ", props.data)
 
   useEffect(() => {
     const ctx = (canvasRef.current as HTMLCanvasElement | null)?.getContext('2d');
@@ -52,7 +52,7 @@ const ChartPie: FC<ChartPieProps> = (props) => {
         },
 
       });
-      console.log("chartInstance data: ", props.data)
+      // console.log("chartInstance data: ", props.data)
       chartRef.current = newChartInstance;
       // setChartInstance(newChartInstance);
 
@@ -97,7 +97,7 @@ const ChartPie: FC<ChartPieProps> = (props) => {
       } else {
         chartIns.data.datasets = [];
       }
-      console.log('Canvas ref:', chartIns);
+      // console.log('Canvas ref:', chartIns);
       // console.log("chartInstance data: ", chartInstance.config, chartInstance.update)
 
 

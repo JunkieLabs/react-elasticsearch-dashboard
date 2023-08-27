@@ -95,9 +95,9 @@ function* handleCommonFilterChangeDeprecated() {
     }
 
    
-    console.log("handleCommonFilterChange filter: ", filter)
+    // console.log("handleCommonFilterChange filter: ", filter)
 
-    console.log("handleCommonFilterChange Pincodes: ", pincodes)
+    // console.log("handleCommonFilterChange Pincodes: ", pincodes)
 
 
 

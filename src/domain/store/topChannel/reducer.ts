@@ -2,6 +2,7 @@ import { ModelTopChannelFilters } from '@/types/store/topChannel';
 import { DummyData } from '@/types/store/dummyData';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ModelElasticAggsResultItem } from '@/types/elastic/aggs';
+import { ModelElasticCity } from '@/types/elastic/cities/cities';
 
 
 
@@ -34,7 +35,11 @@ const topChannelSlice = createSlice({
         },
         setSubFilter: (state, action: PayloadAction<ModelTopChannelFilters>) => {
             state.subFilter = action.payload;
-        },
+        }, 
+        // setSubFilterRegion: (state, action: PayloadAction<ModelElasticCity| undefined>) => {
+        //     state.subFilter.region = action.payload;
+        //     dispatch()
+        // },
     },
 });
 

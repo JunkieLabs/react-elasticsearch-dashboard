@@ -14,7 +14,8 @@ interface ChipsInputProps {
   placeholder: string
   options?: string[]
   onTextChange?: React.Dispatch<React.SetStateAction<string>>
-  setChips: React.Dispatch<React.SetStateAction<string[]>>
+  onChipsChange: (chipsvalue: string[])=>{}
+  // setChips: React.Dispatch<React.SetStateAction<string[]>>
 }
 
 const ChipsInput: FC<ChipsInputProps> = (props) => {
@@ -37,15 +38,17 @@ const ChipsInput: FC<ChipsInputProps> = (props) => {
 
   const handleChange = (value: string[]) => {
     // throw new Error('Function not implemented.');
+    props.onChipsChange(value)
 
-    props.setChips(value)
+    // props.setChips(value)
   }
 
   const onRemove = (option: string) => {
 
     // console.log("onRemove chips: ", option, props.chips)
     var newChips = props.chips.filter(ch => ch != option)
-    props.setChips(newChips)
+    props.onChipsChange(newChips)
+    // props.setChips(newChips)
     // console.log("onRemove chips 2: ",newChips)
   }
 
@@ -109,7 +112,8 @@ const ChipsInput: FC<ChipsInputProps> = (props) => {
       }}
       onChange={(event, values) => {
         // onChange(values);
-        props.setChips(values)
+        // props.setChips(values)
+        props.onChipsChange(values)
       }}
 
     />
