@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { TransformHelper } from '@/tools/parserTools';
 import { ModelElasticAggsResult, ModelElasticAggsStatsResult, ModelElasticAggsTermsResult } from '@/types/elastic/aggs';
-import { ModelElasticPincode, ModelElasticPincodesResult } from '@/types/elastic/pincodes/pincodes';
+// import { ModelElasticbouquet, ModelElasticbouquetsResult } from '@/types/elastic/bouquets/bouquets';
 import { QueryDslQueryContainer } from '@elastic/elasticsearch/lib/api/types';
 
 export async function GET(req: Request) {
@@ -23,7 +23,7 @@ export async function GET(req: Request) {
         max: 50,
         min: 10
     });
-    // let pincodes = searchParams.getAll('pincode');
+    // let bouquets = searchParams.getAll('bouquet');
 
     let search = searchParams.get('search');
 
@@ -32,14 +32,16 @@ export async function GET(req: Request) {
     var response: ModelElasticAggsResult = {
         items: [],
         total: 0,
-        field: ElasticConstants.indexes.eventLogs.pincode,
+        skip: skip,
+        limit: limit,
+        field: ElasticConstants.indexes.eventLogs.bouquet,
         // total: 
     }
 
     // if (!search || sea.length < 0) {
 
 
-    //     return NextResponse.json({ message: 'no pincodes' }, {
+    //     return NextResponse.json({ message: 'no bouquets' }, {
     //         status: ApiConstants.httpError.badRequest
     //     });
     // }
@@ -53,7 +55,7 @@ export async function GET(req: Request) {
 
     if (search) {
         query.wildcard = {
-            [`${ElasticConstants.indexes.eventLogs.pincode}.keyword`]: `*${search}*`
+            [`${ElasticConstants.indexes.eventLogs.bouquet}.keyword`]: `*${search}*`
         }
     }else {
        query = undefined
@@ -71,7 +73,7 @@ export async function GET(req: Request) {
             aggs: {
                 result: {
                     terms: {
-                        field: `${ElasticConstants.indexes.eventLogs.pincode}.keyword`,
+                        field: `${ElasticConstants.indexes.eventLogs.bouquet}.keyword`,
                         size: limit+skip,
                         order: [
                             { "_key": "asc" }
@@ -81,7 +83,7 @@ export async function GET(req: Request) {
                         paginated: {
                             bucket_sort: {
                                 from: skip,  // Starting point for pagination (11th result)
-                                size: limit, // Number of buckets (pincodes) per page
+                                size: limit, // Number of buckets (bouquets) per page
                                 sort: [
                                     { "_key": "asc" }
                                 ]
@@ -93,7 +95,7 @@ export async function GET(req: Request) {
                 
                 total: {
                     cardinality: {
-                      field: `${ElasticConstants.indexes.eventLogs.pincode}.keyword`
+                      field: `${ElasticConstants.indexes.eventLogs.bouquet}.keyword`
                     }
                   }
             }
@@ -103,7 +105,7 @@ export async function GET(req: Request) {
     
     const items = (result.aggregations as Result)?.result;
     response.items = items?.buckets??[]
-
+  
     // response.items = (result.hits.hits).map(ele => ele._source) as Result[];//?.result 
     response.total = totalItems;//?.result 
     //as ModelElasticAggsTermsResult

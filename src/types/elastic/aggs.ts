@@ -14,6 +14,8 @@ export interface ModelElasticAggsTermsResult {
 export interface ModelElasticAggsResult {
     field?: string
     total?: number
+    skip?: number
+    limit? : number
     items: ModelElasticAggsResultItem[] | number[]
 }
 

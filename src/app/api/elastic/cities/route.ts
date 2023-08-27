@@ -26,7 +26,7 @@ export async function GET(req: Request) {
     const elastic = await getElasticClient();
     var response: ModelElasticCitiesResult = {
         items: [],
-        size: 0
+        size: 0,
     }
 
     // if (!pincodes || pincodes.length < 0) {

@@ -52,11 +52,11 @@ const settings = {
     "mappings": {
 
         "properties": {
-            "channel_name": {
-                "type": "text"
-            },
-            "bouquet_name": { "type": "text" },
-            "deviceId": { "type": "text" },
+            // "channel_name": {
+            //     "type": "text"
+            // },
+            // "bouquet_name": { "type": "text" },
+            // "deviceId": { "type": "text" },
             "user_age": { "type": "integer" },
             "event": { "type": "text" },
             "timestamp": {
