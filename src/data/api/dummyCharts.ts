@@ -2,7 +2,7 @@ import { DummyData } from "@/types/store/dummyData";
 
 
 // Simulate fetching channelPerformances based on filter and subFilter
-export async function fetchChannelPerformanceDummyData(filter: string, subFilter: string): Promise<DummyData[]> {
+export async function fetchDummyChartsData(filter: string, subFilter: string): Promise<DummyData[]> {
   // Simulate API delay
   await new Promise((resolve) => setTimeout(resolve, 1000));
 

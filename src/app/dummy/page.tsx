@@ -4,13 +4,10 @@ import React, { FC, useCallback } from 'react';
 
 import useSWR from 'swr';
 import styles from './styles.module.scss';
+import DummyCharts from '@/ui/sections/dummy/DummyCharts/DummyCharts';
 import { fetcher } from '@/tools/apiHelper';
-import ChannelPerformance from '@/ui/sections/analysis/ChannelPerformance/ChannelPerformance';
 
-interface PagesProps {
-  
-  searchParams: Record<string, string> | null | undefined;
-}
+interface PagesProps {}
 
 
 // const  useSearchs= () => {
@@ -19,11 +16,10 @@ interface PagesProps {
 //     return await r.json();
 //   }, []);
 // }
-// const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
-const Pages: FC<PagesProps> = (props) =>{
+const Pages: FC<PagesProps> = () =>{
   
-  // const { data, error } = useSWR(`/api/elastic`, fetcher);
+  const { data, error } = useSWR(`/api/elastic`, fetcher);
 
   // const searchs = useSearchs();
   // const onSearch = useCallback(
@@ -36,10 +32,10 @@ const Pages: FC<PagesProps> = (props) =>{
   //   },
   //   [searchs]
   // );
-  // console.log("data", data);
+  console.log("data", data);
  
   return ( <div className={styles.Main}>
-   <ChannelPerformance searchParams={props.searchParams}></ChannelPerformance>
+   <DummyCharts></DummyCharts>
   </div>
 )
   };
