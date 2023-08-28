@@ -55,7 +55,7 @@ const SideNav: FC<SideNavProps> = (props) => {
           lg: 'none',
         },
         transition: 'transform 0.4s, width 0.4s',
-        zIndex: 10000,
+        zIndex: 1000,
         height: '100dvh',
         width: 'var(--Sidebar-width)',
         top: 0,

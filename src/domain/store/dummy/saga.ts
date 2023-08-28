@@ -10,7 +10,7 @@ function* handleCommonFilterChange() {
 
     // Fetch based on filter and sub-filter
     const filter: string = yield select((state: RootState) => state.CommonFilters.value);
-    const subFilter: ModelDummyChartsFilters = yield select((state: RootState) => state.dummyCharts.subFilter);
+    const subFilter: ModelDummyChartsFilters = yield select((state: RootState) => state.DummyCharts.subFilter);
     // let pincodes: ModelElasticPincode[] =[]
     // if(subFilter.pincodes.length>0){
     //     const pincodesResult: ModelElasticPincode[] = yield ElasticPincodeRepo.getAll(subFilter.pincodes);

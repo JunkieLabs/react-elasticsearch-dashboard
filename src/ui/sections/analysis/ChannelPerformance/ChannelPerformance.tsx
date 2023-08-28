@@ -61,21 +61,21 @@ const ChannelPerformance: FC<ChannelPerformanceProps> = (props) => {
           </Box>
           <Box sx={{ p: { xs: 1, sm: 1, md: 1 } }} ></Box>
 
-          <Filters></Filters>
+          <Filters searchParams={props.searchParams}></Filters>
 
           
-
+          <Box sx={{ p: { xs: 1, sm: 1, md: 1 } }} ></Box>
 
         </Box>
 
 
-        <Link href="?modal=true" legacyBehavior passHref >
+        {/* <Link href="?modal=true" legacyBehavior passHref >
           <Button>Modal</Button>
         </Link>
         {modal && <Box> What</Box>}
         {modal && <Link href="?modal=false" legacyBehavior passHref >
           <Button>Modal cancel</Button>
-        </Link>}
+        </Link>} */}
         {/* <Box> What</Box>} */}
 
       </Container>

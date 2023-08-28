@@ -25,7 +25,7 @@ export const store = configureStore({
         Pincodes: PincodesReducers,
         CommonFilters : CommonFiltersReducers,
         ChannelPerformance: ChannelPerformanceReducers,
-        dummyCharts: DummyChartsReducers,
+        DummyCharts: DummyChartsReducers,
         TopChannel: TopChannelReducers
     },
     middleware:[sagaMiddleware]

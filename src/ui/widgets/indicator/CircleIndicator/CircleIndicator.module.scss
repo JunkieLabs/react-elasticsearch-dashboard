@@ -1,0 +1,24 @@
+.CircleIndicator {
+    --color-primary: #ff0d4f;
+    height: 0.4rem;
+    width: 0.4rem;
+    position: relative;
+
+    &::after {
+        // position: relative;
+        // &::after{
+
+        position: absolute;
+        // left: -0.6rem;
+        top: 50%;
+        transform: translate(-50%, -50%);
+
+        background: var(--color-primary);
+        content: "";
+
+        height: 0.4rem;
+        width: 0.4rem;
+        border-radius: 50%;
+        // }
+    }
+}

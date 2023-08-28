@@ -1,8 +1,6 @@
 import { fetcher } from "@/tools/apiHelper";
 import { ModelElasticAggsResult, ModelElasticAggsResultItem } from "@/types/elastic/aggs";
 import { ModelElasticGeoPoint } from "@/types/elastic/common";
-import { ModelElasticPincode, ModelElasticPincodesResult } from "@/types/elastic/pincodes/pincodes";
-import { ModelChannelPerformanceFilters } from "@/types/store/channelPerformance";
 import { ElasticConstants } from "../elastic.constants";
 
 const getTopN = async ({ n = 5, locations, pincodes, ageRange, dateRange }:

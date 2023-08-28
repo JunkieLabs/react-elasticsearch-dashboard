@@ -6,9 +6,12 @@ import Box from '@mui/joy/Box';
 import List from '@mui/joy/List';
 
 
-interface ExpansonPanelProps { }
+interface ExpansonPanelProps {
+  header: React.ReactNode;
+  children: React.ReactNode;
+ }
 
-const ExpansonPanel: FC<ExpansonPanelProps> = () => (
+const ExpansonPanel: FC<ExpansonPanelProps> = (props) => (
   <div className={styles.ExpansonPanel}>
     <List
       variant="outlined"
@@ -23,26 +26,13 @@ const ExpansonPanel: FC<ExpansonPanelProps> = () => (
       }}
     ><Accordian.Item key={1221} value="filtersAccordian" >
         <AccordionHeader isFirst={true} isLast={true} >
-          <Box className="wase" sx={{
-            display: 'flex',
-            flexFlow: "row wrap",
-            gap: "1rem"
-
-          }}>
-            <Box sx={{ height: 56 }}></Box>
-          </Box>
+         {props.header}
         </AccordionHeader>
 
         <AccordionContent className='td-bg-white'>
+          {props.children}
 
-          <Box sx={{
-            display: "flex",
-            flexDirection: "column",
-            gap: {
-              xs: "1.5rem", sm: "1.5rem"
-            },
-          }}>
-          </Box>
+
         </AccordionContent>
       </Accordian.Item>
     </List>

@@ -1,6 +1,7 @@
 import { ModelChannelPerformanceFilters } from '@/types/store/channelPerformance';
 import { DummyData } from '@/types/store/dummyData';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { StoreConstants } from '../store.constants';
 
 
 
@@ -13,9 +14,25 @@ interface ChannelPerformanceState {
 const initialState: ChannelPerformanceState = {
     dummyData: [],
     subFilter: {
-       bucket:''
+        bucket: '',
+        plots: [{
+            color: "#234343",
+            indentifier: StoreConstants.channelPerformance.filters.plotBouquetIdentifier,
+            key: "Bouquet1",
+            name: "Bouquet 1",
+            texts: ["Bouquet 1"]
+
+        },
+        {
+            color: "#934343",
+            indentifier: StoreConstants.channelPerformance.filters.plotChannelIdentifier,
+            key: "channel2",
+            name: "Channel 2",
+            texts: ["Bouquet 2", "Channel 22"]
+
+        }]
     },
-    
+
 };
 
 const channelPerformanceSlice = createSlice({

@@ -15,6 +15,13 @@ export const StoreConstants = {
         }
 
 
+    },
+
+    channelPerformance:{
+        filters:{
+            plotBouquetIdentifier:"bouquet",
+            plotChannelIdentifier:"channel"
+        }
     }
 
 }
