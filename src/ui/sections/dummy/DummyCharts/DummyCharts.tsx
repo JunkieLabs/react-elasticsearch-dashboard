@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import styles from './DummyCharts.module.scss';
 import { fetcher } from '@/tools/apiHelper';
 import { DummyResultBucket } from '@/app/api/elastic/dummy/route';
@@ -8,6 +8,8 @@ import ChartBar from '@/ui/widgets/charts/ChartBar/ChartBar';
 import ChartPie from '@/ui/widgets/charts/ChartPie/ChartPie';
 import { Box } from '@mui/joy';
 import useSWR from 'swr';
+import * as Highcharts from 'highcharts';
+import HighchartsReact from 'highcharts-react-official';
 
 interface DummyChartsProps { }
 
@@ -17,6 +19,7 @@ const DummyCharts: FC<DummyChartsProps> = () => {
   //     DummyCharts Component
   //   </div>
   // );
+  const highChartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
 
   const { data, error } = useSWR<DummyResultBucket>(`/api/elastic/dummy`, fetcher);
@@ -50,12 +53,24 @@ const DummyCharts: FC<DummyChartsProps> = () => {
   console.log("data1:", data);
   return (
     <div className={styles.DummyCharts}>
-    
+
       <Box sx={{
         display: "flex",
         flexDirection: "column",
         gap: 20
       }}>
+
+
+        <HighchartsReact
+          highcharts={Highcharts}
+          options={options}
+          ref={highChartComponentRef}
+          
+
+          
+          // {...props}
+        
+        />
         <Box sx={{
           height: 400
         }}>
@@ -83,6 +98,14 @@ const DummyCharts: FC<DummyChartsProps> = () => {
 
 }
 
-
+const options: Highcharts.Options = {
+  title: {
+    text: 'My chart'
+  },
+  series: [{
+    type: 'line',
+    data: [1, 2, 3]
+  }]
+};
 
 export default DummyCharts;

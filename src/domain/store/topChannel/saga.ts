@@ -23,7 +23,7 @@ function* handleCommonFilterChange() {
     //     pincodes =[]
     // }
 
-   
+
     console.log("handleCommonFilterChange filter: ", filter)
 
     // console.log("handleCommonFilterChange Pincodes: ", pincodes)
@@ -35,7 +35,7 @@ function* handleCommonFilterChange() {
     const items: ModelElasticAggsResultItem[] = yield ElasticTopChannelAggRepo.getTopN({
         pincodes: subFilter.pincodes,
         dateRange: filter,
-        locations:[],
+        locations: subFilter.region ? [subFilter.region.location] : [],
         // locations: pincodes.map(ele => ele.location),
         n: 5,
         ageRange: subFilter.ageRange
@@ -85,16 +85,16 @@ function* handleCommonFilterChangeDeprecated() {
     // Fetch based on filter and sub-filter
     const filter: Date[] = yield select((state: RootState) => state.CommonFilters.value);
     const subFilter: ModelTopChannelFilters = yield select((state: RootState) => state.ChannelPerformance.subFilter);
-    let pincodes: ModelElasticPincode[] =[]
-    if(subFilter.pincodes.length>0){
+    let pincodes: ModelElasticPincode[] = []
+    if (subFilter.pincodes.length > 0) {
         const pincodesResult: ModelElasticPincode[] = yield ElasticPincodeRepo.getAllDeprecated(subFilter.pincodes);
         pincodes = pincodesResult
 
-    }else {
-        pincodes =[]
+    } else {
+        pincodes = []
     }
 
-   
+
     // console.log("handleCommonFilterChange filter: ", filter)
 
     // console.log("handleCommonFilterChange Pincodes: ", pincodes)

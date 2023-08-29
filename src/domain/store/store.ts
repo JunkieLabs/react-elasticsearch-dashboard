@@ -12,6 +12,7 @@ import { CitiesReducers } from './cities/reducer';
 import { ConfigurationReducers } from './configuration/reducer';
 import { PincodesReducers } from './pincodes/reducer';
 import { DummyChartsReducers } from './dummy/reducer';
+import { BouquetsReducers } from './bouquets/reducer';
 
 
 
@@ -26,7 +27,8 @@ export const store = configureStore({
         CommonFilters : CommonFiltersReducers,
         ChannelPerformance: ChannelPerformanceReducers,
         DummyCharts: DummyChartsReducers,
-        TopChannel: TopChannelReducers
+        TopChannel: TopChannelReducers,
+        Bouquets: BouquetsReducers
     },
     middleware:[sagaMiddleware]
 })

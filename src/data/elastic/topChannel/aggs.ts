@@ -14,8 +14,9 @@ const getTopN = async ({ n = 5, locations, pincodes, ageRange, dateRange }:
     locations.forEach(location => searchParam.append('location', JSON.stringify(location)))
     searchParam.append('field', ElasticConstants.indexes.testTime.channelName);
     searchParam.append('n', `${n}`);
+    console.log("getTopN search Params: ",  searchParam, pincodes)
 
-    var response: ModelElasticAggsResult = await fetcher('/api/elastic/test-time/aggs?' + searchParam)
+    var response: ModelElasticAggsResult = await fetcher('/api/elastic/events/aggs?' + searchParam)
     // if (response.status >= 400 && response.status < 500) {
     //   // Handle the 4xx error
     // } else if (response.status >= 500) {
