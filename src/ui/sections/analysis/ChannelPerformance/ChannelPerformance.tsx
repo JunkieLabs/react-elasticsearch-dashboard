@@ -10,6 +10,7 @@ import { subDays } from 'date-fns';
 import { useDispatch } from 'react-redux';
 import { StoreActionCommonFilters } from '@/domain/store/commonFilters/reducer';
 import Filters from './Filters/Filters';
+import { StoreActionBouquets } from '@/domain/store/bouquets/reducer';
 
 interface ChannelPerformanceProps {
 
@@ -23,6 +24,14 @@ const ChannelPerformance: FC<ChannelPerformanceProps> = (props) => {
   const [dateRange, setDateRange] = useState<Date[]>([new Date(), subDays(new Date(), 7),]);
 
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    // console.log("filterAgeRange: ", filterAgeRange, filterAgeDefaultRange, filterAgeDefaultRange === filterAgeRange)
+
+    dispatch(StoreActionBouquets.init())
+    return () => { }
+
+  }, []);
 
   useEffect(() => {
     // console.log("filterAgeRange: ", filterAgeRange, filterAgeDefaultRange, filterAgeDefaultRange === filterAgeRange)

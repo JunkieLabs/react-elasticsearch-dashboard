@@ -54,7 +54,7 @@ export class TransformHelper {
          }
       }
 
-      console.log("tonumber: ", newValue)
+      // console.log("tonumber: ", newValue)
 
       return newValue;
    }

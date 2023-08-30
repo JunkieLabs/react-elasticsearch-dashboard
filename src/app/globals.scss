@@ -25,3 +25,22 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+
+html::-webkit-scrollbar {
+  background: transparent;
+  width: 8px;
+}
+
+html::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+}
+
+*::-webkit-scrollbar {
+  background: transparent;
+  width: 8px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+}

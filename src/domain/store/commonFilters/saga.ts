@@ -5,15 +5,15 @@ import { ElasticCommonFilterRepo } from "@/data/elastic/commonFilters/filterRang
 
 export function* handleCommonFilterAgeRange() {
 
-    console.log("handleCommonFilterAgeRange ")
-    var d: number = yield 2;
-    console.log("handleCommonFilterAgeRange d: ", d)
-    var e: number = yield 3;
-    console.log("handleCommonFilterAgeRange e: ", e)
+    // console.log("handleCommonFilterAgeRange ")
+    // var d: number = yield 2;
+    // console.log("handleCommonFilterAgeRange d: ", d)
+    // var e: number = yield 3;
+    // console.log("handleCommonFilterAgeRange e: ", e)
 
     try {
         const result: any[] = yield ElasticCommonFilterRepo.getAgeStats()
-        console.log("handleCommonFilterAgeRange result: ", result)
+        // console.log("handleCommonFilterAgeRange result: ", result)
         if (result.length > 0) {
             yield put(StoreActionCommonFilters.commonFilterSetAgeRange(result));
 

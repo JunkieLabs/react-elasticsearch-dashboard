@@ -5,6 +5,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 interface BouquetState {
   items: string[];
   search: string
+  activeBouquet?: string
   bouquetChannelsMap: {
     [key:string]: string[]
   }
@@ -12,7 +13,7 @@ interface BouquetState {
 
 const initialState: BouquetState  = {
   items: [],
-  search:"",
+  search:"", 
   bouquetChannelsMap: {}
 };
 
@@ -27,10 +28,13 @@ const bouquetsSlice = createSlice({
     setAll: (state, action: PayloadAction<string[]>) => {
       state.items = action.payload;
     },
-    setBouquetChannels:(state, action: PayloadAction<{ key: string; channels: string[] }>) =>{
-      state.bouquetChannelsMap[action.payload.key] = action.payload.channels
+    setBouquetChannels:(state, action: PayloadAction<{ bouquet: string; channels: string[] }>) =>{
+      state.bouquetChannelsMap[action.payload.bouquet] = action.payload.channels
 
-    }
+    },
+    initChannelsForBouquet: (state, action: PayloadAction<string>) => {
+      state.activeBouquet = action.payload
+    },
     // search:(state, action: PayloadAction<string>) =>{
     //   state.search = action.payload
     // }

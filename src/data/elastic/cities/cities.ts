@@ -16,7 +16,7 @@ const getCities = async (): Promise<ModelElasticCity[]> => {
     //   // Handle the successful response
     // }
 
-    console.log("elasticCities: ", response)
+    // console.log("elasticCities: ", response)
 
     // 
 

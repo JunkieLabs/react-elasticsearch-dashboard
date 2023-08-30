@@ -20,12 +20,13 @@ export async function GET(req: Request) {
 
     let skip = TransformHelper.toNumber(searchParams.get('skip') as string | undefined);
     let limit = TransformHelper.toNumber(searchParams.get('limit') as string | undefined, {
-        max: 300,
-        min: 200
+        max: 400,
+        min: 350
     });
     // let bouquets = searchParams.getAll('bouquet');
 
     let search = searchParams.get('search');
+    let bouquet = searchParams.get('bouquet');
 
 
     const elastic = await getElasticClient();
@@ -34,7 +35,7 @@ export async function GET(req: Request) {
         total: 0,
         skip: skip,
         limit: limit,
-        field: ElasticConstants.indexes.eventLogs.bouquet,
+        field: ElasticConstants.indexes.eventLogs.channelName,
         // total: 
     }
 
@@ -53,15 +54,25 @@ export async function GET(req: Request) {
 
     };
 
+    var hasQuery = false;
+
     if (search) {
         query.wildcard = {
-            [`${ElasticConstants.indexes.eventLogs.bouquet}.keyword`]: `*${search}*`
+            [`${ElasticConstants.indexes.eventLogs.channelName}.keyword`]: `*${search}*`
         }
-    }else {
+        hasQuery = true
+    }
+
+    if(bouquet){
+        query.term = {
+            [`${ElasticConstants.indexes.eventLogs.bouquet}.keyword`]: `${bouquet}`
+        }
+        hasQuery = true
+    }
+    if(!hasQuery){
         query.match_all ={
 
         }
-    //    query = undefined
     }
 
     console.log("query: ", query, skip, limit)
@@ -76,7 +87,7 @@ export async function GET(req: Request) {
             aggs: {
                 result: {
                     terms: {
-                        field: `${ElasticConstants.indexes.eventLogs.bouquet}.keyword`,
+                        field: `${ElasticConstants.indexes.eventLogs.channelName}.keyword`,
                         size: limit+skip,
                         order: [
                             { "_key": "asc" }
@@ -98,7 +109,7 @@ export async function GET(req: Request) {
                 
                 total: {
                     cardinality: {
-                      field: `${ElasticConstants.indexes.eventLogs.bouquet}.keyword`
+                      field: `${ElasticConstants.indexes.eventLogs.channelName}.keyword`
                     }
                   }
             }

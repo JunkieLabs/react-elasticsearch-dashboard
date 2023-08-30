@@ -7,5 +7,13 @@ import { watchPincodes } from './pincodes/saga';
 import { watchDummyCharts } from './dummy/saga';
 import { watchBouquets} from './bouquets/saga';
 export function* rootSaga() {
-  yield all([ watchChannelPerformance(), watchCommonFilters(),  watchTopChannel(), watchCities(), watchPincodes(), watchBouquets(), watchDummyCharts()]);
+  yield all([ 
+    watchChannelPerformance(), 
+    watchCommonFilters(),  
+    watchTopChannel(), 
+    watchCities(), 
+    watchPincodes(), 
+    watchBouquets(), 
+    watchDummyCharts()
+  ]);
 }

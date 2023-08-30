@@ -25,7 +25,7 @@ const getTopN = async ({ n = 5, locations, pincodes, ageRange, dateRange }:
     //   // Handle the successful response
     // }
 
-    console.log("getTopN ModelElasticAggsResult: ", response)
+    // console.log("getTopN ModelElasticAggsResult: ", response)
 
     // 
 
