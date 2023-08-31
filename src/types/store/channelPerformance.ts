@@ -1,4 +1,6 @@
 export interface ModelChannelPerformanceFilters {
     bucket: string;
-    plots: ModelAnalyticPlot[]
+    bouquets: string[];
+    bouquetChannelsMap: { [bouquet: string]: string[] };
+    // plots: ModelAnalyticPlot[]
 }

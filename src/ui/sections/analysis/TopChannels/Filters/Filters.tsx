@@ -40,7 +40,7 @@ const Filters: FC<FiltersProps> = () => {
   useEffect(() => {
     // filterGender.
     setFilterRegion(stateSubFilter.region ?? null)
-    setFilterPincode(stateSubFilter.pincodes)
+    setFilterPincode(stateSubFilter.pincodes??[])
     setFilterGender(stateSubFilter.gender)
     // = stateSubFilter.region
 
@@ -130,7 +130,7 @@ const Filters: FC<FiltersProps> = () => {
   }
 
 
-  console.log("debounce filterPincode: ", filterPincode)
+  // console.log("debounce filterPincode: ", filterPincode)
 
 
   return (

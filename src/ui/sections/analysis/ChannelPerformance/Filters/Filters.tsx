@@ -12,7 +12,9 @@ import Button from '@mui/joy/Button';
 import Breadcrumbs from '@mui/joy/Breadcrumbs';
 import Link from 'next/link';
 import { TransformHelper } from '@/tools/parserTools';
-import BouquetChannelPicker from '@/ui/sections/picker/BouquetChannelPicker/BouquetChannelPicker';
+import BouquetChannelPicker, { BouquetChannelsMap } from '@/ui/sections/picker/BouquetChannelPicker/BouquetChannelPicker';
+import { ModelChannelPerformanceFilters } from '@/types/store/channelPerformance';
+import { StoreActionChannelPerformance } from '@/domain/store/channelPerformance/reducer';
 
 interface FiltersProps {
 
@@ -25,18 +27,44 @@ const Filters: FC<FiltersProps> = (props) => {
 
 
   const stateSubFilter = useSelector((state: RootState) => state.ChannelPerformance.subFilter);
+  
+  const statePlots = useSelector((state: RootState) => state.ChannelPerformance.plots);
 
   const [filterPlot, setFilterPlot] = useState<ModelAnalyticPlot[] | null>(null);
 
   const dispatch = useDispatch();
   useEffect(() => {
     // filterGender.
-    setFilterPlot(stateSubFilter.plots ?? null)
+    setFilterPlot(statePlots ?? [])
     // setFilterPincode(stateSubFilter.pincodes)
     // setFilterGender(stateSubFilter.gender)
     // = stateSubFilter.region
 
-  }, [stateSubFilter])
+  }, [statePlots])
+
+  const handleStoreChange = async (channelPerformanceFilters: ModelChannelPerformanceFilters) => {
+    // return (){}
+
+    console.log("StoreActionChannelPerformance handleStoreChange: ", channelPerformanceFilters)
+    dispatch(StoreActionChannelPerformance.setSubFilter(channelPerformanceFilters))
+   
+  }
+  const handleBucketChannelChecked = (bouquets: string[], bouquetChannelsMaps: BouquetChannelsMap) => {
+    // dispatch(StoreAction.set(dateRange))
+    // if (region) {
+    //   let i = stateDefaultRegions.findIndex(val => val.city == region.city);
+    //   if (i >= 0) {
+    //     setFilterRegion(stateDefaultRegions[i]);
+
+    //   }
+    // } else {
+    //   console.log("handleRegionChange 2: ");
+
+    //   setFilterRegion(null)
+    // }
+    handleStoreChange({ ...stateSubFilter, bouquets: bouquets, bouquetChannelsMap: bouquetChannelsMaps })
+  }
+
   return (
     <div className={styles.Filters}>
 
@@ -58,7 +86,7 @@ const Filters: FC<FiltersProps> = (props) => {
 
             {filterPlot && filterPlot.map(plot =>
 
-              <Chip key={plot.indentifier} variant="outlined" startDecorator={
+              <Chip key={plot.key} variant="outlined" startDecorator={
                 <CircleIndicator color={plot.color} />}>
                 {plot.name}
               </Chip>
@@ -85,7 +113,7 @@ const Filters: FC<FiltersProps> = (props) => {
             {filterPlot && filterPlot.map(plot =>
 
               <Box
-              key={plot.indentifier}
+                key={plot.key}
                 className="td-border td-rounded-md td-px-4" sx={{
                   display: "flex",
                   alignSelf: "stretch",
@@ -108,7 +136,12 @@ const Filters: FC<FiltersProps> = (props) => {
 
         </ExpansonPanel>
 
-        {modalBouquetChannel && <BouquetChannelPicker/>}
+        {modalBouquetChannel && <BouquetChannelPicker onChecked={
+          handleBucketChannelChecked
+        }
+        checkedBouquets={stateSubFilter.bouquets}
+        checkedBouquetChannelsMap={stateSubFilter.bouquetChannelsMap}
+        ></BouquetChannelPicker>}
       </Box>
     </div>
   );

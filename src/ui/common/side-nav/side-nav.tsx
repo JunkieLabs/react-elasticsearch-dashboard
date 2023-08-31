@@ -38,7 +38,7 @@ const SideNav: FC<SideNavProps> = (props) => {
 
   const routePath = useSelector((state: RootState) => state.App.routePath);
 
-  console.log("SideNav: ", routePath);
+  // console.log("SideNav: ", routePath);
 
   return (
     //   <div className={styles.Main}>

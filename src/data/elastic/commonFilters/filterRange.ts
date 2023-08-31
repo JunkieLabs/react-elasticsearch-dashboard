@@ -19,7 +19,7 @@ import { ModelElasticAggsResult, ModelElasticAggsResultItem } from "@/types/elas
   //   // Handle the successful response
   // }
 
-  console.log("fetchCommonFilterAge: ", response)
+  // console.log("fetchCommonFilterAge: ", response)
 
   // 
 

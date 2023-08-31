@@ -42,7 +42,7 @@ const ChannelPerformance: FC<ChannelPerformanceProps> = (props) => {
   }, [dateRange]);
 
   // const showModal = searchParams?.modal;
-  console.log("modal: ", modal)
+  // console.log("modal: ", modal)
 
   return (
     <div className={styles.ChannelPerformance}>

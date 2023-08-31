@@ -64,7 +64,7 @@ export async function GET(req: Request) {
     //    query = undefined
     }
 
-    console.log("query: ", query, skip, limit)
+    // console.log("query: ", query, skip, limit)
     
 
 
@@ -116,7 +116,7 @@ export async function GET(req: Request) {
 
     // response.data = terms.buckets
 
-    console.log("string result: ", limit, items)
+    // console.log("string result: ", limit, items)
 
 
 

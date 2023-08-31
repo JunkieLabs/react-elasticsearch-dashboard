@@ -61,7 +61,7 @@ export async function GET(req: Request) {
 
     // response.data = terms.buckets
 
-    console.log("string result: ", limit, result)
+    // console.log("string result: ", limit, result)
 
 
 

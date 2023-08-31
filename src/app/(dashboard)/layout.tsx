@@ -25,11 +25,11 @@ export default function DashboardLayout({
 
 
 
-    console.log("app startup: ", );
+    // console.log("app startup: ", );
     dispatch(StoreActionCommonFilters.commonFilterAgeInit())
     dispatch(StoreActionCities.citiesInit())
     
-    console.log("app startup: 2", );
+    // console.log("app startup: 2", );
 
 
   }, []);

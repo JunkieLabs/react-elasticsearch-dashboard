@@ -24,7 +24,7 @@ const initialState: TopChannelState = {
 };
 
 const topChannelSlice = createSlice({
-    name: 'channelPerforamce',
+    name: 'topChannel',
     initialState,
     reducers: {
         setDummyChartData: (state, action: PayloadAction<DummyData[]>) => {

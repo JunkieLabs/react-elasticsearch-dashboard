@@ -4,7 +4,6 @@ import { StoreActionCommonFilters } from '@/domain/store/commonFilters/reducer';
 import { ElasticTopChannelAggRepo } from '@/data/elastic/topChannel';
 import { ElasticPincodeRepo } from "@/data/elastic/pincodes/pincodes";
 import { RootState } from '../store';
-import { DummyData } from '@/types/store/dummyData';
 import { ModelTopChannelFilters } from '@/types/store/topChannel';
 import { ModelElasticPincode } from '@/types/elastic/pincodes/pincodes';
 import { ModelElasticAggsResultItem } from '@/types/elastic/aggs';
@@ -13,7 +12,7 @@ function* handleCommonFilterChange() {
 
     // Fetch based on filter and sub-filter
     const filter: Date[] = yield select((state: RootState) => state.CommonFilters.value);
-    const subFilter: ModelTopChannelFilters = yield select((state: RootState) => state.ChannelPerformance.subFilter);
+    const subFilter: ModelTopChannelFilters = yield select((state: RootState) => state.TopChannel.subFilter);
     // let pincodes: ModelElasticPincode[] =[]
     // if(subFilter.pincodes.length>0){
     //     const pincodesResult: ModelElasticPincode[] = yield ElasticPincodeRepo.getAll(subFilter.pincodes);
@@ -24,7 +23,7 @@ function* handleCommonFilterChange() {
     // }
 
 
-    console.log("handleCommonFilterChange filter: ", filter)
+    // console.log("handleCommonFilterChange filter: ", filter)
 
     // console.log("handleCommonFilterChange Pincodes: ", pincodes)
 
@@ -41,7 +40,7 @@ function* handleCommonFilterChange() {
         ageRange: subFilter.ageRange
     });
 
-    console.log("ModelElasticAggsResultItem: ", items)
+    // console.log("ModelElasticAggsResultItem: ", items)
 
     yield put(StoreActionTopChannel.setAggregation(items));
 }
@@ -110,7 +109,7 @@ function* handleCommonFilterChangeDeprecated() {
         ageRange: subFilter.ageRange
     });
 
-    console.log("ModelElasticAggsResultItem: ", items)
+    // console.log("ModelElasticAggsResultItem: ", items)
 
     yield put(StoreActionTopChannel.setAggregation(items));
 }

@@ -3,6 +3,6 @@ interface ModelAnalyticPlot{
     name: string
     key: string
     texts?: string[]
-    indentifier:string
+    indentifiers:{[key: string]: string}[]
 
 }

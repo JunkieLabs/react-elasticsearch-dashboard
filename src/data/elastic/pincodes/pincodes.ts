@@ -10,14 +10,14 @@ const getPincodes = async (search?: string): Promise<ModelElasticAggsResultItem[
     if(search){
         searchParam.append("search", search)
     }
-    console.log("elasticPincodes search: ", search)
+    // console.log("elasticPincodes search: ", search)
 
     // pincodes.forEach(pincode => searchParam.append('pincode', pincode))
 
     var response: ModelElasticAggsResult = await fetcher('/api/elastic/pincodes'+ (search ? ('?' + searchParam ): ''))
    
 
-    console.log("elasticPincodes aggs: ", response)
+    // console.log("elasticPincodes aggs: ", response)
 
     // 
 

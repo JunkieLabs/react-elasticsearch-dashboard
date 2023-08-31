@@ -4,9 +4,7 @@
 
 import React, { FC, useCallback } from 'react';
 
-import useSWR from 'swr';
 import styles from './styles.module.scss';
-import ChannelPerformance from '@/ui/layouts/ChannelPerformance/ChannelPerformance';
 import TopChannels from '@/ui/sections/analysis/TopChannels/TopChannels';
 
 interface PagesProps {}

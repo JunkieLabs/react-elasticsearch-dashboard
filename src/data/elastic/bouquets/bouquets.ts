@@ -10,14 +10,14 @@ const getBouquets = async (search?: string): Promise<ModelElasticAggsResultItem[
     if(search){
         searchParam.append("search", search)
     }
-    console.log("elasticPincodes search: ", search)
+    // console.log("elasticPincodes search: ", search)
 
     // pincodes.forEach(pincode => searchParam.append('pincode', pincode))
 
     var response: ModelElasticAggsResult = await fetcher('/api/elastic/bouquets'+ (search ? ('?' + searchParam ): ''))
    
 
-    console.log("elasticPincodes aggs: ", response)
+    // console.log("elasticPincodes aggs: ", response)
 
     // 
 
@@ -53,7 +53,7 @@ const getBouquetChannels = async (bouquet: string, search?: string): Promise<Mod
     var response: ModelElasticAggsResult = await fetcher('/api/elastic/channels?'+  searchParam)
    
 
-    console.log("elasticPincodes aggs: ", response)
+    // console.log("elasticPincodes aggs: ", response)
 
     // 
 

@@ -8,6 +8,7 @@ import { StoreConstants } from '../store.constants';
 interface ChannelPerformanceState {
     dummyData: DummyData[];
     subFilter: ModelChannelPerformanceFilters;
+    plots: ModelAnalyticPlot[];
 }
 
 
@@ -15,23 +16,26 @@ const initialState: ChannelPerformanceState = {
     dummyData: [],
     subFilter: {
         bucket: '',
-        plots: [{
-            color: "#234343",
-            indentifier: StoreConstants.channelPerformance.filters.plotBouquetIdentifier,
-            key: "Bouquet1",
-            name: "Bouquet 1",
-            texts: ["Bouquet 1"]
+        bouquets: [],
+        bouquetChannelsMap: {},
 
-        },
-        {
-            color: "#934343",
-            indentifier: StoreConstants.channelPerformance.filters.plotChannelIdentifier,
-            key: "channel2",
-            name: "Channel 2",
-            texts: ["Bouquet 2", "Channel 22"]
-
-        }]
     },
+    plots: [{
+        color: "#234343",
+        indentifiers: [{ [StoreConstants.channelPerformance.filters.plotBouquetIdentifier]: "Bouquet1" }],
+        key: "Bouquet1",
+        name: "Bouquet 1",
+        texts: ["Bouquet 1"]
+
+    },
+    {
+        color: "#934343",
+        indentifiers: [{ [StoreConstants.channelPerformance.filters.plotBouquetIdentifier]: "Bouquet2" }, { [StoreConstants.channelPerformance.filters.plotChannelIdentifier]: "channel2" }],
+        key: "Bouquet2_channel2",
+        name: "Channel 2",
+        texts: ["Bouquet 2", "Channel 22"]
+
+    }]
 
 };
 
@@ -44,6 +48,10 @@ const channelPerformanceSlice = createSlice({
         },
         setSubFilter: (state, action: PayloadAction<ModelChannelPerformanceFilters>) => {
             state.subFilter = action.payload;
+        },
+
+        setPlots: (state, action: PayloadAction<ModelAnalyticPlot[]>) => {
+            state.plots = action.payload;
         },
     },
 });

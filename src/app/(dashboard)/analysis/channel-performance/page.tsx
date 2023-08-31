@@ -2,9 +2,7 @@
 
 import React, { FC, useCallback } from 'react';
 
-import useSWR from 'swr';
 import styles from './styles.module.scss';
-import { fetcher } from '@/tools/apiHelper';
 import ChannelPerformance from '@/ui/sections/analysis/ChannelPerformance/ChannelPerformance';
 
 interface PagesProps {

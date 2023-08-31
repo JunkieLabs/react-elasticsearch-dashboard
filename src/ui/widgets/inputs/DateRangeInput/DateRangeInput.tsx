@@ -85,7 +85,7 @@ const DateRangeInput: FC<DateRangeInputProps> = (props) => {
 
       var range = val.range()
       
-    console.log("currentState range: ", range)
+    // console.log("currentState range: ", range)
       var isSame = isSameDay(range.startDate ?? (new Date()), currentState.startDate)
       isSame = isSame ? isSameDay(range.endDate ?? (new Date()), currentState.endDate) : false
       return isSame;
@@ -116,7 +116,7 @@ const DateRangeInput: FC<DateRangeInputProps> = (props) => {
   useEffect(() => {
 
     if (anchorRef.current) {
-      console.log("anchorEl", anchorRef.current)
+      // console.log("anchorEl", anchorRef.current)
       setAnchorEl((anchorRef.current ?? null as HTMLCanvasElement | null));
     }
     // setTimeout(() => setAnchorEl(anchorRef?.current), 1) 
@@ -137,7 +137,7 @@ const DateRangeInput: FC<DateRangeInputProps> = (props) => {
 
   const clickAwayHandler = (event: MouseEvent | TouchEvent) => {
 
-    console.log("clickAwayHandler: ", isOpen)
+    // console.log("clickAwayHandler: ", isOpen)
 
     // event.stopPropagation()
     // if(isOpen){

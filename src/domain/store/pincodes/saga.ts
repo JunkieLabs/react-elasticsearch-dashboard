@@ -8,12 +8,12 @@ import { RootState } from "../store";
 
 export function* handlePincodesBySearch() {
 
-    console.log("handlePincodesBySearch ")
+    // console.log("handlePincodesBySearch ")
 
     try {
         const searchKey: string = yield select((state: RootState) => state.Pincodes.search);
         const result: ModelElasticAggsResultItem[] = yield ElasticPincodeRepo.getAll(searchKey)
-        console.log("handlePincodesBySearch result: ", result)
+        // console.log("handlePincodesBySearch result: ", result)
         if (result.length > 0) {
             yield put(StoreActionPincodes.pincodeSet(result.map(val => val.key as string)));
 

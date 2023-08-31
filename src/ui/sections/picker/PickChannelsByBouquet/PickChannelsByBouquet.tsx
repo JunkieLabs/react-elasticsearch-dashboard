@@ -8,6 +8,7 @@ import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
 import Checkbox from '@mui/joy/Checkbox';
 import { StoreActionBouquets } from '@/domain/store/bouquets/reducer';
+import Typography from '@mui/joy/Typography';
 
 export interface PickChannelsByBouquetProps {
 
@@ -31,12 +32,12 @@ const PickChannelsByBouquet: FC<PickChannelsByBouquetProps> = (props) => {
 
   // console.log(newArray); // [3, 4]
 
-  console.log("PickChannelsByBouquet stateChannels: ", stateChannels)
+  // console.log("PickChannelsByBouquet stateChannels: ", stateChannels)
 
   useEffect(() => {
     // console.log("filterAgeRange: ", filterAgeRange, filterAgeDefaultRange, filterAgeDefaultRange === filterAgeRange)
 
-    console.log("PickChannelsByBouquet dispatch initChannelsForBouquet: ", props.bouquet)
+    // console.log("PickChannelsByBouquet dispatch initChannelsForBouquet: ", props.bouquet)
     dispatch(StoreActionBouquets.initChannelsForBouquet(props.bouquet))
     return () => { }
 
@@ -135,8 +136,10 @@ const PickChannelsByBouquet: FC<PickChannelsByBouquetProps> = (props) => {
                       // setStatus({ ...status, declinedPayment: event.target.checked })
                     }
                   />
-
-                  <ol id={labelId} >{value}</ol>
+                  <Typography id={labelId} sx={{
+                    flex: '1 1 0%'
+                  }} >{value}</Typography>
+                  {/* <ol id={labelId} >{value}</ol> */}
 
                 </ListItem>
               );
