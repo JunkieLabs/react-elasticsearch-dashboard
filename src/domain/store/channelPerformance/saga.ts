@@ -28,11 +28,11 @@ function* handleFilterChange() {
 
 
 
-    const items: ModelElasticAggsResultItem[] = yield ElasticChannelPerformanceAggRepo.getPlots({
+    const items: ModelElasticAggsResultItem[] = yield ElasticChannelPerformanceAggRepo.getTimeSeries({
         bouquets: subFilter.bouquets,
         dateRange: filterDateRanage,
         // locations: pincodes.map(ele => ele.location),
-        n: 5,
+        // n: 5,
         bouquetChannelsMap: subFilter.bouquetChannelsMap
     });
 
@@ -76,7 +76,7 @@ function* handleFilterChange() {
 
     yield put(StoreActionChannelPerformance.setPlots(plots));
 
-    // yield put(StoreActionChannelPerformance.setAggregation(items));
+    yield put(StoreActionChannelPerformance.setAggregation(items));
 }
 export function* watchAllFilterChange() {
     yield takeLatest([StoreActionCommonFilters.commonFilterSet.type, StoreActionChannelPerformance.setSubFilter.type], handleFilterChange);

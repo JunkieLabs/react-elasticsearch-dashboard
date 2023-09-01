@@ -1,10 +1,9 @@
 import { fetcher } from "@/tools/apiHelper";
 import { ModelElasticAggsResult, ModelElasticAggsResultItem } from "@/types/elastic/aggs";
-import { ModelElasticGeoPoint } from "@/types/elastic/common";
 import { ElasticConstants } from "../elastic.constants";
 
-const getPlots = async ({ n = 5,  bouquets, bouquetChannelsMap, dateRange }:
-     { n: number ,  bouquets?: string[], bouquetChannelsMap?:{ [bouquet: string]: string[] }, dateRange: Date[] }): Promise<ModelElasticAggsResultItem[]> => {
+const getTimeSeries = async ({   bouquets, bouquetChannelsMap, dateRange }:
+     {  bouquets?: string[], bouquetChannelsMap?:{ [bouquet: string]: string[] }, dateRange: Date[] }): Promise<ModelElasticAggsResultItem[]> => {
     // Simulate API delay
 
     var searchParam = new URLSearchParams();
@@ -12,10 +11,16 @@ const getPlots = async ({ n = 5,  bouquets, bouquetChannelsMap, dateRange }:
     bouquets?.forEach(bouquet => searchParam.append('bouquet', bouquet))
 
     searchParam.append('field', ElasticConstants.indexes.testTime.channelName);
-    searchParam.append('n', `${n}`);
+    // searchParam.append('n', `${n}`);
+
+    if(bouquetChannelsMap){
+        searchParam.append('bouquet-channels-map', JSON.stringify(bouquetChannelsMap))
+    }
+
+
     // console.log("getPlots search Params: ",  searchParam, pincodes)
 
-    var response: ModelElasticAggsResult = await fetcher('/api/elastic/events/aggs?' + searchParam)
+    var response: ModelElasticAggsResult = await fetcher('/api/elastic/events/aggs/times?' + searchParam)
     // if (response.status >= 400 && response.status < 500) {
     //   // Handle the 4xx error
     // } else if (response.status >= 500) {
@@ -44,5 +49,5 @@ const getPlots = async ({ n = 5,  bouquets, bouquetChannelsMap, dateRange }:
 
 export const ElasticChannelPerformanceAggRepo = {
 
-    getPlots: getPlots
+    getTimeSeries: getTimeSeries
 }

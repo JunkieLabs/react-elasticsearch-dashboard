@@ -7,10 +7,11 @@ import Link from 'next/link';
 import Button from '@mui/joy/Button';
 import DateRangeInput from '@/ui/widgets/inputs/DateRangeInput/DateRangeInput';
 import { subDays } from 'date-fns';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StoreActionCommonFilters } from '@/domain/store/commonFilters/reducer';
 import Filters from './Filters/Filters';
 import { StoreActionBouquets } from '@/domain/store/bouquets/reducer';
+import { RootState } from '@/domain/store/store';
 
 interface ChannelPerformanceProps {
 
@@ -22,6 +23,8 @@ const ChannelPerformance: FC<ChannelPerformanceProps> = (props) => {
   const modal = props.searchParams && props.searchParams['modal'] ? TransformHelper.toBoolean(props.searchParams['modal'] as string) : false;
 
   const [dateRange, setDateRange] = useState<Date[]>([new Date(), subDays(new Date(), 7),]);
+  
+  const stateTimeSeries = useSelector((state: RootState) => state.ChannelPerformance.timeSeries);
 
   const dispatch = useDispatch();
 
