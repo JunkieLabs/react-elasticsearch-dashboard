@@ -145,13 +145,14 @@ const SideNav: FC<SideNavProps> = (props) => {
                   Channel Performance</ListItemContent>
               </ListItemButton>
             </Link>
-
-            <ListItemButton selected={routePath.includes(UiNavigationConstants.analysis.deviceMonitor)}>
-              <ListItemDecorator>
-                <Box className={`td-align-middle td-w-1 td-h-1 td-bg-gray-700`} ></Box>
-              </ListItemDecorator>
-              <ListItemContent>Device Monitor</ListItemContent>
-            </ListItemButton>
+            <Link href="/analysis/device-monitor" legacyBehavior passHref >
+              <ListItemButton component="a" selected={routePath.includes(UiNavigationConstants.analysis.deviceMonitor)}>
+                <ListItemDecorator>
+                  <Box className={`td-align-middle td-w-1 td-h-1 td-bg-gray-700`} ></Box>
+                </ListItemDecorator>
+                <ListItemContent>Device Monitor</ListItemContent>
+              </ListItemButton>
+            </Link>
 
             <Link href="/analysis/top-channels" legacyBehavior passHref>
               <ListItemButton component="a" selected={routePath.includes(UiNavigationConstants.analysis.topChannels)}>

@@ -4,39 +4,54 @@ import styles from './ChartHighstock.module.scss';
 import Highcharts from 'highcharts/highstock';
 
 import HighchartsReact from 'highcharts-react-official';
+import { ModelChartHighStock } from '@/types/charts/highstock';
+import { Box, Theme } from '@mui/joy';
+import { SxProps } from '@mui/material/styles';
 
 
 interface ChartHighstockProps {
+  data?: ModelChartHighStock
 
-
+  sx?: SxProps<Theme>;
 }
 
-const ChartHighstock: FC<ChartHighstockProps> = () => {
+const ChartHighstock: FC<ChartHighstockProps> = (props) => {
 
   const highChartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
-  const options = config('#1BBF6D')
+
+  const options = config('#1BBF6D', props.data?.series)
+
+  console.log("ChartHighstock data: ", (props.data?.series as any))
 
   return (
-    <div className={styles.ChartHighstock}>
+    <Box className={styles.ChartHighstock + " td-w-full"} sx={[props.sx ?? [] as any, {
+      // transform: `rotate(${degree}deg)`
+      // display: `flex`,
+      height: '100%',
+    }]}>
       <HighchartsReact
         highcharts={Highcharts}
         options={options}
         ref={highChartComponentRef}
+        
+        constructorType={"stockChart"}
+        className="td-w-full"
 
 
 
       // {...props}
 
-      />
-    </div>
+      >
+        </HighchartsReact>
+    </Box>
   );
 }
 
 export default ChartHighstock;
 
 
-const config = (mColor: string): Highcharts.Options => {
+const config = (mColor: string, data?:  Highcharts.SeriesOptionsType[]): Highcharts.Options => {
   return {
     chart: {
       backgroundColor: undefined,
@@ -47,6 +62,7 @@ const config = (mColor: string): Highcharts.Options => {
     tooltip: {
       valueDecimals: 2
     },
+    
     colors: [mColor as any],
     navigator: {
       maskFill: 'rgba(0,0,0,0.12)' as any
@@ -95,7 +111,19 @@ const config = (mColor: string): Highcharts.Options => {
         width: 48,
         padding: 4
       },
-      buttons: [{
+      buttons: [
+        {
+          type: 'hour',
+          count: 1,
+          text: 'Hr',
+    
+        }, {
+          type: 'day',
+          count: 2,
+          text: 'Day',
+    
+        },
+        {
         type: 'month' as any,
         count: 1,
         text: 'Month' as any,
@@ -116,7 +144,7 @@ const config = (mColor: string): Highcharts.Options => {
         text: 'All' as any
       }]
     },
-    series: [],
+    series: (data && data.length> 0) ? data :  [],
     xAxis: {
       events: {
         afterSetExtremes: (e) => {

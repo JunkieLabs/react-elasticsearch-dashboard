@@ -10,7 +10,7 @@ const getTimeSeries = async ({   bouquets, bouquetChannelsMap, dateRange }:
 
     bouquets?.forEach(bouquet => searchParam.append('bouquet', bouquet))
 
-    searchParam.append('field', ElasticConstants.indexes.testTime.channelName);
+    // searchParam.append('field', ElasticConstants.indexes.testTime.channelName);
     // searchParam.append('n', `${n}`);
 
     if(bouquetChannelsMap){
@@ -20,7 +20,7 @@ const getTimeSeries = async ({   bouquets, bouquetChannelsMap, dateRange }:
 
     // console.log("getPlots search Params: ",  searchParam, pincodes)
 
-    var response: ModelElasticAggsResult = await fetcher('/api/elastic/events/aggs/times?' + searchParam)
+    var response: ModelElasticAggsResult = await fetcher('/api/elastic/events/aggs/time?' + searchParam)
     // if (response.status >= 400 && response.status < 500) {
     //   // Handle the 4xx error
     // } else if (response.status >= 500) {

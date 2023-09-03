@@ -8,10 +8,12 @@
 //         colorClass: UtilColor.COLOR_CLASS[color]
 //       });
 //     }
+import Highcharts from 'highcharts/highstock';
 
 import { isNumeric } from "@/tools/parserTools";
 import { ModelChartJs, ModelChartJsDataset } from "@/types/charts/chartjs";
 import { ModelChartCommonItem } from "@/types/charts/common";
+import { ModelChartHighStock } from "@/types/charts/highstock";
 import { ModelElasticAggsResultItem } from "@/types/elastic/aggs";
 import { UiResourceColor } from "@/ui/resource/color";
 
@@ -63,7 +65,42 @@ const chartCommonToChartJs = (items: ModelChartCommonItem[]): ModelChartJs => {
 
 }
 
+const timeseriesToHighstock = (items: ModelElasticAggsResultItem[], color: string): ModelChartHighStock => {
+
+
+
+    var series: Highcharts.SeriesOptionsType = {
+
+
+
+        type: 'line',
+        id: "string",
+        name: 'Events',
+        color: color,
+        data: items.map(item => [item.key as number, item.doc_count]),
+        dataGrouping: {
+            enabled: false
+        },
+        boostThreshold: 1,
+        turboThreshold: 1,
+        showInNavigator: true
+        // tooltip: {
+        //     valueDecimals: 2
+        // }
+    }
+    var data: ModelChartHighStock = {
+        color: color,
+        series: [series]
+    }
+
+
+
+    return data;
+
+}
+
 export const ChartHelper = {
     elasticAggregationToChartJs: elasticAggregationToChartJs,
-    chartCommonToChartJs: chartCommonToChartJs
+    chartCommonToChartJs: chartCommonToChartJs,
+    timeseriesToHighstock: timeseriesToHighstock
 }

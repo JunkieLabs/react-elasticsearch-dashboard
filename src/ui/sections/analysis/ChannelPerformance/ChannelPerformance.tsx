@@ -12,6 +12,9 @@ import { StoreActionCommonFilters } from '@/domain/store/commonFilters/reducer';
 import Filters from './Filters/Filters';
 import { StoreActionBouquets } from '@/domain/store/bouquets/reducer';
 import { RootState } from '@/domain/store/store';
+import ChartHighstock from '@/ui/widgets/charts/ChartHighstock/ChartHighstock';
+import { ModelChartHighStock } from '@/types/charts/highstock';
+import { ChartHelper } from '@/domain/charts/helper';
 
 interface ChannelPerformanceProps {
 
@@ -25,8 +28,17 @@ const ChannelPerformance: FC<ChannelPerformanceProps> = (props) => {
   const [dateRange, setDateRange] = useState<Date[]>([new Date(), subDays(new Date(), 7),]);
   
   const stateTimeSeries = useSelector((state: RootState) => state.ChannelPerformance.timeSeries);
-
+  const [chartData, setChartData] = useState<ModelChartHighStock>()
   const dispatch = useDispatch();
+
+  useEffect(() => {
+
+    var modelChartJs = ChartHelper.timeseriesToHighstock(stateTimeSeries ?? [], "#232324")
+    setChartData(modelChartJs)
+
+
+
+  }, [stateTimeSeries])
 
   useEffect(() => {
     // console.log("filterAgeRange: ", filterAgeRange, filterAgeDefaultRange, filterAgeDefaultRange === filterAgeRange)
@@ -89,7 +101,18 @@ const ChannelPerformance: FC<ChannelPerformanceProps> = (props) => {
           <Button>Modal cancel</Button>
         </Link>} */}
         {/* <Box> What</Box>} */}
+        <Box sx={{
+            height: 400,
+            display: "flex",
+            width: "100%",
+            maxWidth: 'calc( 99% )'
+          }
+          } >
+            <ChartHighstock data={chartData} sx={{
+              width:'100%'
 
+            }}></ChartHighstock>
+          </Box>
       </Container>
     </div>
   );
