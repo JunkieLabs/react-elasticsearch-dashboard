@@ -13,6 +13,7 @@ import { ConfigurationReducers } from './configuration/reducer';
 import { PincodesReducers } from './pincodes/reducer';
 import { DummyChartsReducers } from './dummy/reducer';
 import { BouquetsReducers } from './bouquets/reducer';
+import { DeviceMonitorReducers } from './deviceMonitor/reducer';
 
 
 
@@ -28,7 +29,8 @@ export const store = configureStore({
         ChannelPerformance: ChannelPerformanceReducers,
         DummyCharts: DummyChartsReducers,
         TopChannel: TopChannelReducers,
-        Bouquets: BouquetsReducers
+        Bouquets: BouquetsReducers,
+        DeviceMonitor: DeviceMonitorReducers
     },
     middleware:[sagaMiddleware]
 })
