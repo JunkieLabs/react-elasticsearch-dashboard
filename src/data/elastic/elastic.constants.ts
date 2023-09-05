@@ -23,7 +23,9 @@ export const ElasticConstants = {
             channelNumber:"channel_number",
             volume:"volume",
             pincode:"pincode",
-            bouquet:"bouquet_name"
+            bouquet:"bouquet_name",
+            deviceId:"device_id",
+            timestamp:"timestamp"
          },
         cities:{
             _: "cities",
@@ -36,8 +38,26 @@ export const ElasticConstants = {
             pincode:"pincode",
             location:"location",
 
-        }
+        },
 
+      
+
+    },
+
+    checks:{
+        device:{
+            stateActive: "active",
+            stateInActive: "inactive",
+            stateConnected: "connected",
+
+            timeOffsetActive: 4,//hour 
+            timeOffsetConnected: 2,//hour
+
+        }
+    },
+
+    configs:{
+        timeSeriesInterval: 3 // hour
     }
 
     

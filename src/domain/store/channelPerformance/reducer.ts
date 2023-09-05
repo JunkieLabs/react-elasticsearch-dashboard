@@ -23,7 +23,13 @@ const initialState: ChannelPerformanceState = {
         bouquetChannelsMap: {},
 
     },
-    plots: [{
+    plots: [],
+    timeSeries:[]
+
+};
+
+/**
+ {
         color: "#234343",
         indentifiers: [{ [StoreConstants.channelPerformance.filters.plotBouquetIdentifier]: "Bouquet1" }],
         key: "Bouquet1",
@@ -38,10 +44,8 @@ const initialState: ChannelPerformanceState = {
         name: "Channel 2",
         texts: ["Bouquet 2", "Channel 22"]
 
-    }],
-    timeSeries:[]
-
-};
+    }
+ */
 
 const channelPerformanceSlice = createSlice({
     name: 'channelPerforamce',

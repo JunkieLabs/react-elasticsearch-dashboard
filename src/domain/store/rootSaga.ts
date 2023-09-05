@@ -6,6 +6,7 @@ import { watchCities } from './cities/saga';
 import { watchPincodes } from './pincodes/saga';
 import { watchDummyCharts } from './dummy/saga';
 import { watchBouquets} from './bouquets/saga';
+import { watchDeviceMonitor } from './deviceMonitor/saga';
 export function* rootSaga() {
   yield all([ 
     watchChannelPerformance(), 
@@ -14,6 +15,7 @@ export function* rootSaga() {
     watchCities(), 
     watchPincodes(), 
     watchBouquets(), 
+    watchDeviceMonitor(),
     watchDummyCharts()
   ]);
 }

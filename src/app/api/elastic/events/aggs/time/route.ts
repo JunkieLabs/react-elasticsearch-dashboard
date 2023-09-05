@@ -98,7 +98,7 @@ export async function GET(req: Request) {
         result: {
             date_histogram: {
                 field: "timestamp",
-                fixed_interval: "3h",  // Daily aggregation
+                fixed_interval: `${ElasticConstants.configs.timeSeriesInterval}h`,  // Daily aggregation
                 min_doc_count: 1,
                 format: "yyyy-MM-dd HH:mm:ss"
             }

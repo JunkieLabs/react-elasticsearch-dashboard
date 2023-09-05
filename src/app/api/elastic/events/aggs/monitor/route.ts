@@ -26,7 +26,7 @@ export async function GET(req: Request) {
                     result: {
                         range: {
                             timestamp: {
-                                gte: "now-2h/h"
+                                gte: `now-${ElasticConstants.checks.device.timeOffsetConnected}h/h`
                             }
                         }
                     }
@@ -35,38 +35,38 @@ export async function GET(req: Request) {
             aggs: {
                 total: {
                     cardinality: {
-                        field: "device_id.keyword"
+                        field: `${ElasticConstants.indexes.eventLogs.deviceId}.keyword`
                     }
                 }
             }
         },
-        inactive: {
-            filters: {
-                filters: {
-                    result: {
-                        range: {
-                            timestamp: {
-                                lt: "now-4h/h"
-                            }
-                        }
-                    }
-                }
-            },
-            aggs: {
-                total: {
-                    cardinality: {
-                        field: "device_id.keyword"
-                    }
-                }
-            }
-        },
+        // inactive: {
+        //     filters: {
+        //         filters: {
+        //             result: {
+        //                 range: {
+        //                     timestamp: {
+        //                         lt: "now-4h/h"
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     },
+        //     aggs: {
+        //         total: {
+        //             cardinality: {
+        //                 field: "device_id.keyword"
+        //             }
+        //         }
+        //     }
+        // },
         active: {
             filters: {
                 filters: {
                     result: {
                         range: {
                             timestamp: {
-                                gte: "now-4h/h"
+                                gte: `now-${ElasticConstants.checks.device.timeOffsetActive}h/h`
                             }
                         }
                     }
@@ -75,7 +75,7 @@ export async function GET(req: Request) {
             aggs: {
                 total: {
                     cardinality: {
-                        field: "device_id.keyword"
+                        field: `${ElasticConstants.indexes.eventLogs.deviceId}.keyword`
                     }
                 }
             }
@@ -105,10 +105,11 @@ export async function GET(req: Request) {
 
     console.log("aggsResult: ", aggsResult)
     response.active = aggsResult.active?.buckets.result.total.value ?? 0
-    response.inactive = aggsResult.inactive?.buckets.result.total.value ?? 0
+    // response.inactive = aggsResult.inactive?.buckets.result.total.value ?? 0
     response.connected = aggsResult.connected?.buckets.result.total.value ?? 0
     response.all = aggsResult.all?.total.value ?? 0
-
+    response.inactive = response.all - response.active;
+  
     return NextResponse.json(response);
 
 

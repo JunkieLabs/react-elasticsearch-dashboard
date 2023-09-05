@@ -4,6 +4,7 @@ import { createEntityAdapter, createSlice, PayloadAction } from '@reduxjs/toolki
 import { StoreConstants } from '../store.constants';
 import { ModelElasticAggsResultItem } from '@/types/elastic/aggs';
 import { ModelElasticEvent, ModelElasticEventHit } from '@/types/elastic/events/events';
+import { ModelElasticEventMonitorResult } from '@/types/elastic/events/monitor';
 
 
 
@@ -38,6 +39,13 @@ interface DeviceMonitorState {
         limit: number,
         isEnd: boolean,
         total: number
+    }
+
+    stats:{
+        active: number,
+        inactive: number,
+        connected: number,
+        all: number
     }
 
 
@@ -83,6 +91,12 @@ const initialState: DeviceMonitorState = {
         isEnd: false,
         total: 0
     },
+    stats:{
+        active:0,
+        inactive:0,
+        all:0,
+        connected:0
+    }
 
 };
 
@@ -93,9 +107,9 @@ const deviceMonitorSlice = createSlice({
         initCounter: (state, action: PayloadAction<void>) => {
       
         },
-        // setAggregation: (state, action: PayloadAction<ModelElasticAggsResultItem[]>) => {
-        //     state.timeSeries = action.payload;
-        // },
+        setStats: (state, action: PayloadAction<ModelElasticEventMonitorResult>) => {
+            state.stats = action.payload;
+        },
 
 
     },
