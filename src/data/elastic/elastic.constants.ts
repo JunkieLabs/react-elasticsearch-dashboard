@@ -49,6 +49,7 @@ export const ElasticConstants = {
             stateActive: "active",
             stateInActive: "inactive",
             stateConnected: "connected",
+            stateAll: "all",
 
             timeOffsetActive: 4,//hour 
             timeOffsetConnected: 2,//hour

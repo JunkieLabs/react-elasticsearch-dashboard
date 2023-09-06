@@ -6,6 +6,7 @@ import Box from '@mui/joy/Box';
 import { StoreActionDeviceMonitor } from '@/domain/store/deviceMonitor/reducer';
 import LabelCard from './LabelCard/LabelCard';
 import Container from '@mui/joy/Container';
+import DeviceTable from './DeviceTable/DeviceTable';
 
 interface DeviceMonitorProps { }
 
@@ -64,7 +65,8 @@ const DeviceMonitor: FC<DeviceMonitorProps> = () => {
           <Box sx={{ p: { xs: 1, sm: 1, md: 1 } }} ></Box>
           <Box>
 
-            Table
+            {/* Table */}
+            <DeviceTable state='all'></DeviceTable>
           </Box>
 
 
