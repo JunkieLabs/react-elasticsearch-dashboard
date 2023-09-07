@@ -35,7 +35,7 @@ const elasticEventHitToDevice = (stateList: (ModelElasticEventHit | undefined)[]
         return {
           id: item?._id ?? "",
           deviceId: item?._source.device_id ?? "",
-          timestamp: item?._source.timestamp ? format(parseISO(item?._source.timestamp), "dd-MM-yyyy") : format(Date.now(), "dd-MM-yyyy"),
+          timestamp: item?._source.timestamp ? format(parseISO(item?._source.timestamp), "dd-MM-yyyy hh:mm") : format(Date.now(), "dd-MM-yyyy"),
           log: item?._source ?? {} as any,
           status:status
         }

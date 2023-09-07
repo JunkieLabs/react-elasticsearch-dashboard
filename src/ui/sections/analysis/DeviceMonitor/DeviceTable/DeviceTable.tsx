@@ -6,12 +6,16 @@ import Box from '@mui/joy/Box';
 import { StoreActionDeviceMonitor } from '@/domain/store/deviceMonitor/reducer';
 import { RootState } from '@/domain/store/store';
 import Table from '@mui/joy/Table';
-import { IconButton } from '@mui/joy';
+import { IconButton, Sheet } from '@mui/joy';
+import { ObjectView } from 'react-object-view'
 import KeyboardArrowRightRounded from '@mui/icons-material/KeyboardArrowRightRounded';
 import KeyboardArrowLeftRounded from '@mui/icons-material/KeyboardArrowLeftRounded';
+import KeyboardArrowUpRounded from '@mui/icons-material/KeyboardArrowUpRounded';
+import KeyboardArrowDownRounded from '@mui/icons-material/KeyboardArrowDownRounded';
 import { ModelElasticEvent } from '@/types/elastic/events/events';
 import { ModelDeviceDetail } from '@/types/devices/models';
 import { DeviceHelper } from '@/domain/devices/helper';
+import { useRouter } from 'next/navigation';
 
 
 interface DeviceTableProps {
@@ -87,10 +91,11 @@ const DeviceTable: FC<DeviceTableProps> = (props) => {
         flexDirection: "column"
       }}>
 
-        <Table aria-label="striped table" borderAxis='xBetween'
+        <Table hoverRow aria-label="striped table" borderAxis='xBetween'
         >
           <thead>
             <tr>
+              <th style={{ width: 40 }} aria-label="empty" />
               <th style={{ width: '40%' }}>DeviceId</th>
               <th className={styles["align-center"]}>Last Timestamp</th>
               <th className={styles["align-center"]}>Status</th>
@@ -99,13 +104,14 @@ const DeviceTable: FC<DeviceTableProps> = (props) => {
           </thead>
           <tbody>
             {data.map((row) => (
-              <tr key={row?.id}>
-                <td align='left'>{row.deviceId}</td>
-                <td className={styles["align-center"]}>{row.timestamp}</td>
-                <td className={styles["align-center"]}><Box sx={{
-                  margin: 'auto'
-                }} className="td-aspect-square td-h-4">{row.status}</Box></td>
-              </tr>
+              <DeviceTableRow key={row.id} row={row}></DeviceTableRow>
+              // <tr key={row?.id}>
+              //   <td align='left'>{row.deviceId}</td>
+              //   <td className={styles["align-center"]}>{row.timestamp}</td>
+              //   <td className={styles["align-center"]}><Box sx={{
+              //     margin: 'auto'
+              //   }} className="td-aspect-square td-h-4">{row.status}</Box></td>
+              // </tr>
             ))}
           </tbody>
         </Table>
@@ -130,6 +136,85 @@ const DeviceTable: FC<DeviceTableProps> = (props) => {
   );
 }
 
+interface DeviceTableRowProps {
+
+  row: ModelDeviceDetail
+}
+
+const DeviceTableRow: FC<DeviceTableRowProps> = (props) => {
+  
+  const router = useRouter()
+  const [open, setOpen] = React.useState(false);
+
+  let { row } = props
+
+  const  handleClick = (event: React.MouseEvent<HTMLTableRowElement, MouseEvent>, deviceId: string) => {
+    // throw new Error('Function not implemented.');
+
+    router.replace(`?device-id=${deviceId}`)
+  }
+
+  return (
+    <React.Fragment>
+      <tr key={row?.id}  onClick={(event) => handleClick(event, row.deviceId)}>
+        <td>
+          <IconButton
+            aria-label="expand row"
+            variant="plain"
+            color="neutral"
+            size="sm"
+            onClick={(event) => {
+              event.stopPropagation()
+              setOpen(!open)}}
+          >
+            {open ? <KeyboardArrowUpRounded /> : <KeyboardArrowDownRounded />}
+          </IconButton>
+        </td>
+
+        <td align='left'>{row.deviceId}</td>
+        <td className={styles["align-center"]}>{row.timestamp}</td>
+        <td className={styles["align-center"]}><Box sx={{
+          margin: 'auto'
+        }} className="td-aspect-square td-h-4">{row.status}</Box></td>
+
+      </tr>
+      <tr>
+        <td style={{ height: 0, padding: 0 }} colSpan={4}>
+          {open && (
+            <Sheet
+              variant="soft"
+
+              sx={{ p: 1, pl: 6,
+                background:"#eeeeee",
+                boxShadow: 'inset 0 3px 6px 0 rgba(0 0 0 / 0.08)' }}
+            >
+
+              <ObjectView data={row.log}
+                options={{ hidePreviews: true,
+                  hideObjectSize: false,
+                  hideDataTypes: true}}
+                styles={{}}
+                palette={{
+                  base05: '#8B878F',
+                  base00: '#eeeeee',
+                  base07: '#000000',
+                  base06: '#000000',
+                  base0F: '#ff5e0a',
+                  base0B: '#ab8313',
+                  base0E: '#f1245a',
+                  base01: '#cfdae3',
+                  base0D: '#519e0c',
+                  base02: '#4c4a4d',
+                  base0A: '#02adbe'}}
+              />
+
+            </Sheet>)}
+        </td>
+      </tr>
+    </React.Fragment>
+
+  );
+}
 
 
 

@@ -1,3 +1,5 @@
+import { ModelElasticEventHit } from "./events/events"
+
 export interface ModelElasticAggsStatsResult {
     count: number//,
     min: number//,
@@ -17,6 +19,14 @@ export interface ModelElasticAggsResult {
     skip?: number
     limit? : number
     items: ModelElasticAggsResultItem[] | number[]
+}
+
+export interface ModelElasticHitsResult {
+    field?: string
+    total?: number
+    skip?: number
+    limit? : number
+    items: ModelElasticEventHit[]
 }
 
 export interface ModelElasticAggsResultItem {

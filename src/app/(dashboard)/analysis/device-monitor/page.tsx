@@ -7,9 +7,12 @@ import React, { FC, useCallback } from 'react';
 import styles from './styles.module.scss';
 import DeviceMonitor from '@/ui/sections/analysis/DeviceMonitor/DeviceMonitor';
 
-interface PagesProps {}
+interface PagesProps {
+  
+  searchParams: Record<string, string> | null | undefined;
+}
 
-const Pages: FC<PagesProps> = () =>{
+const Pages: FC<PagesProps> = (props) =>{
   
 //   const { data, error } = useSWR(`/api/elastic`, fetcher);
 
@@ -27,7 +30,7 @@ const Pages: FC<PagesProps> = () =>{
 //   console.log("data", data);
  
   return ( <div className={styles.Main}>
-   <DeviceMonitor></DeviceMonitor>
+   <DeviceMonitor searchParams={props.searchParams}></DeviceMonitor>
   </div>
 )
   };

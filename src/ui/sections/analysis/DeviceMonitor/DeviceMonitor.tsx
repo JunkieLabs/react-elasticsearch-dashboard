@@ -8,12 +8,21 @@ import LabelCard from './LabelCard/LabelCard';
 import Container from '@mui/joy/Container';
 import DeviceTable from './DeviceTable/DeviceTable';
 
-interface DeviceMonitorProps { }
+interface DeviceMonitorProps {
+  searchParams: Record<string, string> | null | undefined;
+}
 
-const DeviceMonitor: FC<DeviceMonitorProps> = () => {
+const DeviceMonitor: FC<DeviceMonitorProps> = (props) => {
   const dispatch = useDispatch();
 
   const stateStats = useSelector((state: RootState) => state.DeviceMonitor.stats);
+  const activeDeviceName = props.searchParams && props.searchParams['device-id'] ? props.searchParams['device-id'] as string : undefined;
+
+  console.log("activeDeviceName: ", activeDeviceName);
+
+
+
+
 
   useEffect(() => {
 
@@ -49,7 +58,7 @@ const DeviceMonitor: FC<DeviceMonitorProps> = () => {
             <LabelCard sx={{
               flex: { xs: '1 1 calc( 50% - 1rem )', sm: '1 1 calc( 33.3% - 2rem )', md: '1 1 calc( 25% - 2rem )' },
               maxWidth: { xs: 'calc( 50% - 1rem )', sm: 'calc( 33.3% - 2rem )', md: 'calc( 25% - 2rem )' }
-            }} label='Active' value={stateStats.active} selected={true}></LabelCard>
+            }} label='Active' value={stateStats.active} ></LabelCard>
             <LabelCard sx={{
               flex: { xs: '1 1 calc( 50% - 1rem )', sm: '1 1 calc( 33.3% - 2rem )', md: '1 1 calc( 25% - 2rem )' },
               maxWidth: { xs: 'calc( 50% - 1rem )', sm: 'calc( 33.3% - 2rem )', md: 'calc( 25% - 2rem )' }
@@ -57,7 +66,7 @@ const DeviceMonitor: FC<DeviceMonitorProps> = () => {
             <LabelCard sx={{
               flex: { xs: '1 1 calc( 50% - 1rem )', sm: '1 1 calc( 33.3% - 2rem )', md: '1 1 calc( 25% - 2rem )' },
               maxWidth: { xs: 'calc( 50% - 1rem )', sm: 'calc( 33.3% - 2rem )', md: 'calc( 25% - 2rem )' }
-            }} label='All' value={stateStats.all}></LabelCard>
+            }} label='All' value={stateStats.all} selected={true}></LabelCard>
 
 
 
@@ -66,7 +75,8 @@ const DeviceMonitor: FC<DeviceMonitorProps> = () => {
           <Box>
 
             {/* Table */}
-            <DeviceTable state='all'></DeviceTable>
+            {!activeDeviceName && <DeviceTable state='all'></DeviceTable>}
+
           </Box>
 
 

@@ -85,7 +85,7 @@ const initialState: DeviceMonitorState = {
     },
     allListPagination: {
         offset: 0,
-        limit: 2,
+        limit: 10,
         isEnd: false
     },
     connectedListPagination: {
