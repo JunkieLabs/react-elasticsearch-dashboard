@@ -20,10 +20,17 @@ export function* handleDeviceTotalChange() {
     // console.log("handleCitiesList e: ", e)
 
     try {
-        const result: ModelElasticEventTotalResult = yield ElasticDeviceLogsTotalRepo.getTotal()
-        // console.log("handleCitiesList result: ", result)
-        // if (result.length > 0) {
-        yield put(StoreActionDeviceLogs.setTotal(result.total));
+        const deviceId: string|undefined = yield select((state: RootState) => state.DeviceLogs.deviceName);
+
+        if(deviceId){
+
+            const result: ModelElasticEventTotalResult = yield ElasticDeviceLogsTotalRepo.getTotal(deviceId)
+            // console.log("handleCitiesList result: ", result)
+            // if (result.length > 0) {
+            yield put(StoreActionDeviceLogs.setTotal(result.total));
+    
+        }
+
 
         // }
 

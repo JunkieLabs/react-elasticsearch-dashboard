@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { deviceMonitorActiveListAdapter, deviceMonitorAllListAdapter } from "./reducer";
+// import { deviceMonitorActiveListAdapter, deviceMonitorAllListAdapter } from "./reducer";
 
 // Select the data1 adapter state
 const selectActiveListState = (state: RootState) => state.DeviceMonitor.activeList;
@@ -52,20 +52,71 @@ const selectAllListPage = createSelector(
   }
 );
 
+
+
+/**
+ * INACTIVE
+ */
+
+const selectInactiveListState = (state: RootState) => state.DeviceMonitor.inactiveList;
+
+const selectInactiveListPagination = (state: RootState) => state.DeviceMonitor.inactiveListPagination;
+
+// Create a selector to get all data items as an array
+// const selectAllList = createSelector(
+//   selectAllListState,
+//   deviceMonitorAllListAdapter.getSelectors().selectAll
+// );
+
+const selectInactiveListPage = createSelector(
+  selectInactiveListState,
+  selectInactiveListPagination,
+  (paginatedData, { offset, limit }) => {
+
+    const dataIds = paginatedData.ids.slice(offset, offset + limit);
+    return dataIds.map(id => paginatedData.entities[id]);
+  }
+);
+
+/**
+ * CONNECTED
+ */
+
+const selectConnectedListState = (state: RootState) => state.DeviceMonitor.connectedList;
+
+const selectConnectedListPagination = (state: RootState) => state.DeviceMonitor.connectedListPagination;
+
+// Create a selector to get all data items as an array
+// const selectAllList = createSelector(
+//   selectAllListState,
+//   deviceMonitorAllListAdapter.getSelectors().selectAll
+// );
+
+const selectConnectedListPage = createSelector(
+  selectConnectedListState,
+  selectConnectedListPagination,
+  (paginatedData, { offset, limit }) => {
+
+    const dataIds = paginatedData.ids.slice(offset, offset + limit);
+    return dataIds.map(id => paginatedData.entities[id]);
+  }
+);
+
+
 export const StoreSelectorsDeviceMonitor = {
 
   // activeList: selectActiveList,
   list: {
     active: selectActiveListPage,
     all: selectAllListPage,
-    inactive: selectActiveListPage,
-    connected: selectAllListPage,
+    inactive: selectInactiveListPage,
+    connected: selectConnectedListPage,
   },
   pagination: {
     active: selectActiveListPagination,
     all: selectAllListPagination,
-    inactive: selectAllListPagination,
-    connected: selectAllListPagination,
+    inactive: selectInactiveListPagination,
+    connected: selectConnectedListPagination,
   }
   // activeListById: selectActiveListById
 

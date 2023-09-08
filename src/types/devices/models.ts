@@ -8,3 +8,14 @@ export interface ModelDeviceDetail {
     status: string
   
   }
+
+  export interface ModelDeviceLog {
+    id: string
+    deviceId: string
+    log: ModelElasticEvent
+    timestamp: string
+    bouquet: string
+    status: string
+    location: string
+  
+  }

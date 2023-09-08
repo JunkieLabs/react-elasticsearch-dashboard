@@ -42,7 +42,7 @@ const initialState: DeviceLogsState = {
 
     pagination: {
         offset: 0,
-        limit: 2,
+        limit: 10,
         isEnd: false
     },
     total: 0,
@@ -59,7 +59,7 @@ const deviceLogsSlice = createSlice({
             state.total = action.payload
 
         },
-        setDeviceName: (state, action: PayloadAction<string>) => {
+        setDeviceName: (state, action: PayloadAction<string| undefined>) => {
             // state.stats = action.payload;
 
             if(state.deviceName == action.payload)return state;

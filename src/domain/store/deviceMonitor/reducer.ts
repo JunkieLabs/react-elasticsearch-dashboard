@@ -18,6 +18,15 @@ export interface DeviceMonitorState {
         ids: string[];
         entities: { [k: string]: ModelElasticEventHit };
     }
+    inactiveList: ReturnType<typeof deviceMonitorInactiveListAdapter.getInitialState> & {
+        ids: string[];
+        entities: { [k: string]: ModelElasticEventHit };
+    }
+    connectedList: ReturnType<typeof deviceMonitorConnectedListAdapter.getInitialState> & {
+        ids: string[];
+        entities: { [k: string]: ModelElasticEventHit };
+    }
+    
     activeListPagination: {
         offset: number,
         limit: number,
@@ -58,6 +67,13 @@ export const deviceMonitorAllListAdapter = createEntityAdapter<ModelElasticEvent
     selectId: (model) => model._id
 });
 
+export const deviceMonitorInactiveListAdapter = createEntityAdapter<ModelElasticEventHit>({
+    selectId: (model) => model._id
+});
+
+export const deviceMonitorConnectedListAdapter = createEntityAdapter<ModelElasticEventHit>({
+    selectId: (model) => model._id
+});
 
 const initialState: DeviceMonitorState = {
     activeList: deviceMonitorActiveListAdapter.getInitialState(
@@ -72,15 +88,26 @@ const initialState: DeviceMonitorState = {
             entities: Object.fromEntries([])
         },
     ),
-
+    inactiveList: deviceMonitorInactiveListAdapter.getInitialState(
+        {
+            ids: [],
+            entities: Object.fromEntries([])
+        },
+    ), 
+    connectedList: deviceMonitorConnectedListAdapter.getInitialState(
+        {
+            ids: [],
+            entities: Object.fromEntries([])
+        },
+    ),
     activeListPagination: {
         offset: 0,
-        limit: 2,
+        limit: 10,
         isEnd: false
     },
     inactiveListPagination: {
         offset: 0,
-        limit: 2,
+        limit: 10,
         isEnd: false
     },
     allListPagination: {
@@ -90,7 +117,7 @@ const initialState: DeviceMonitorState = {
     },
     connectedListPagination: {
         offset: 0,
-        limit: 2,
+        limit: 10,
         isEnd: false
     },
     stats: {
@@ -136,6 +163,69 @@ const deviceMonitorSlice = createSlice({
                 state.allListPagination.limit = action.payload.limit
                 state.allListPagination.offset = action.payload.offset
             }
+        },
+
+        activeAddItems: (state, action: PayloadAction<ModelElasticEventHit[]>) => {
+
+            var totalPrev = deviceMonitorActiveListAdapter.getSelectors().selectTotal(state.activeList)
+            if (action.payload.length + totalPrev == state.stats.active) {
+                state.activeListPagination.isEnd = true
+            }
+            deviceMonitorActiveListAdapter.addMany(state.activeList, action.payload);
+        },
+
+        activeSetPagination: (state, action: PayloadAction<ModelStorePagination>) => {
+
+            // console.log("activeSetPagination: ");
+
+            if (action.payload.offset < state.stats.active) {
+                // console.log("activeSetPagination 3: ");
+                //if()//
+                state.activeListPagination.limit = action.payload.limit
+                state.activeListPagination.offset = action.payload.offset
+            }
+        },
+
+        inactiveAddItems: (state, action: PayloadAction<ModelElasticEventHit[]>) => {
+
+            var totalPrev = deviceMonitorInactiveListAdapter.getSelectors().selectTotal(state.inactiveList)
+            if (action.payload.length + totalPrev == state.stats.inactive) {
+                state.inactiveListPagination.isEnd = true
+            }
+            deviceMonitorInactiveListAdapter.addMany(state.inactiveList, action.payload);
+        },
+
+        inactiveSetPagination: (state, action: PayloadAction<ModelStorePagination>) => {
+
+            // console.log("activeSetPagination: ");
+
+            if (action.payload.offset < state.stats.inactive) {
+                // console.log("activeSetPagination 3: ");
+                //if()//
+                state.inactiveListPagination.limit = action.payload.limit
+                state.inactiveListPagination.offset = action.payload.offset
+            }
+        },
+
+        connectedAddItems: (state, action: PayloadAction<ModelElasticEventHit[]>) => {
+
+            var totalPrev = deviceMonitorInactiveListAdapter.getSelectors().selectTotal(state.connectedList)
+            if (action.payload.length + totalPrev == state.stats.connected) {
+                state.connectedListPagination.isEnd = true
+            }
+            deviceMonitorConnectedListAdapter.addMany(state.connectedList, action.payload);
+        },
+
+        connectedSetPagination: (state, action: PayloadAction<ModelStorePagination>) => {
+
+            // console.log("activeSetPagination: ");
+
+            if (action.payload.offset < state.stats.connected) {
+                // console.log("activeSetPagination 3: ");
+                //if()//
+                state.connectedListPagination.limit = action.payload.limit
+                state.connectedListPagination.offset = action.payload.offset
+            }
         }
 
 
@@ -155,17 +245,17 @@ export const StoreActionDeviceMonitor = {
         pagination: deviceMonitorSlice.actions.allSetPagination
     },
     active: {
-        addItems: deviceMonitorSlice.actions.allAddItems,
-        pagination: deviceMonitorSlice.actions.allSetPagination
+        addItems: deviceMonitorSlice.actions.activeAddItems,
+        pagination: deviceMonitorSlice.actions.activeSetPagination
     },
     inactive: {
-        addItems: deviceMonitorSlice.actions.allAddItems,
-        pagination: deviceMonitorSlice.actions.allSetPagination
+        addItems: deviceMonitorSlice.actions.inactiveAddItems,
+        pagination: deviceMonitorSlice.actions.inactiveSetPagination
     },
 
     connected: {
-        addItems: deviceMonitorSlice.actions.allAddItems,
-        pagination: deviceMonitorSlice.actions.allSetPagination
+        addItems: deviceMonitorSlice.actions.connectedAddItems,
+        pagination: deviceMonitorSlice.actions.connectedSetPagination
     }
 };
 
