@@ -3,8 +3,10 @@ import { ModelElasticAggsResult, ModelElasticAggsResultItem } from "@/types/elas
 import { ModelElasticGeoPoint } from "@/types/elastic/common";
 import { ElasticConstants } from "../elastic.constants";
 
-const getTopN = async ({ n = 5, locations, pincodes, ageRange, dateRange }:
-     { n: number , locations: ModelElasticGeoPoint[], ageRange?: number[], pincodes?: string[], dateRange: Date[] }): Promise<ModelElasticAggsResultItem[]> => {
+import { formatISO } from 'date-fns';
+
+const getTopN = async ({ n = 5, locations, pincodes, ageRange, gender, dateRange }:
+    { n: number, locations: ModelElasticGeoPoint[], ageRange?: number[], pincodes?: string[], gender?: string, dateRange: Date[] }): Promise<ModelElasticAggsResultItem[]> => {
     // Simulate API delay
 
     var searchParam = new URLSearchParams();
@@ -13,8 +15,22 @@ const getTopN = async ({ n = 5, locations, pincodes, ageRange, dateRange }:
 
     locations.forEach(location => searchParam.append('location', JSON.stringify(location)))
     searchParam.append('field', ElasticConstants.indexes.testTime.channelName);
+
+    if (ageRange) {
+        searchParam.append('age-range', JSON.stringify(ageRange));
+    }
+
+    if (gender) {
+        searchParam.append('gender', gender);
+    }
+
+    if (dateRange != null && dateRange.length > 0) {
+        searchParam.append('date-range', JSON.stringify(dateRange.map(date => date.toISOString())));
+
+    }
+
     searchParam.append('n', `${n}`);
-    // console.log("getTopN search Params: ",  searchParam, pincodes)
+    console.log("getTopN search Params: ", ageRange, pincodes)
 
     var response: ModelElasticAggsResult = await fetcher('/api/elastic/events/aggs?' + searchParam)
     // if (response.status >= 400 && response.status < 500) {

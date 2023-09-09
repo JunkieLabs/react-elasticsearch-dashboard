@@ -10,6 +10,9 @@ export async function GET(req: Request) {
     let locationsStr = searchParams.getAll('location');
     let pincodes = searchParams.getAll('pincode');
     let ageRangeStr = searchParams.get('age-range');
+    let dateRangeStr = searchParams.get('date-range');
+    let gender = searchParams.get('gender');
+    let orderStr = searchParams.get('order')??"desc";
 
     let n = TransformHelper.toNumber(searchParams.get('n') as string | undefined, {
         max: 100,
@@ -20,8 +23,9 @@ export async function GET(req: Request) {
 
     let locations: ModelElasticGeoPoint[] = locationsStr.map(loc => JSON.parse(loc))
     let ageRange = ageRangeStr ? JSON.parse(ageRangeStr) : [];
+    let dateRange = dateRangeStr ? JSON.parse(dateRangeStr) : [];
 
-    console.log("GET aggs: ", field, ageRange, locations, pincodes)
+    console.log("GET aggs: ", field, ageRange,dateRange , locations, pincodes)
 
     const elastic = await getElasticClient();
 
@@ -40,6 +44,36 @@ export async function GET(req: Request) {
         query.bool.must.push({
             "terms": {
                 [`${ElasticConstants.indexes.eventLogs.pincode}.keyword`]: pincodes
+            }
+        });
+    }
+
+    if(ageRange && ageRange.length >0){
+        query.bool.must.push({
+            "range": {
+                [`${ElasticConstants.indexes.eventLogs.age}`]: {
+                    gte: ageRange[0],
+                    lte: ageRange[1]
+                }
+            }
+        });
+    }
+
+    if(dateRange && dateRange.length >0){
+        query.bool.must.push({
+            "range": {
+                [`${ElasticConstants.indexes.eventLogs.timestamp}`]: {
+                    gte: dateRange[0],
+                    lte: dateRange[1]
+                }
+            }
+        });
+    }
+
+    if(gender){
+        query.bool.must.push({
+            "term": {
+                [`${ElasticConstants.indexes.eventLogs.gender}.keyword`]: gender
             }
         });
     }
@@ -85,7 +119,10 @@ export async function GET(req: Request) {
         result: {
             terms: {
                 size: n ?? 5,
-                field: `${field as string}.keyword`
+                field: `${field as string}.keyword`,
+                order: {
+                    "_count": orderStr // Sort in ascending order based on document count
+                  } as any
             }
         }
     }

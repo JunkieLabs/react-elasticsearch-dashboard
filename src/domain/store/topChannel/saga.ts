@@ -7,10 +7,14 @@ import { RootState } from '../store';
 import { ModelTopChannelFilters } from '@/types/store/topChannel';
 import { ModelElasticPincode } from '@/types/elastic/pincodes/pincodes';
 import { ModelElasticAggsResultItem } from '@/types/elastic/aggs';
+import { StoreActionConfiguration } from '../configuration/reducer';
+import { ElasticConstants } from '@/data/elastic/elastic.constants';
+import { StoreHelper } from '../helper';
 
 function* handleCommonFilterChange() {
 
     // Fetch based on filter and sub-filter
+    const topChannelCount: number = yield select((state: RootState) => state.Configuration.topChannelsCount);
     const filter: Date[] = yield select((state: RootState) => state.CommonFilters.value);
     const subFilter: ModelTopChannelFilters = yield select((state: RootState) => state.TopChannel.subFilter);
     // let pincodes: ModelElasticPincode[] =[]
@@ -35,8 +39,9 @@ function* handleCommonFilterChange() {
         pincodes: subFilter.pincodes,
         dateRange: filter,
         locations: subFilter.region ? [subFilter.region.location] : [],
+        gender: StoreHelper.filterCommon.genderToElasticGender(subFilter.gender),
         // locations: pincodes.map(ele => ele.location),
-        n: 5,
+        n: topChannelCount,
         ageRange: subFilter.ageRange
     });
 
@@ -62,7 +67,7 @@ function* handleSubFilterChange(action: ReturnType<typeof StoreActionTopChannel.
 }
 
 export function* watchAllFilterChange() {
-    yield takeLatest([StoreActionCommonFilters.commonFilterSet.type, StoreActionTopChannel.setSubFilter.type], handleCommonFilterChange);
+    yield takeLatest([StoreActionConfiguration.topChannelCounts.type, StoreActionCommonFilters.commonFilterSet.type, StoreActionTopChannel.setSubFilter.type], handleCommonFilterChange);
 }
 
 // export function* watchSubFilterChange() {

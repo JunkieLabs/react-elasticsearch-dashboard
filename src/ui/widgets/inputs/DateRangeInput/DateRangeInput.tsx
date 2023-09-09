@@ -24,15 +24,15 @@ const defaultStaticRanges = createStaticRanges([
   {
     label: 'Last 7 days',
     range: () => ({
-      startDate: new Date(),
-      endDate: dateRangeDefineds.last7Days,
+      startDate: dateRangeDefineds.last7Days,
+      endDate: new Date(),
     }),
   },
   {
     label: 'Last 30 days',
     range: () => ({
-      startDate: new Date(),
-      endDate: dateRangeDefineds.last30Days,
+      startDate:dateRangeDefineds.last30Days,
+      endDate:  new Date(),
     }),
   },
 ] as any);
@@ -57,8 +57,8 @@ const DateRangeInput: FC<DateRangeInputProps> = (props) => {
 
   const [state, setState] = useState<DateRangePickerState[]>([
     {
-      startDate: new Date(),
-      endDate: subDays(new Date(), 7),
+      startDate: subDays(new Date(), 7),
+      endDate: new Date(),
       key: "selection",
     },
   ]);

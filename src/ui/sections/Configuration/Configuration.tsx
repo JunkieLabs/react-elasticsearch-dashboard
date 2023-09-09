@@ -1,4 +1,4 @@
-import React, { FC, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FC, FormEvent, useEffect, useState } from 'react';
 import styles from './Configuration.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { format, subDays } from 'date-fns';
@@ -7,6 +7,7 @@ import { RootState } from '@/domain/store/store';
 import { ModelStoreConfigurationFilter } from '@/types/store/configuration';
 import { StoreActionConfiguration } from '@/domain/store/configuration/reducer';
 import { StoreSelectorsConfiguration } from '@/domain/store/configuration/selector';
+import { TransformHelper } from '@/tools/parserTools';
 
 interface ConfigurationProps { }
 
@@ -20,11 +21,23 @@ const Configuration: FC<ConfigurationProps> = () => {
   // const filtersState = useSelector((state: RootState) => state.Configuration.filters);
   const filtersState = useSelector(StoreSelectorsConfiguration.filters);
 
-
+  const channelsCountState = useSelector(StoreSelectorsConfiguration.selectTotalCounts);
+  
   const [formData, setFormData] = useState({ topChannelCounts: "", slowChannelCounts: "" });
 
   const [error, setError] = useState({ topChannelCounts: "", slowChannelCounts: "" });
   const [loading, setLoding] = useState<boolean>(false);
+
+
+  useEffect(() => {
+    // filterGender.
+    setFormData({
+      topChannelCounts:`${channelsCountState.top}`, 
+      slowChannelCounts: `${channelsCountState.slow}`
+    })
+    // = stateSubFilter.region
+
+  }, [channelsCountState])
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
 
@@ -44,6 +57,32 @@ const Configuration: FC<ConfigurationProps> = () => {
     setLoding(true);
 
   }
+
+  const handleFormTopChannel = async (e: ChangeEvent<HTMLInputElement>) => {
+
+    var number = TransformHelper.toNumber(e.target.value, {
+      default:5
+    })
+
+    setFormData({ ...formData, topChannelCounts: e.target.value })
+    dispatch(StoreActionConfiguration.topChannelCounts(number))
+
+
+  }
+
+  const handleFormSlowChannel = async (e: ChangeEvent<HTMLInputElement>) => {
+
+    var number = TransformHelper.toNumber(e.target.value, {
+      default:5
+    })
+
+    setFormData({ ...formData, slowChannelCounts: e.target.value })
+    dispatch(StoreActionConfiguration.slowChannelCounts(number))
+
+
+  }
+
+  
 
   const handleFilterSelection = (filterItem: ModelStoreConfigurationFilter) => (event: { target: { checked: boolean; }; }) => {
     // const newSelections = [...filterItem.selections];
@@ -125,8 +164,9 @@ const Configuration: FC<ConfigurationProps> = () => {
                 <Input
                   type="number"
                   name="topChannelCounts"
+                  value={formData.topChannelCounts}
 
-                  onChange={(e) => setFormData({ ...formData, topChannelCounts: e.target.value })}
+                  onChange={handleFormTopChannel}
 
 
                 />
@@ -168,7 +208,10 @@ const Configuration: FC<ConfigurationProps> = () => {
                 <Input
                   type="number"
                   name="slowChannelCounts"
-                  onChange={(e) => setFormData({ ...formData, slowChannelCounts: e.target.value })}
+                  value={formData.slowChannelCounts}
+
+                  onChange={handleFormSlowChannel}
+                  // /onChange={(e) => setFormData({ ...formData, slowChannelCounts: e.target.value })}
 
 
                 />

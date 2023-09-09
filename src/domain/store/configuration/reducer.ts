@@ -4,55 +4,55 @@ import { createEntityAdapter, createSlice, PayloadAction } from '@reduxjs/toolki
 import { StoreConstants } from '../store.constants';
 
 interface ConfigurationState {
-    filters: 
-    ReturnType<typeof configurationFilterAdapter.getInitialState>  & {
+    filters:
+    ReturnType<typeof configurationFilterAdapter.getInitialState> & {
         ids: string[];
         entities: { [k: string]: ModelStoreConfigurationFilter };
-      },//ModelStoreConfigurationFilter[];
+    },//ModelStoreConfigurationFilter[];
     topChannelsCount: number;
     slowChannelsCount: number;
 }
 export const configurationFilterAdapter = createEntityAdapter<ModelStoreConfigurationFilter>({
-    selectId:(model)=> model.name 
+    selectId: (model) => model.name
 });
 
 const initialFilters = [
-        {
-            name: StoreConstants.configuration.filters.filterAge,
-            isEnabled: true,
-            label: "Based on age"
-        },
-        {
-            name: StoreConstants.configuration.filters.filterGender,
-            isEnabled: true,
-            label: "Based on Gender"
-        },
-        {
-            name: StoreConstants.configuration.filters.filterRegion,
-            isEnabled: true,
-            label: "Based on Region"
-        },
-        {
-            name: StoreConstants.configuration.filters.filterPincode,
-            isEnabled: true,
-            label: "Based on Pincode"
-        },
-        {
-            name: StoreConstants.configuration.filters.filterBouquet,
-            isEnabled: true,
-            label: "Based on Bouquet"
-        }
+    {
+        name: StoreConstants.configuration.filters.filterAge,
+        isEnabled: true,
+        label: "Based on age"
+    },
+    {
+        name: StoreConstants.configuration.filters.filterGender,
+        isEnabled: true,
+        label: "Based on Gender"
+    },
+    {
+        name: StoreConstants.configuration.filters.filterRegion,
+        isEnabled: true,
+        label: "Based on Region"
+    },
+    {
+        name: StoreConstants.configuration.filters.filterPincode,
+        isEnabled: true,
+        label: "Based on Pincode"
+    },
+    {
+        name: StoreConstants.configuration.filters.filterBouquet,
+        isEnabled: true,
+        label: "Based on Bouquet"
+    }
 
-    ];
+];
 
 const initialState: ConfigurationState = {
 
     filters: configurationFilterAdapter.getInitialState(
         {
-            ids: initialFilters.map(val=> val.name),
-            entities: Object.fromEntries(initialFilters.map(val=> [val.name, val]))
+            ids: initialFilters.map(val => val.name),
+            entities: Object.fromEntries(initialFilters.map(val => [val.name, val]))
         },
-        
+
     ),
 
     // filters: 
@@ -94,13 +94,19 @@ const configurationSlice = createSlice({
     reducers: {
         addFilter: (state, action: PayloadAction<ModelStoreConfigurationFilter>) => {
             configurationFilterAdapter.addOne(state.filters, action.payload);
-          },
-          updateFilter: (state, action: PayloadAction<ModelStoreConfigurationFilter>) => {
+        },
+        updateFilter: (state, action: PayloadAction<ModelStoreConfigurationFilter>) => {
             configurationFilterAdapter.updateOne(state.filters, {
-              id: action.payload.name,
-              changes: action.payload,
+                id: action.payload.name,
+                changes: action.payload,
             });
-          },
+        },
+        topChannelCounts: (state, action: PayloadAction<number>) => {
+            state.topChannelsCount = action.payload;
+        },
+        slowChannelCounts: (state, action: PayloadAction<number>) => {
+            state.slowChannelsCount = action.payload;
+        },
         // addFilter: configurationFilterAdapter.addOne,
         // updateData: configurationFilterAdapter.updateOne,
         // setFilterState: (state, action: PayloadAction<ModelStoreConfigurationFilter[]>) => {

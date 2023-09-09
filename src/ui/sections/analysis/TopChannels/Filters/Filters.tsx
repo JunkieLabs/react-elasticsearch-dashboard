@@ -13,6 +13,8 @@ import { StoreActionTopChannel } from '@/domain/store/topChannel/reducer';
 import { ModelElasticCity } from '@/types/elastic/cities/cities';
 import { StoreActionPincodes } from '@/domain/store/pincodes/reducer';
 import { ModelTopChannelFilters } from '@/types/store/topChannel';
+import { ElasticConstants } from '@/data/elastic/elastic.constants';
+import { StoreConstants } from '@/domain/store/store.constants';
 
 interface FiltersProps { }
 
@@ -24,7 +26,7 @@ const Filters: FC<FiltersProps> = () => {
 
   const stateSubFilter = useSelector((state: RootState) => state.TopChannel.subFilter);
 
-  const [filterGender, setFilterGender] = useState<string>('all');
+  const [filterGender, setFilterGender] = useState<string>(StoreConstants.filterCommon.gender.all);
   const [filterAgeRange, setFilterAgeRange] = useState<number[]>([0, 100]);// useState([30, 50]);
   const [filterPincode, setFilterPincode] = useState<string[]>([]);
   const [filterRegion, setFilterRegion] = useState<ModelElasticCity | null>(null);
@@ -127,6 +129,17 @@ const Filters: FC<FiltersProps> = () => {
     setFilterGender(gender)
 
     handleStoreChange({ ...stateSubFilter, gender: gender })
+  }
+
+  const handleAgeChange = async (newAge: number[]) => {
+
+    if(newAge  && newAge.length>0){
+
+      setFilterAgeRange(newAge);
+
+    }
+
+    handleStoreChange({ ...stateSubFilter, ageRange: newAge })
   }
 
 
@@ -241,10 +254,10 @@ const Filters: FC<FiltersProps> = () => {
                       // setFilterGender(newValue ?? 'all');
                     }}
                   >
-                    <Button value="all">All</Button>
-                    <Button value="male">Male</Button>
-                    <Button value="female">Female</Button>
-                    <Button value="others">Others</Button>
+                    <Button value={StoreConstants.filterCommon.gender.all}>All</Button>
+                    <Button value={StoreConstants.filterCommon.gender.male}>Male</Button>
+                    <Button value={StoreConstants.filterCommon.gender.female}>Female</Button>
+                    <Button value={StoreConstants.filterCommon.gender.other}>Others</Button>
                   </ToggleButtonGroup>
                 </Box>
 
@@ -270,7 +283,8 @@ const Filters: FC<FiltersProps> = () => {
                     onChange={(event, newValue) => {
                       // setValue(newValue);
                       // console.log("ToggleButtonGroup age: ", newValue, filterAgeDefaultRange);
-                      setFilterAgeRange((newValue as number[]) ?? stateAgeRangeDefault);
+                      handleAgeChange(newValue as number[])
+                      // setFilterAgeRange((newValue as number[]) ?? stateAgeRangeDefault);
                     }}
                     valueLabelDisplay="auto"
                   // getAriaValueText={valueText}

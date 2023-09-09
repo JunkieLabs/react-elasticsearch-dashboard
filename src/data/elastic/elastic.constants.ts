@@ -23,6 +23,7 @@ export const ElasticConstants = {
             channelNumber:"channel_number",
             volume:"volume",
             pincode:"pincode",
+            gender:"users_gender",
             bouquet:"bouquet_name",
             deviceId:"device_id",
             timestamp:"timestamp"
@@ -54,6 +55,12 @@ export const ElasticConstants = {
             timeOffsetActive: 4,//hour 
             timeOffsetConnected: 2,//hour
 
+        },
+        gender: {
+            all:"_",
+            male: "Male",
+            female: "Female",
+            other: "Others"
         }
     },
 

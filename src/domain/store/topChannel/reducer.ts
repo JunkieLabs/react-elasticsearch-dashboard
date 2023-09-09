@@ -3,6 +3,8 @@ import { DummyData } from '@/types/store/dummyData';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ModelElasticAggsResultItem } from '@/types/elastic/aggs';
 import { ModelElasticCity } from '@/types/elastic/cities/cities';
+import { ElasticConstants } from '@/data/elastic/elastic.constants';
+import { StoreConstants } from '../store.constants';
 
 
 
@@ -17,7 +19,7 @@ const initialState: TopChannelState = {
     dummyData: [],
     aggregation: [],
     subFilter: {
-        gender: 'all',
+        gender: StoreConstants.filterCommon.gender.all,
         pincodes: [],
     },
     

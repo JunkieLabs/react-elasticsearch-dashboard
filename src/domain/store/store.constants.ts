@@ -1,7 +1,13 @@
 export const StoreConstants = {
 
     filterCommon : {
-        ageRange:[0, 100]
+        ageRange:[0, 100], 
+        gender: {
+            all: "All",
+            male: "Male",
+            female: "Female",
+            other: "Others"
+        }
     },
 
     configuration:{
