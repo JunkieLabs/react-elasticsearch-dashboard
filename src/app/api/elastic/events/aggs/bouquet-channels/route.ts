@@ -6,7 +6,7 @@
 import { getElasticClient } from "@/data/elastic/elastic";
 import { ElasticConstants } from "@/data/elastic/elastic.constants";
 import { TransformHelper } from "@/tools/parserTools";
-import { ModelElasticAggsResult, ModelElasticAggsTermsResult } from "@/types/elastic/aggs";
+import { ModelElasticAggsResult, ModelElasticAggsTermsResult, ModelElasticMultiAggsResult, ModelElasticMultiAggsResultItem } from "@/types/elastic/aggs";
 import { ModelElasticGeoPoint } from "@/types/elastic/common";
 import { NextResponse } from "next/server";
 import { inspect } from "util";
@@ -92,6 +92,8 @@ export async function GET(req: Request) {
     }
 
     if (dateRange && dateRange.length > 0) {
+
+
         query.bool.must.push({
             "range": {
                 [`${ElasticConstants.indexes.eventLogs.timestamp}`]: {
@@ -107,25 +109,62 @@ export async function GET(req: Request) {
 
 
 
-    const aggs = {
-        result: {
-            date_histogram: {
-                field: "timestamp",
-                fixed_interval: `${ElasticConstants.configs.timeSeriesInterval}h`,  // Daily aggregation
-                min_doc_count: 1,
-                format: "yyyy-MM-dd HH:mm:ss"
+    const aggs: { [key: string]: any } = {
+        total: {
+            value_count: {
+              field: "_index"
             }
         }
     }
 
 
+
+    if (bouquets && bouquets.length > 0) {
+
+        for (var bouquetName of bouquets) {
+            aggs[`${bouquetName}`] = {
+                filter: {
+                    term: { [`${ElasticConstants.indexes.eventLogs.bouquet}.keyword`]: bouquetName }
+                }
+            }
+        }
+        // subQuery.bool.should.push(...bouquets.map(bouquet => { return {  } }))
+    }
+
+    if (bouquetChannelsMap && Object.keys(bouquetChannelsMap).length > 0) {
+        var keys = Object.keys(bouquetChannelsMap)
+        for (let bouquetKey of keys) {
+            //const key = keys[i];
+
+            for (let bouquetChannelKey of bouquetChannelsMap[bouquetKey]) {
+                aggs[`${bouquetKey} > ${bouquetChannelKey}`] = {
+                    filter: {
+                        bool: {
+                            must: [
+                                { term: { [`${ElasticConstants.indexes.eventLogs.bouquet}.keyword`]: bouquetKey } },
+                                { term: { [`${ElasticConstants.indexes.eventLogs.channelName}.keyword`]: bouquetChannelKey } }
+                            ]
+                        }
+                    }
+                }
+            }
+
+
+
+        }
+    }
+
     
 
 
 
-    var response: ModelElasticAggsResult = {
-        items: [],
-        field: field ?? undefined
+
+
+
+    var response: ModelElasticMultiAggsResult = {
+        aggs: {},
+        total: 0
+        // field: field ?? undefined
     }
     // console.log("quey pin: ", query.bool.must)
 
@@ -139,8 +178,11 @@ export async function GET(req: Request) {
             aggs: aggs
         }
     });
-    const terms = (result.aggregations as Result)?.result;//??[];//.map((item) => item._source);
-    response.items = terms?.buckets ?? []
+    const {total,  ...aggsResults} = (result.aggregations as any);//??[];//.map((item) => item._source);
+   
+    
+    response.aggs = aggsResults
+    response.total = total?.[`value`]??0
 
     return NextResponse.json(response);
 
@@ -149,6 +191,6 @@ export async function GET(req: Request) {
 
 interface Result {
 
-    result?: ModelElasticAggsTermsResult
+    [key: string]: ModelElasticMultiAggsResultItem
 
 }

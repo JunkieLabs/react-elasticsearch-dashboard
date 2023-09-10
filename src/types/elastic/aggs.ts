@@ -11,6 +11,17 @@ export interface ModelElasticAggsStatsResult {
 export interface ModelElasticAggsTermsResult {
     buckets: any[]
 }
+export interface ModelElasticMultiAggsResult {
+    aggs: {
+        [key:string]: ModelElasticMultiAggsResultItem
+    }
+    total?: number
+}
+
+export interface ModelElasticMultiAggsResultItem{
+
+    doc_count: number 
+}
 
 // Client Side
 export interface ModelElasticAggsResult {

@@ -2,7 +2,7 @@ import { ModelChannelPerformanceFilters } from '@/types/store/channelPerformance
 import { DummyData } from '@/types/store/dummyData';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { StoreConstants } from '../store.constants';
-import { ModelElasticAggsResultItem } from '@/types/elastic/aggs';
+import { ModelElasticAggsResultItem, ModelElasticMultiAggsResult } from '@/types/elastic/aggs';
 
 
 
@@ -10,7 +10,11 @@ interface ChannelPerformanceState {
     dummyData: DummyData[];
     subFilter: ModelChannelPerformanceFilters;
     plots: ModelAnalyticPlot[];
-    
+    multiAggs: {
+        items: ModelElasticAggsResultItem[],
+        total: number
+    },
+
     timeSeries: ModelElasticAggsResultItem[],
 }
 
@@ -23,8 +27,12 @@ const initialState: ChannelPerformanceState = {
         bouquetChannelsMap: {},
 
     },
+    multiAggs: {
+        items: [],
+        total:0
+    },
     plots: [],
-    timeSeries:[]
+    timeSeries: []
 
 };
 
@@ -59,6 +67,13 @@ const channelPerformanceSlice = createSlice({
         },
         setAggregation: (state, action: PayloadAction<ModelElasticAggsResultItem[]>) => {
             state.timeSeries = action.payload;
+        },
+
+        setMultiAggregation: (state, action: PayloadAction< {
+            items: ModelElasticAggsResultItem[],
+            total: number
+        }>) => {
+            state.multiAggs = action.payload;
         },
 
         setPlots: (state, action: PayloadAction<ModelAnalyticPlot[]>) => {
