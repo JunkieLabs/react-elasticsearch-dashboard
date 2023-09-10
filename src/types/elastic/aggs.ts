@@ -33,5 +33,8 @@ export interface ModelElasticAggsResultItem {
 
     key: string | number
     doc_count: number 
+    sub? : {
+        buckets?: ModelElasticAggsResultItem[]
+    }
 
   }

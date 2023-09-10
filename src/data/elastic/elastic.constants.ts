@@ -61,6 +61,11 @@ export const ElasticConstants = {
             male: "Male",
             female: "Female",
             other: "Others"
+        },
+        aggs: {
+            subAggsType:{
+                byDay: "byDay"
+            }
         }
     },
 

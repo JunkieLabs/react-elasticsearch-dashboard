@@ -99,7 +99,7 @@ const ChartBar: FC<ChartBarProps> = (props) => {
       chartIns.data.labels = props.data?.labels ?? [];
       if (props.data?.data && props.data?.data.length > 0) {
 
-        if (chartIns.data.datasets && chartIns.data.datasets.length > 0) {
+        if (chartIns.data.datasets && chartIns.data.datasets.length == 1) {
           chartIns.data.datasets[0] = props.data!.data[0];
         } else {
           chartIns.data.datasets = props.data?.data ?? [];

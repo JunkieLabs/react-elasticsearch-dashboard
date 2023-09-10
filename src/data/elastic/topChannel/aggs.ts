@@ -28,7 +28,8 @@ const getTopN = async ({ n = 5, locations, pincodes, ageRange, gender, dateRange
         searchParam.append('date-range', JSON.stringify(dateRange.map(date => date.toISOString())));
 
     }
-
+    searchParam.append('sub-aggs', ElasticConstants.checks.aggs.subAggsType.byDay);
+    
     searchParam.append('n', `${n}`);
     console.log("getTopN search Params: ", ageRange, pincodes)
 

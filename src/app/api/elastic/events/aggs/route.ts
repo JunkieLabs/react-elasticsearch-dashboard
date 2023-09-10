@@ -12,7 +12,7 @@ export async function GET(req: Request) {
     let ageRangeStr = searchParams.get('age-range');
     let dateRangeStr = searchParams.get('date-range');
     let gender = searchParams.get('gender');
-    let orderStr = searchParams.get('order')??"desc";
+    let orderStr = searchParams.get('order') ?? "desc";
 
     let n = TransformHelper.toNumber(searchParams.get('n') as string | undefined, {
         max: 100,
@@ -20,12 +20,13 @@ export async function GET(req: Request) {
     });
     // let gender = searchParams.get('gender');
     let field = searchParams.get('field');
+    let subAggs = searchParams.get('sub-aggs');
 
     let locations: ModelElasticGeoPoint[] = locationsStr.map(loc => JSON.parse(loc))
     let ageRange = ageRangeStr ? JSON.parse(ageRangeStr) : [];
     let dateRange = dateRangeStr ? JSON.parse(dateRangeStr) : [];
 
-    console.log("GET aggs: ", field, ageRange,dateRange , locations, pincodes)
+    console.log("GET aggs: ", field, ageRange, dateRange, locations, pincodes)
 
     const elastic = await getElasticClient();
 
@@ -48,7 +49,7 @@ export async function GET(req: Request) {
         });
     }
 
-    if(ageRange && ageRange.length >0){
+    if (ageRange && ageRange.length > 0) {
         query.bool.must.push({
             "range": {
                 [`${ElasticConstants.indexes.eventLogs.age}`]: {
@@ -59,7 +60,7 @@ export async function GET(req: Request) {
         });
     }
 
-    if(dateRange && dateRange.length >0){
+    if (dateRange && dateRange.length > 0) {
         query.bool.must.push({
             "range": {
                 [`${ElasticConstants.indexes.eventLogs.timestamp}`]: {
@@ -70,7 +71,7 @@ export async function GET(req: Request) {
         });
     }
 
-    if(gender){
+    if (gender) {
         query.bool.must.push({
             "term": {
                 [`${ElasticConstants.indexes.eventLogs.gender}.keyword`]: gender
@@ -122,7 +123,19 @@ export async function GET(req: Request) {
                 field: `${field as string}.keyword`,
                 order: {
                     "_count": orderStr // Sort in ascending order based on document count
-                  } as any
+                } as any
+            }
+        } as any
+    }
+
+
+    if (subAggs && subAggs == ElasticConstants.checks.aggs.subAggsType.byDay) {
+        aggs.result[`aggs`] = {
+            sub: {
+                date_histogram: {
+                    field: `${ElasticConstants.indexes.eventLogs.timestamp}`,
+                    "calendar_interval": "1d" // You can adjust the interval as needed
+                }
             }
         }
     }

@@ -15,6 +15,7 @@ import ChartPie from '@/ui/widgets/charts/ChartPie/ChartPie';
 import ChartBar from '@/ui/widgets/charts/ChartBar/ChartBar';
 import ChartTable from './ChartTable/ChartTable';
 import AirBnbSlider from '@/ui/widgets/AirBnbSlider/AirBnbSlider';
+import ChannelDetails from './ChannelDetails/ChannelDetails';
 
 interface TopChannelsProps { }
 
@@ -30,7 +31,7 @@ const TopChannels: FC<TopChannelsProps> = () => {
 
   useEffect(() => {
 
-    var chartCommonItems = ChartHelper.elasticAggregationToChartJs(aggregatedItems)
+    var chartCommonItems = ChartHelper.elasticAggregationToChartJsCommon(aggregatedItems)
     setChartCommonItems(chartCommonItems)
 
 
@@ -168,22 +169,12 @@ const TopChannels: FC<TopChannelsProps> = () => {
 
           <Box sx={{ p: { xs: 2, sm: 2, md: 3 } }} ></Box>
 
-          <AirBnbSlider></AirBnbSlider>
+          {/* <AirBnbSlider></AirBnbSlider> */}
 
           {/* <ChartTable data={chartCommonItems}></ChartTable> */}
+          <ChannelDetails dateRange={dateRange} sx={{}}></ChannelDetails>
 
-          <Box sx={{
-            height: 400,
-            display: "flex",
-            width: "100%",
-            maxWidth: 'calc( 99% )'
-          }
-          } >
-            <ChartBar data={chartData} sx={{
-              width:'100%'
-
-            }}></ChartBar>
-          </Box>
+          
         <Box sx={{ p: { xs: 2, sm: 4, md: 6 } }} ></Box>
       </Box>
     </Container>

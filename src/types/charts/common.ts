@@ -6,5 +6,13 @@ export interface ModelChartCommonItem {
     label: string
     color: string
     id: string
+    // sub
     
 }
+
+// export interface ModelChartCommonItemSet {
+    
+//     label: string
+//     color: string
+//     values: {number[]}
+// }

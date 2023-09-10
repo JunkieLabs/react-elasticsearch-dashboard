@@ -16,10 +16,18 @@ const AirBnbSlider: FC<AirBnbSliderProps> = () => {
         aria-labelledby="track-inverted-range-slider"
         // getAriaValueText={valueText}
         defaultValue={[20, 37]}
-        
+        getAriaValueText={valueText}
+        marks
+        min={30}
+        max={50}
+        valueLabelDisplay="auto"
         />
     </div>
   );
 };
+
+function valueText(value: number) {
+  return `${value}°C`;
+}
 
 export default AirBnbSlider;

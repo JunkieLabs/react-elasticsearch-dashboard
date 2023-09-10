@@ -10,6 +10,7 @@
 //     }
 import Highcharts from 'highcharts/highstock';
 
+import { differenceInDays, format, addDays } from 'date-fns';
 import { isNumeric } from "@/tools/parserTools";
 import { ModelChartJs, ModelChartJsDataset } from "@/types/charts/chartjs";
 import { ModelChartCommonItem } from "@/types/charts/common";
@@ -18,7 +19,7 @@ import { ModelElasticAggsResultItem } from "@/types/elastic/aggs";
 import { UiResourceColor } from "@/ui/resource/color";
 
 
-const elasticAggregationToChartJs = (items: ModelElasticAggsResultItem[]): ModelChartCommonItem[] => {
+const elasticAggregationToChartJsCommon = (items: ModelElasticAggsResultItem[]): ModelChartCommonItem[] => {
 
     var data: ModelChartCommonItem[] = [];
 
@@ -65,6 +66,88 @@ const chartCommonToChartJs = (items: ModelChartCommonItem[]): ModelChartJs => {
 
 }
 
+
+const elasticSubAggregationTimeToChartJs = (items: ModelElasticAggsResultItem[], dayRange: number[], dateRange: Date[]): ModelChartJs => {
+
+    // var data: ModelChartCommonItem[] = [];
+
+
+    // console.log("dateRange[0].valueOf()", dateRange[0].valueOf(), dateRange[1].valueOf())
+    // console.log("first", differenceInDays((items[0].sub?.buckets?.[0].key as number | undefined) ?? 0, dateRange[0]))
+    // console.log("2nd", differenceInDays((items[0].sub?.buckets?.[1].key as number | undefined) ?? 0, dateRange[0]))
+    var labels = [];
+
+    for (let j = dayRange[0]; j < dayRange[1]; j++) {
+         labels.push (format(addDays(dateRange[0], j), "dd/MM/yyyy"))
+    }
+
+    // console.log("")
+
+    var modelChartJs: ModelChartJs = {
+
+        labels: labels,
+        data: []
+    }
+
+
+    for (let l = 0; l < items.length; l++) {
+        const element = items[l];
+
+        var chartEntries = new Map<number, { label: string, value: number }>()
+
+        for (let j = dayRange[0]; j < dayRange[1]; j++) {
+            chartEntries.set(j, { label: format(addDays(dateRange[0], j), "dd/MM/yyyy"), value: 0 })
+        }
+        if (element.sub?.buckets) {
+
+
+            console.log("element.sub!.buckets", element.sub!.buckets)
+            for (var entry of element.sub!.buckets) {
+                // console.log("entry: ", entry)
+                var diff = differenceInDays((entry.key as number | undefined) ?? 0, dateRange[0])
+                var chartEntry = chartEntries.get(diff)
+
+                if (chartEntry) {
+                    chartEntry.value += entry.doc_count
+                    chartEntries.set(diff, chartEntry)
+                }
+
+                // if()
+
+
+            }
+
+        }
+
+        var entriesData  = []
+
+        for (let j = dayRange[0]; j < dayRange[1]; j++) {
+            entriesData.push(chartEntries.get(j)!.value)
+        }
+        var dataset: ModelChartJsDataset = {
+            data: entriesData,
+            label: isNumeric(element.key) ? `${Number(element.key)}` : element.key.toString(),
+            backgroundColor: UiResourceColor.COLOR_ARRAY[l % 15]
+        }
+
+        modelChartJs.data.push(dataset);
+
+
+        // let chatCommonData: ModelChartCommonItem = {
+        //     id: isNumeric(element.key) ? `${Number(element.key)}` : element.key.toString(),//`${label}`,
+        //     color: UiResourceColor.COLOR_ARRAY[i % 15],
+        //     label: isNumeric(element.key) ? `${Number(element.key)}` : element.key.toString(),
+        //     value: element.doc_count
+        // }
+        // data.push(chatCommonData);
+
+    }
+    return modelChartJs;
+
+}
+
+
+
 const timeseriesToHighstock = (items: ModelElasticAggsResultItem[], color: string): ModelChartHighStock => {
 
 
@@ -100,7 +183,8 @@ const timeseriesToHighstock = (items: ModelElasticAggsResultItem[], color: strin
 }
 
 export const ChartHelper = {
-    elasticAggregationToChartJs: elasticAggregationToChartJs,
+    elasticAggregationToChartJsCommon: elasticAggregationToChartJsCommon,
     chartCommonToChartJs: chartCommonToChartJs,
+    elasticSubAggregationTimeToChartJs: elasticSubAggregationTimeToChartJs,
     timeseriesToHighstock: timeseriesToHighstock
 }
