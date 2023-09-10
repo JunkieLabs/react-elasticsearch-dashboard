@@ -15,6 +15,11 @@ import { RootState } from '@/domain/store/store';
 import ChartHighstock from '@/ui/widgets/charts/ChartHighstock/ChartHighstock';
 import { ModelChartHighStock } from '@/types/charts/highstock';
 import { ChartHelper } from '@/domain/charts/helper';
+import { ModelChartCommonItem } from '@/types/charts/common';
+import { ModelChartJs } from '@/types/charts/chartjs';
+import ChartBar from '@/ui/widgets/charts/ChartBar/ChartBar';
+import ChartPie from '@/ui/widgets/charts/ChartPie/ChartPie';
+import ChartTable from './ChartTable/ChartTable';
 
 interface ChannelPerformanceProps {
 
@@ -26,27 +31,47 @@ const ChannelPerformance: FC<ChannelPerformanceProps> = (props) => {
   const modal = props.searchParams && props.searchParams['modal'] ? TransformHelper.toBoolean(props.searchParams['modal'] as string) : false;
 
   const [dateRange, setDateRange] = useState<Date[]>([new Date(), subDays(new Date(), 7),]);
-  
+  const [chartCommonItems, setChartCommonItems] = useState<ModelChartCommonItem[]>([])
+  const [chartData, setChartData] = useState<ModelChartJs>()
+  const aggregatedItems = useSelector((state: RootState) => state.ChannelPerformance.multiAggs);
+
   const stateTimeSeries = useSelector((state: RootState) => state.ChannelPerformance.timeSeries);
-  const [chartData, setChartData] = useState<ModelChartHighStock>()
+  const [chartTimeSeriesData, setChartTimeSeriesData] = useState<ModelChartHighStock>()
   const dispatch = useDispatch();
 
   useEffect(() => {
 
     var modelChartJs = ChartHelper.timeseriesToHighstock(stateTimeSeries ?? [], "#232324")
-    setChartData(modelChartJs)
+    setChartTimeSeriesData(modelChartJs)
 
 
 
   }, [stateTimeSeries])
 
   useEffect(() => {
-    // console.log("filterAgeRange: ", filterAgeRange, filterAgeDefaultRange, filterAgeDefaultRange === filterAgeRange)
 
-    dispatch(StoreActionBouquets.init())
-    return () => { }
+    var chartCommonItems;
+    if (aggregatedItems.items && aggregatedItems.items.length > 0) {
+      chartCommonItems = ChartHelper.elasticAggregationToChartJsCommon(aggregatedItems.items)
+    } else {
+      chartCommonItems = [{
+        id: `total`,//`${label}`,
+        color: `#c9b969`,
+        label: `Total`,
+        value: aggregatedItems.total
+      }]
+    }
+    setChartCommonItems(chartCommonItems)
 
-  }, []);
+  }, [aggregatedItems])
+
+  useEffect(() => {
+    var modelChartJs = ChartHelper.chartCommonToChartJs(chartCommonItems ?? [])
+    setChartData(modelChartJs)
+
+  }, [chartCommonItems])
+
+
 
   useEffect(() => {
     // console.log("filterAgeRange: ", filterAgeRange, filterAgeDefaultRange, filterAgeDefaultRange === filterAgeRange)
@@ -55,6 +80,15 @@ const ChannelPerformance: FC<ChannelPerformanceProps> = (props) => {
     return () => { }
 
   }, [dateRange]);
+
+
+  useEffect(() => {
+    // console.log("filterAgeRange: ", filterAgeRange, filterAgeDefaultRange, filterAgeDefaultRange === filterAgeRange)
+
+    dispatch(StoreActionBouquets.init())
+    return () => { }
+
+  }, []);
 
   // const showModal = searchParams?.modal;
   // console.log("modal: ", modal)
@@ -87,7 +121,7 @@ const ChannelPerformance: FC<ChannelPerformanceProps> = (props) => {
 
           <Filters searchParams={props.searchParams}></Filters>
 
-          
+
           <Box sx={{ p: { xs: 1, sm: 1, md: 1 } }} ></Box>
 
         </Box>
@@ -102,17 +136,63 @@ const ChannelPerformance: FC<ChannelPerformanceProps> = (props) => {
         </Link>} */}
         {/* <Box> What</Box>} */}
         <Box sx={{
-            height: 400,
-            display: "flex",
-            width: "100%",
-            maxWidth: 'calc( 99% )'
-          }
-          } >
-            <ChartHighstock data={chartData} sx={{
-              width:'100%'
+          height: 400,
+          display: "flex",
+          width: "100%",
+          maxWidth: 'calc( 99% )'
+        }
+        } >
+          <ChartHighstock data={chartTimeSeriesData} sx={{
+            width: '100%'
 
-            }}></ChartHighstock>
+          }}></ChartHighstock>
+
+
+
+        </Box>
+
+
+        <Box sx={{ p: { xs: 2, sm: 4, md: 6 } }} ></Box>
+
+        <Box sx={{
+          display: "flex",
+          flexFlow: "row wrap",
+          gap: 2
+        }}>
+          <Box sx={{
+            flex: { xs: '1 1 calc( 100%  )', sm: '1 1 calc( 60% - 2rem )' },
+            maxWidth: { xs: 'calc( 99% )', sm: 'calc( 60% - 2rem )' }
+
+          }}>
+            <ChartBar data={chartData} sx={{
+
+            }}></ChartBar>
           </Box>
+          <Box sx={{
+            maxHeight: 400,
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+            flex: { xs: '1 1 calc( 100%  )', sm: '1 1 calc( 40% - 2rem )' },
+            maxWidth: { xs: 'calc( 99% )', sm: 'calc( 40% - 2rem )' }
+
+          }}>
+            <ChartPie data={chartData} sx={{
+              maxHeight: "100%",
+              height: `unset`,
+              width: '100%'
+
+            }}></ChartPie>
+          </Box>
+        </Box>
+
+        <Box sx={{ p: { xs: 2, sm: 2, md: 3 } }} ></Box>
+
+        <ChartTable data={chartCommonItems}></ChartTable>
+
+        
+        <Box sx={{ p: { xs: 2, sm: 2, md: 3 } }} ></Box>
+
       </Container>
     </div>
   );

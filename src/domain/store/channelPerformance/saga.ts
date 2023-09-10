@@ -29,7 +29,7 @@ function* handleTimeSeries(): Generator<any, void, any> {
 
 
 
-    const items: ModelElasticAggsResultItem[] = yield ElasticChannelPerformanceAggRepo.getTimeSeries({
+    const resultItems: ModelElasticAggsResultItem[] = yield ElasticChannelPerformanceAggRepo.getTimeSeries({
         bouquets: subFilter.bouquets,
         dateRange: filterDateRanage,
         // locations: pincodes.map(ele => ele.location),
@@ -77,23 +77,7 @@ function* handleTimeSeries(): Generator<any, void, any> {
 
     yield put(StoreActionChannelPerformance.setPlots(plots));
 
-    yield put(StoreActionChannelPerformance.setAggregation(items));
-}
-
-
-
-function* handleAggs(): Generator<any, void, any> {
-
-    console.log("handleFilterChange: ")
-
-    // Fetch based on filter and sub-filter
-    // const filter: Date[] = yield select((state: RootState) => state.ChannelPerformance.subFilter);
-    const filterDateRanage: Date[] = yield select((state: RootState) => state.CommonFilters.value);
-    const subFilter: ModelChannelPerformanceFilters = yield select((state: RootState) => state.ChannelPerformance.subFilter);
-
-
-
-
+    yield put(StoreActionChannelPerformance.setAggregation(resultItems));
 
     const aggsResult: ModelElasticMultiAggsResult = yield ElasticChannelPerformanceAggRepo.getAggs({
         bouquets: subFilter.bouquets,
@@ -103,42 +87,78 @@ function* handleAggs(): Generator<any, void, any> {
         bouquetChannelsMap: subFilter.bouquetChannelsMap
     });
 
-    console.log("ModelElasticAggsMultiResultItem: ", aggsResult)
-    const items: ModelElasticAggsResultItem[] = [];
+    console.log("ModelElasticAggsMultiResultItem hh: ", aggsResult, plots)
+    const aggsItems: ModelElasticAggsResultItem[] = [];
 
 
-    var keys = Object.keys(aggsResult.aggs)
+    // var keys = Object.keys(aggsResult.aggs)
 
-    for (var key of keys) {
-        items.push({
-            doc_count: aggsResult.aggs[key].doc_count,
-            key: key
-        })
+    for (var plot of plots) {
+
+        var plotkey = plot.texts?.join(" : ") 
+
+
+        // console.log("plotkey: ", plotkey)
+        if(plotkey){
+
+            console.log("plotkey: ", plotkey)
+            var aggs = aggsResult.aggs[plotkey];
+
+            aggsItems.push({
+                doc_count: aggs.doc_count,
+                key: plotkey
+            })
+        }
+        
     }
 
+    // TODO index
+    // plots
 
 
 
-    yield put(StoreActionChannelPerformance.setMultiAggregation({items: items, total:  aggsResult.total??0}));
+
+
+    yield put(StoreActionChannelPerformance.setMultiAggregation({items: aggsItems, total:  aggsResult.total??0}));
+
+
 }
+
+
+
+// function* handleAggs(): Generator<any, void, any> {
+
+//     console.log("handleFilterChange: ")
+
+//     // Fetch based on filter and sub-filter
+//     // const filter: Date[] = yield select((state: RootState) => state.ChannelPerformance.subFilter);
+//     const filterDateRanage: Date[] = yield select((state: RootState) => state.CommonFilters.value);
+//     const subFilter: ModelChannelPerformanceFilters = yield select((state: RootState) => state.ChannelPerformance.subFilter);
+
+
+//     const plots: ModelAnalyticPlot[] = yield select((state: RootState) => state.ChannelPerformance.plots);
+
+
+
+//    }
 // function* sasa(action:  AnyAction) : Generator<any, void, any> {
 //     // Call both functions concurrently using fork
 //     yield fork(handleTimeSeries, action);
 //     yield fork(handleAggs, action);
 //   }
 
-export function* watchAllFilterChange() {
-    yield takeLatest([StoreActionCommonFilters.commonFilterSet.type, StoreActionChannelPerformance.setSubFilter.type],
-        function* (action: AnyAction) {
-            // Call both functions concurrently using fork
-            yield fork(handleTimeSeries);
-            yield fork(handleAggs);
-        });
-}
-
 // export function* watchAllFilterChange() {
-//     yield takeLatest([StoreActionCommonFilters.commonFilterSet.type, StoreActionChannelPerformance.setSubFilter.type], handleTimeSeries);
+//     yield takeLatest([StoreActionCommonFilters.commonFilterSet.type, StoreActionChannelPerformance.setSubFilter.type],
+//         function* (action: AnyAction) {
+//             // Call both functions concurrently using fork
+//             yield fork(handleTimeSeries);
+//             yield fork(handleAggs);
+//         });
 // }
+
+export function* watchAllFilterChange() {
+    yield takeLatest([StoreActionCommonFilters.commonFilterSet.type, StoreActionChannelPerformance.setSubFilter.type], handleTimeSeries);
+}
 
 export function* watchChannelPerformance() {
     yield all([fork(watchAllFilterChange)]);

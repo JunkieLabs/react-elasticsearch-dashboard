@@ -137,7 +137,7 @@ export async function GET(req: Request) {
             //const key = keys[i];
 
             for (let bouquetChannelKey of bouquetChannelsMap[bouquetKey]) {
-                aggs[`${bouquetKey} > ${bouquetChannelKey}`] = {
+                aggs[`${bouquetKey} : ${bouquetChannelKey}`] = {
                     filter: {
                         bool: {
                             must: [
