@@ -1,0 +1,78 @@
+import { takeLatest, put, select, call, all, fork } from 'redux-saga/effects';
+import { StoreActionSlowChannel } from './reducer';
+import { StoreActionCommonFilters } from '@/domain/store/commonFilters/reducer';
+import { ElasticTopChannelAggRepo } from '@/data/elastic/topChannel';
+import { RootState } from '../store';
+import { ModelSlowChannelFilters } from '@/types/store/slowChannel';
+import { ModelElasticAggsResultItem } from '@/types/elastic/aggs';
+import { StoreActionConfiguration } from '../configuration/reducer';
+import { StoreHelper } from '../helper';
+
+function* handleCommonFilterChange() {
+
+    // Fetch based on filter and sub-filter
+    const topChannelCount: number = yield select((state: RootState) => state.Configuration.topChannelsCount);
+    const filter: Date[] = yield select((state: RootState) => state.CommonFilters.value);
+    const subFilter: ModelSlowChannelFilters = yield select((state: RootState) => state.TopChannel.subFilter);
+    // let pincodes: ModelElasticPincode[] =[]
+    // if(subFilter.pincodes.length>0){
+    //     const pincodesResult: ModelElasticPincode[] = yield ElasticPincodeRepo.getAll(subFilter.pincodes);
+    //     pincodes = pincodesResult
+
+    // }else {
+    //     pincodes =[]
+    // }
+
+
+    // console.log("handleCommonFilterChange filter: ", filter)
+
+    // console.log("handleCommonFilterChange Pincodes: ", pincodes)
+
+
+
+
+
+    const items: ModelElasticAggsResultItem[] = yield ElasticTopChannelAggRepo.getTopN({
+        pincodes: subFilter.pincodes,
+        dateRange: filter,
+        locations: subFilter.region ? [subFilter.region.location] : [],
+        gender: StoreHelper.filterCommon.genderToElasticGender(subFilter.gender),
+        // locations: pincodes.map(ele => ele.location),
+        n: topChannelCount,
+        ageRange: subFilter.ageRange,
+        order: 'asc'
+    });
+
+    // console.log("ModelElasticAggsResultItem: ", items)
+
+    yield put(StoreActionSlowChannel.setAggregation(items));
+}
+
+
+
+
+function* handleSubFilterChange(action: ReturnType<typeof StoreActionSlowChannel.setSubFilter>) {
+    /*
+      // TODO can be used to update subfilter
+    
+      const subFilterValue = action.payload;
+      yield put(channelPerformanceSetSubFilter(subFilterValue));
+     */
+    console.log("handleSubFilterChange Pincodes: ")
+
+
+    yield call(handleCommonFilterChange); // Fetch again when sub-filter changes
+}
+
+export function* watchAllFilterChange() {
+    yield takeLatest([StoreActionConfiguration.topChannelCounts.type, StoreActionCommonFilters.commonFilterSet.type, StoreActionSlowChannel.setSubFilter.type], handleCommonFilterChange);
+}
+
+// export function* watchSubFilterChange() {
+//     yield takeLatest(channelPerformanceSetSubFilter.type, handleSubFilterChange);
+// }
+
+export function* watchSlowChannel() {
+    yield all([fork(watchAllFilterChange)]);
+}
+

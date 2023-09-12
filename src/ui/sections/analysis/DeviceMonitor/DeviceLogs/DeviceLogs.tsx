@@ -101,7 +101,7 @@ const DeviceLogs: FC<DeviceLogsProps> = (props) => {
 
       <Box sx={{ p: { xs: 1, sm: 1, md: 1 } }} ></Box>
 
-      <Table hoverRow aria-label="striped table" borderAxis='xBetween'
+      <Table aria-label="striped table" borderAxis='xBetween'
       >
         <thead>
           <tr>
@@ -140,6 +140,7 @@ const DeviceLogs: FC<DeviceLogsProps> = (props) => {
       </Box>
 
 
+      <Box sx={{ p: { xs: 2, sm: 2, md: 2 } }} ></Box>
     </Box>
   );
 }

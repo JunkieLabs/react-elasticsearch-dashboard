@@ -23,6 +23,12 @@ export function* handleStatsInit() {
         // console.log("handleCitiesList result: ", result)
         // if (result.length > 0) {
         yield put(StoreActionDeviceMonitor.setStats(result));
+        const state: DeviceMonitorState = yield select((state: RootState) => state.DeviceMonitor);
+
+        yield put(StoreActionDeviceMonitor.all.pagination(state.allListPagination));
+        yield put(StoreActionDeviceMonitor.active.pagination(state.activeListPagination));
+        yield put(StoreActionDeviceMonitor.inactive.pagination(state.inactiveListPagination));
+        yield put(StoreActionDeviceMonitor.connected.pagination(state.connectedListPagination));
 
         // }
 

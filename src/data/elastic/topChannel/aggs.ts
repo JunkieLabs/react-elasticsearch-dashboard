@@ -5,8 +5,9 @@ import { ElasticConstants } from "../elastic.constants";
 
 import { formatISO } from 'date-fns';
 
-const getTopN = async ({ n = 5, locations, pincodes, ageRange, gender, dateRange }:
-    { n: number, locations: ModelElasticGeoPoint[], ageRange?: number[], pincodes?: string[], gender?: string, dateRange: Date[] }): Promise<ModelElasticAggsResultItem[]> => {
+const getTopN = async ({ n = 5, locations, pincodes, ageRange, gender, dateRange, order }:
+    { n: number, locations: ModelElasticGeoPoint[], ageRange?: number[], pincodes?: string[], gender?: string, 
+        dateRange: Date[], order?: string }): Promise<ModelElasticAggsResultItem[]> => {
     // Simulate API delay
 
     var searchParam = new URLSearchParams();
@@ -31,6 +32,11 @@ const getTopN = async ({ n = 5, locations, pincodes, ageRange, gender, dateRange
     searchParam.append('sub-aggs', ElasticConstants.checks.aggs.subAggsType.byDay);
     
     searchParam.append('n', `${n}`);
+
+    if (order) {
+        searchParam.append('order', order);
+    }
+
     console.log("getTopN search Params: ", ageRange, pincodes)
 
     var response: ModelElasticAggsResult = await fetcher('/api/elastic/events/aggs?' + searchParam)

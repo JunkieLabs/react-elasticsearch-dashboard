@@ -10,7 +10,7 @@ const getPaginated = async ({state, offset, limit}:{state: string , offset: numb
    searchParam.append("skip", `${offset}`)
    searchParam.append("limit", `${limit}`)
    
-    // console.log("getPlots search Params: ",  searchParam, pincodes)
+    console.log("device getPaginated search Params: ",  searchParam, state)
 
     var response: ModelElasticEventHitResult = await fetcher('/api/elastic/events/hits/devices?'+   searchParam )
     // if (response.status >= 400 && response.status < 500) {

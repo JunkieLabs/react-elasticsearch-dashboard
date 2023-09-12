@@ -15,6 +15,7 @@ import { DummyChartsReducers } from './dummy/reducer';
 import { BouquetsReducers } from './bouquets/reducer';
 import { DeviceMonitorReducers } from './deviceMonitor/reducer';
 import { DeviceLogsReducers } from './deviceLogs/reducer';
+import { SlowChannelReducers } from './slowChannel/reducer';
 
 
 
@@ -30,6 +31,7 @@ export const store = configureStore({
         ChannelPerformance: ChannelPerformanceReducers,
         DummyCharts: DummyChartsReducers,
         TopChannel: TopChannelReducers,
+        SlowChannel: SlowChannelReducers,
         Bouquets: BouquetsReducers,
         DeviceMonitor: DeviceMonitorReducers,
         DeviceLogs: DeviceLogsReducers

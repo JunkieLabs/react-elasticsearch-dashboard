@@ -139,8 +139,8 @@ const deviceMonitorSlice = createSlice({
         setStats: (state, action: PayloadAction<ModelElasticEventMonitorResult>) => {
             // state.stats = action.payload;
             state = { ...initialState, stats: action.payload }
-
-            console.log("setStats: ", state)
+            console.log("#### setStats: stats:", state, action.payload)
+           
             return state;
         },
 

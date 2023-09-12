@@ -29,7 +29,8 @@ export async function GET(req: Request) {
     let bouquetChannelsMap: { [bouquet: string]: string[] } = bouquetChannelsMapStr ? JSON.parse(bouquetChannelsMapStr) : [];
 
     let dateRange = dateRangeStr ? JSON.parse(dateRangeStr) : [];
-    console.log("GET aggs: ", field, bouquets, bouquetChannelsMap)
+    // console.log("GET bouquet-channels aggs: ", field, bouquets, bouquetChannelsMap)
+    // console.log("GET bouquet-channels aggs: ", field, bouquets, dateRangeStr, dateRange)
 
     const elastic = await getElasticClient();
 
@@ -168,7 +169,7 @@ export async function GET(req: Request) {
     }
     // console.log("quey pin: ", query.bool.must)
 
-    console.log("quey: ", query.bool.must, query.bool.must[0])
+    // console.log("b-c quey: ", query.bool.must, query.bool.must[0])
 
     const result = await elastic.search({
         index: ElasticConstants.indexes.eventLogs._,

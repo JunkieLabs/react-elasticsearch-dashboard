@@ -18,17 +18,17 @@ const elasticEventHitToDevice = (stateList: (ModelElasticEventHit | undefined)[]
 
     var mapped = stateList.map(item => {
 
-        var date = item?._source.timestamp ? parseISO(item?._source.timestamp) : undefined;
+        var date = item?._source.timestamp ? Date.parse(item?._source.timestamp) : undefined;
         var status = ElasticConstants.checks.device.stateInActive;
         if (date) {
           var currentDate = new Date(Date.now())
   
           var hours = differenceInHours( currentDate, date)
   
-          console.log("hours: ", hours)
-          if (hours < ElasticConstants.checks.device.timeOffsetConnected) {
+          console.log("  hours: ", hours, item?._source.device_id , item?._source.timestamp, currentDate.toISOString())
+          if (hours <= ElasticConstants.checks.device.timeOffsetConnected) {
             status = ElasticConstants.checks.device.stateConnected;
-          } else if (hours < ElasticConstants.checks.device.timeOffsetActive) {
+          } else if (hours <= ElasticConstants.checks.device.timeOffsetActive) {
             status = ElasticConstants.checks.device.stateActive;
           }
         }

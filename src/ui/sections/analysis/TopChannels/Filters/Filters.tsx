@@ -15,6 +15,7 @@ import { StoreActionPincodes } from '@/domain/store/pincodes/reducer';
 import { ModelTopChannelFilters } from '@/types/store/topChannel';
 import { ElasticConstants } from '@/data/elastic/elastic.constants';
 import { StoreConstants } from '@/domain/store/store.constants';
+import { StoreActionBouquets } from '@/domain/store/bouquets/reducer';
 
 interface FiltersProps { }
 
@@ -23,6 +24,7 @@ const Filters: FC<FiltersProps> = () => {
   const stateAgeRangeDefault = useSelector((state: RootState) => state.CommonFilters.ageRange);
 
   const stateDefaultRegions = useSelector((state: RootState) => state.Cities.values);
+  const stateDefaultBouquets = useSelector((state: RootState) => state.Bouquets.items);
 
   const stateSubFilter = useSelector((state: RootState) => state.TopChannel.subFilter);
 
@@ -30,6 +32,7 @@ const Filters: FC<FiltersProps> = () => {
   const [filterAgeRange, setFilterAgeRange] = useState<number[]>([0, 100]);// useState([30, 50]);
   const [filterPincode, setFilterPincode] = useState<string[]>([]);
   const [filterRegion, setFilterRegion] = useState<ModelElasticCity | null>(null);
+  const [filterBouquet, setFilterBouquet] = useState<string | null>(null);
   const [pincodeInputText, setPincodeInputText] = useState<string>('');
 
 
@@ -40,10 +43,19 @@ const Filters: FC<FiltersProps> = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
+    // console.log("filterAgeRange: ", filterAgeRange, filterAgeDefaultRange, filterAgeDefaultRange === filterAgeRange)
+
+    dispatch(StoreActionBouquets.init())
+    return () => { }
+
+  }, []);
+
+  useEffect(() => {
     // filterGender.
     setFilterRegion(stateSubFilter.region ?? null)
-    setFilterPincode(stateSubFilter.pincodes??[])
+    setFilterPincode(stateSubFilter.pincodes ?? [])
     setFilterGender(stateSubFilter.gender)
+    setFilterBouquet(stateSubFilter.bouquet ?? null)
     // = stateSubFilter.region
 
   }, [stateSubFilter])
@@ -115,6 +127,22 @@ const Filters: FC<FiltersProps> = () => {
     handleStoreChange({ ...stateSubFilter, region: region })
   }
 
+  const handleBouquetChange = async (bouquet: string | undefined) => {
+    console.log("handleBouquetChange: ", bouquet);
+    if (bouquet) {
+      let i = stateDefaultBouquets.findIndex(val => val == bouquet);
+      if (i >= 0) {
+        setFilterBouquet(stateDefaultBouquets[i]);
+
+      }
+    } else {
+      console.log("handleBouquetChange 2: ");
+
+      setFilterBouquet(null)
+    }
+    handleStoreChange({ ...stateSubFilter, bouquet: bouquet })
+  }
+
   const handlePincodesChange = async (pincodes: string[]) => {
 
     setFilterPincode(pincodes)
@@ -133,7 +161,7 @@ const Filters: FC<FiltersProps> = () => {
 
   const handleAgeChange = async (newAge: number[]) => {
 
-    if(newAge  && newAge.length>0){
+    if (newAge && newAge.length > 0) {
 
       setFilterAgeRange(newAge);
 
@@ -195,6 +223,14 @@ const Filters: FC<FiltersProps> = () => {
                 Region: {filterRegion.city}
               </Chip>}
 
+              {filterBouquet && <Chip
+                key={"Bouquet"}
+                size="sm"
+                variant="soft"
+                color="neutral"
+              >
+                Bouquet: {filterBouquet}
+              </Chip>}
 
               {
                 filterPincode.map((item, index) => {
@@ -400,7 +436,44 @@ const Filters: FC<FiltersProps> = () => {
                     placeholder='type pincode '></ChipsInput>
                 </Box>
 
+                <Box
+                  sx={{
+                    maxWidth: { xs: "unset", sm: "50%" },
+                    flex: "1 1 0%",
+                    display: "flex", flexDirection: "column",
+                    gap: `0.5rem`
+                  }}>
 
+                  <h4 className='td-text-xs td-font-medium'>Select Bouquet</h4>
+
+                  <Autocomplete
+
+                    onChange={(event, values) => {
+
+                      console.log("auto onChange: ", values)
+                      // onChange(values);
+                      handleBouquetChange(values ?? undefined);
+                    }}
+                    // defaultValue={filterRegion}
+                    value={filterBouquet}
+
+
+                    getOptionLabel={(option) => option}
+                    // freeSolo={false}
+                    // placeholder="Region"
+                    options={stateDefaultBouquets}
+                    renderOption={(props, option) => {
+                      var { key, ...propsExc } = props as any;
+                      return (
+                        <AutocompleteOption variant="soft" key={"op" + option}  {...propsExc}>
+                          {option}
+                        </AutocompleteOption>
+                      );
+                    }}
+
+                  // sx={{ width: 300 }}
+                  />
+                </Box>
 
 
               </Box>
@@ -416,14 +489,5 @@ const Filters: FC<FiltersProps> = () => {
   )
 };
 
-const top7Region = [
-  { label: 'ZX9876307', },
-  { label: 'ZX9876308', },
-  { label: 'ZX9876309', },
-  { label: 'ZX9876310', },
-  { label: 'ZX9876312', },
-  { label: 'ZX9876311', },
-  { label: 'ZX9876313', },
-]
 
 export default Filters;

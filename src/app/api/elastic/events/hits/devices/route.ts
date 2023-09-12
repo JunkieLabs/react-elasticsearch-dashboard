@@ -11,6 +11,8 @@ import { ModelElasticGeoPoint } from "@/types/elastic/common";
 import { NextResponse } from "next/server";
 import { inspect } from "util";
 
+import { formatISO, subHours } from 'date-fns';
+
 export async function GET(req: Request) {
     let { searchParams } = new URL(req.url);
     let skip = TransformHelper.toNumber(searchParams.get('skip') as string | undefined);
@@ -29,12 +31,12 @@ export async function GET(req: Request) {
     let state = searchParams.get('state');
 
 
-    // console.log("GET aggs: ", field, bouquets, bouquetChannelsMap)
+    console.log("GET device hits: ", field, state, limit, skip)
 
     const elastic = await getElasticClient();
 
     var query = {
-        
+
 
 
 
@@ -84,20 +86,32 @@ export async function GET(req: Request) {
                 field: ElasticConstants.indexes.eventLogs.timestamp
             }
         };
+        var gte = subHours(new Date(Date.now()), ElasticConstants.checks.device.timeOffsetActive)
 
         aggs.result.aggs["bucket_selector"] = {
             bucket_selector: {
                 buckets_path: {
                     maxTimestamp: "max_timestamp"
                 },
-                script: `params.maxTimestamp <= ${Date.now().valueOf()}L - ${ElasticConstants.checks.device.timeOffsetActive} * 3600 * 1000L`
+
+                // script: {
+                //     source: "Instant.parse(doc['timestamp'].value).isBefore(Instant.parse(params.maxTimestamp))",
+                //     params: {
+                //         maxTimestamp: `${gte.toISOString()}`
+                //     }
+                // }
+
+
+                script: `params.maxTimestamp <= ${gte.valueOf()}L`
+
+                // script: `params.maxTimestamp <= ${Date.now().valueOf()}L - ${ElasticConstants.checks.device.timeOffsetActive} * 3600 * 1000L`
             }
 
         }
         query = undefined;
 
-        console.log(" aggs.result.aggs[bucket_selector",  aggs.result.aggs["bucket_selector"])
-    }else  if (state == ElasticConstants.checks.device.stateActive) {
+        console.log(" aggs.result.aggs[bucket_selector", aggs.result.aggs["bucket_selector"])
+    } else if (state == ElasticConstants.checks.device.stateActive) {
         aggs.result.aggs["max_timestamp"] = {
             max: {
                 field: ElasticConstants.indexes.eventLogs.timestamp
@@ -113,15 +127,18 @@ export async function GET(req: Request) {
         //     }
 
         // }
+        var gte = subHours(new Date(Date.now()), ElasticConstants.checks.device.timeOffsetActive)
 
-        query["range"]= {
+        query["range"] = {
             timestamp: {
-                gte: `now-${ElasticConstants.checks.device.timeOffsetActive}h/h`,
-                lte: `now/h`
+                gte: `${gte.toISOString()}`,
+                // lte: `${new Date(Date.now()).toISOString()}`
+                // gte: `now-${ElasticConstants.checks.device.timeOffsetActive}h/h`,
+                // lte: `now/h`
             }
         }
 
-        console.log(" aggs.result.aggs[bucket_selector",  aggs.result.aggs["bucket_selector"])
+        console.log(" aggs.result.aggs[bucket_selector", aggs.result.aggs["bucket_selector"])
     } else if (state == ElasticConstants.checks.device.stateConnected) {
         aggs.result.aggs["max_timestamp"] = {
             max: {
@@ -129,10 +146,14 @@ export async function GET(req: Request) {
             }
         };
 
-        query["range"]= {
+        var gte = subHours(new Date(Date.now()), ElasticConstants.checks.device.timeOffsetConnected)
+
+        query["range"] = {
             timestamp: {
-                gte: `now-${ElasticConstants.checks.device.timeOffsetConnected}h/h`,
-                lte: `now/h`
+                gte: `${gte.toISOString()}`,
+                // gte: `now-${ElasticConstants.checks.device.timeOffsetConnected}h/h`,
+                // lte: `${new Date(Date.now()).toISOString()}`
+                // lte: `now/h`
             }
         }
         // aggs.result.aggs["bucket_selector"] = {
@@ -145,9 +166,9 @@ export async function GET(req: Request) {
 
         // }
 
-        console.log(" aggs.result.aggs[bucket_selector",  aggs.result.aggs["bucket_selector"])
-    }else {
-        
+        console.log(" aggs.result.aggs[bucket_selector", aggs.result.aggs["bucket_selector"])
+    } else {
+
         query = undefined;
     }
 
@@ -162,7 +183,8 @@ export async function GET(req: Request) {
     }
     // console.log("quey pin: ", query.bool.must)
 
-    // console.log("quey: ", query.bool.must, query.bool.must[0])
+    console.log("device hit quey: ", state, query)
+    console.log("aggs: ", aggs)
 
     const result = await elastic.search({
         index: ElasticConstants.indexes.eventLogs._,

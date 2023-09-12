@@ -162,12 +162,14 @@ const SideNav: FC<SideNavProps> = (props) => {
                 <ListItemContent>Top Channels</ListItemContent>
               </ListItemButton>
             </Link>
-            <ListItemButton selected={routePath.includes(UiNavigationConstants.analysis.slowChannels)}>
-              <ListItemDecorator>
-                <Box className={`td-align-middle td-w-1 td-h-1 td-bg-gray-700`} ></Box>
-              </ListItemDecorator>
-              <ListItemContent>Slow Channels</ListItemContent>
-            </ListItemButton>
+            <Link href="/analysis/slow-channels" legacyBehavior passHref>
+              <ListItemButton component="a" selected={routePath.includes(UiNavigationConstants.analysis.slowChannels)}>
+                <ListItemDecorator>
+                  <Box className={`td-align-middle td-w-1 td-h-1 td-bg-gray-700`} ></Box>
+                </ListItemDecorator>
+                <ListItemContent>Slow Channels</ListItemContent>
+              </ListItemButton>
+            </Link>
           </ListItem>
 
           <ListDivider inset={`gutter`} />

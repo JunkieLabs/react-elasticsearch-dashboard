@@ -5,4 +5,5 @@ export interface ModelTopChannelFilters {
     ageRange?: number[];
     pincodes: string[];
     region? : ModelElasticCity; 
+    bouquet? : string; 
 }

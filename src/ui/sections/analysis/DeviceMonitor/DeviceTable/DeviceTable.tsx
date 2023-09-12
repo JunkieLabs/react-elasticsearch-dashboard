@@ -24,6 +24,9 @@ interface DeviceTableProps {
 }
 
 const DeviceTable: FC<DeviceTableProps> = (props) => {
+
+  // console.log("props state: ", props.state)
+
   const selectorList = StoreSelectorsDeviceMonitor.list[props.state]
   const selectorPagination = StoreSelectorsDeviceMonitor.pagination[props.state]
 
@@ -64,18 +67,21 @@ const DeviceTable: FC<DeviceTableProps> = (props) => {
 
   }
 
+  // useEffect(() => {
+
+  //   console.log("useEffect stateTotal: ", props.state)
+
+  //   dispatch(StoreActionDeviceMonitor[props.state].pagination({
+  //     offset: pagination.offset, limit: pagination.limit
+  //   }))
+
+
+  // }, [stateTotal])
+
   useEffect(() => {
 
-    dispatch(StoreActionDeviceMonitor[props.state].pagination({
-      offset: pagination.offset, limit: pagination.limit
-    }))
 
-
-  }, [stateTotal])
-
-  useEffect(() => {
-
-
+    console.log("useEffect stateList: ", stateList.length)
 
     setData(DeviceHelper.elasticEventHitToDevice(stateList))
 

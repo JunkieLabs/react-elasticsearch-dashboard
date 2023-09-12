@@ -2,12 +2,16 @@ import { getElasticClient } from "@/data/elastic/elastic";
 import { ElasticConstants } from "@/data/elastic/elastic.constants";
 import { ModelElasticEventMonitorResult } from "@/types/elastic/events/monitor";
 import { NextResponse } from "next/server";
+import { formatISO, subHours } from 'date-fns';
 // TODO change the time 
 export async function GET(req: Request) {
 
     // console.log("GET aggs: ", field, ageRange, locations, pincodes)
 
     const elastic = await getElasticClient();
+    var connectedGte = subHours(new Date(Date.now()), ElasticConstants.checks.device.timeOffsetConnected)
+    var activeGte = subHours(new Date(Date.now()), ElasticConstants.checks.device.timeOffsetActive)
+ console.log("GET aggs monitor: ", new Date(Date.now()).toUTCString(), new Date(Date.now()).toISOString(), connectedGte, activeGte)
 
     var aggs = {
         all: {
@@ -26,7 +30,11 @@ export async function GET(req: Request) {
                     result: {
                         range: {
                             timestamp: {
-                                gte: `now-${ElasticConstants.checks.device.timeOffsetConnected}h/h`
+
+                                gte: `${connectedGte.toISOString()}`
+
+
+                                // gte: `now-${ElasticConstants.checks.device.timeOffsetConnected}h`
                             }
                         }
                     }
@@ -66,7 +74,9 @@ export async function GET(req: Request) {
                     result: {
                         range: {
                             timestamp: {
-                                gte: `now-${ElasticConstants.checks.device.timeOffsetActive}h/h`
+                                gte: `${activeGte.toISOString()}`
+
+                                // gte: `now-${ElasticConstants.checks.device.timeOffsetActive}h`
                             }
                         }
                     }

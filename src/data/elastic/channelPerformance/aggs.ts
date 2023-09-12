@@ -73,7 +73,7 @@ const getAggs = async ({ bouquets, bouquetChannelsMap, dateRange }:
 
     var response: ModelElasticMultiAggsResult = await fetcher('/api/elastic/events/aggs/bouquet-channels?' + searchParam)
 
-    // console.log("getPlots ModelElasticAggsResult: ", response)
+    console.log("getAggs bouquet-channels: ", response)
 
     // 
 

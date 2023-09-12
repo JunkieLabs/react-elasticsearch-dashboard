@@ -146,7 +146,7 @@ export async function GET(req: Request) {
     }
     // console.log("quey pin: ", query.bool.must)
 
-    console.log("quey: ", query.bool.must)
+    // console.log("quey: ", query.bool.must)
 
     const result = await elastic.search({
         index: ElasticConstants.indexes.eventLogs._,

@@ -8,11 +8,13 @@ import { watchDummyCharts } from './dummy/saga';
 import { watchBouquets} from './bouquets/saga';
 import { watchDeviceMonitor } from './deviceMonitor/saga';
 import { watchDeviceLogs } from './deviceLogs/saga';
+import { watchSlowChannel } from './slowChannel/saga';
 export function* rootSaga() {
   yield all([ 
     watchChannelPerformance(), 
     watchCommonFilters(),  
     watchTopChannel(), 
+    watchSlowChannel(), 
     watchCities(), 
     watchPincodes(), 
     watchBouquets(), 

@@ -88,7 +88,7 @@ const Filters: FC<FiltersProps> = (props) => {
 
               <Chip key={plot.key} variant="outlined" startDecorator={
                 <CircleIndicator color={plot.color} />}>
-                {plot.name}
+                {plot.texts?.join(" : ")}
               </Chip>
               //   <Box className="" sx={{ display: 'flex', flexDirection: 'row' }}>
               //   <h4 className='td-text-sm'>{plot.name}</h4>
