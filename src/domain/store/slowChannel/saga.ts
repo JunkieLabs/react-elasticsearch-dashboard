@@ -11,9 +11,9 @@ import { StoreHelper } from '../helper';
 function* handleCommonFilterChange() {
 
     // Fetch based on filter and sub-filter
-    const topChannelCount: number = yield select((state: RootState) => state.Configuration.topChannelsCount);
+    const topChannelCount: number = yield select((state: RootState) => state.Configuration.slowChannelsCount);
     const filter: Date[] = yield select((state: RootState) => state.CommonFilters.value);
-    const subFilter: ModelSlowChannelFilters = yield select((state: RootState) => state.TopChannel.subFilter);
+    const subFilter: ModelSlowChannelFilters = yield select((state: RootState) => state.SlowChannel.subFilter);
     // let pincodes: ModelElasticPincode[] =[]
     // if(subFilter.pincodes.length>0){
     //     const pincodesResult: ModelElasticPincode[] = yield ElasticPincodeRepo.getAll(subFilter.pincodes);
@@ -49,23 +49,8 @@ function* handleCommonFilterChange() {
 }
 
 
-
-
-function* handleSubFilterChange(action: ReturnType<typeof StoreActionSlowChannel.setSubFilter>) {
-    /*
-      // TODO can be used to update subfilter
-    
-      const subFilterValue = action.payload;
-      yield put(channelPerformanceSetSubFilter(subFilterValue));
-     */
-    console.log("handleSubFilterChange Pincodes: ")
-
-
-    yield call(handleCommonFilterChange); // Fetch again when sub-filter changes
-}
-
 export function* watchAllFilterChange() {
-    yield takeLatest([StoreActionConfiguration.topChannelCounts.type, StoreActionCommonFilters.commonFilterSet.type, StoreActionSlowChannel.setSubFilter.type], handleCommonFilterChange);
+    yield takeLatest([StoreActionConfiguration.slowChannelCounts.type, StoreActionCommonFilters.commonFilterSet.type, StoreActionSlowChannel.setSubFilter.type], handleCommonFilterChange);
 }
 
 // export function* watchSubFilterChange() {

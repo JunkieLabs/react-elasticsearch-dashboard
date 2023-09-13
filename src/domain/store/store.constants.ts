@@ -29,6 +29,14 @@ export const StoreConstants = {
             plotChannelIdentifier:"channel",
             
         }
+    },
+
+    reportGeneration: {
+        stage: {
+            initial: 1,
+            loading: 2,
+            loaded: 3
+        }
     }
 
 }

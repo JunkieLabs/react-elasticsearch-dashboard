@@ -9,6 +9,7 @@ import { watchBouquets} from './bouquets/saga';
 import { watchDeviceMonitor } from './deviceMonitor/saga';
 import { watchDeviceLogs } from './deviceLogs/saga';
 import { watchSlowChannel } from './slowChannel/saga';
+import { watchReportGeneration } from './reportGeneration/saga';
 export function* rootSaga() {
   yield all([ 
     watchChannelPerformance(), 
@@ -20,6 +21,7 @@ export function* rootSaga() {
     watchBouquets(), 
     watchDeviceMonitor(),
     watchDeviceLogs(),
+    watchReportGeneration(),
     watchDummyCharts()
   ]);
 }

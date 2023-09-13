@@ -181,12 +181,15 @@ const SideNav: FC<SideNavProps> = (props) => {
               </ListItemDecorator>
               <ListItemContent>Map</ListItemContent>
             </Box></ListSubheader>
-            <ListItemButton selected={routePath.includes(UiNavigationConstants.map.topSlowChannels)}>
+            <Link href="/map/top-slow-channels" legacyBehavior passHref>
+           
+            <ListItemButton component="a"  selected={routePath.includes(UiNavigationConstants.map.topSlowChannels)}>
               <ListItemDecorator>
                 <Box className={`td-align-middle td-w-1 td-h-1 td-bg-gray-700`} ></Box>
               </ListItemDecorator>
               <ListItemContent>Top/Slow Channel</ListItemContent>
             </ListItemButton>
+            </Link>
 
           </ListItem>
 
@@ -249,7 +252,7 @@ const SideNav: FC<SideNavProps> = (props) => {
       <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
         <Box sx={{ minWidth: 0, flex: 1 }}>
           <Typography fontSize="sm" fontWeight="lg">
-            Niraj
+            Admin
           </Typography>
           <Typography level="body-xs">@smardtv</Typography>
         </Box>

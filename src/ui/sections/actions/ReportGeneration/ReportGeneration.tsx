@@ -1,12 +1,18 @@
-import React, { FC, FormEvent, useState } from 'react';
+import React, { FC, FormEvent, useEffect, useState } from 'react';
 import styles from './ReportGeneration.module.scss';
 import Box from '@mui/joy/Box';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Done from '@mui/icons-material/Done';
 import { format, subDays } from 'date-fns';
 import { FormControl, FormLabel, Input, FormHelperText, Checkbox, Button, Container } from '@mui/joy';
 import error from 'next/error';
 import Link from 'next/link';
+import { RootState } from '@/domain/store/store';
+import { StoreConstants } from '@/domain/store/store.constants';
+import { StoreActionReportGeneration } from '@/domain/store/reportGeneration/reducer';
+import { exportToCsv, exportToCsv2 } from '@/tools/csvDownload';
+
+// import ObjectToCSV from 'objects-to-csv';
 
 interface ReportGenerationProps { }
 
@@ -17,7 +23,26 @@ const ReportGeneration: FC<ReportGenerationProps> = () => {
   const [formData, setFormData] = useState({ startDate: "", endDate: "" });
 
   const [error, setError] = useState({ startDate: "", endDate: "" });
-  const [loading, setLoding] = useState<boolean>(false);
+  // const [loading, setLoding] = useState<boolean>(false);
+  const stateLogs = useSelector((state: RootState) => state.ReportGeneration.logs);
+
+
+  const stateStage = useSelector((state: RootState) => state.ReportGeneration.stage);
+  const stateFitlerDateRange = useSelector((state: RootState) => state.ReportGeneration.filterDateRange);
+
+  useEffect(() => {
+
+    if (stateFitlerDateRange.length > 0) {
+
+
+      setFormData({
+        startDate: `${format(stateFitlerDateRange[0], "yyyy-MM-dd")}`,
+        endDate: `${format(stateFitlerDateRange[1], "yyyy-MM-dd")}`
+      })
+    }
+
+
+  }, stateFitlerDateRange)
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
 
@@ -25,20 +50,76 @@ const ReportGeneration: FC<ReportGenerationProps> = () => {
     console.log("handleSubmit", formData)
 
     event.preventDefault();
-    if (!formData.startDate) {
-      setError({ ...error, startDate: "Start Date Required" })
-      return;
-    }
-    if (!formData.endDate) {
-      setError({ ...error, endDate: "End Date required" })
-      return;
-    }
 
-    setLoding(true);
+    if(stateStage == StoreConstants.reportGeneration.stage.initial){
+      if (!formData.startDate) {
+        setError({ ...error, startDate: "Start Date Required" })
+        return;
+      }
+      if (!formData.endDate) {
+        setError({ ...error, endDate: "End Date required" })
+        return;
+      }
   
+      // var dateStart = Date.parse(formData.startDate);
+      // console.log("DateStart: ", dateStart)
+      dispatch(StoreActionReportGeneration.filterDateRange([new Date(Date.parse(formData.startDate)), new Date(Date.parse(formData.endDate))]))
+      console.log("StoreActionReportGeneration: ")
+  
+    }else {
+
+      downloadCSV();
+
+    }
+   
+    // setLoding(true);
+
   }
 
-  console.log("new Date().toUTCString()", format(new Date(), "dd-MM-yyyy"));
+
+  const downloadCSV = async () => {
+
+    // let csv: any[] = [];
+    const hits = stateLogs.map(log => log._source).map(log =>{
+      
+      var logw = Object.assign({}, log)
+       logw = Object.assign(logw, {location: log.location.coordinates.join(","), 
+       users_age: log.users_age.join(","),
+       users_gender: log.users_gender.join(",")})
+      return logw;
+    } );
+    // // [
+    // //   { name: 'Alex', age: 25 },
+    // //   { name: 'John', age: 30 },
+    // //   { name: 'Mary', age: 20 },
+    // // ];
+
+    // hits.forEach((hit) => {
+    //   let row: any[] = [];
+
+    //   Object.keys(hit).forEach((key) => {
+    //     row.push((hit as any)[key]);
+    //   });
+
+    //   csv.push(row.join(','));
+    // });
+    // const csv = new ObjectToCSV(hits);
+ 
+    // const blob = new Blob([csv.join('\n')], { type: 'text/csv' });
+    // const link = document.createElement('a');
+    // link.href = window.URL.createObjectURL(blob);
+    // link.download = 'data.csv';
+    // document.body.appendChild(link);
+    // link.click();
+
+    exportToCsv2(`${formData.startDate}_${formData.endDate}`, hits);
+    dispatch(StoreActionReportGeneration.clear())
+    
+    // await csv.toDisk('./test.csv');
+  };
+
+  console.log("new Date().toUTCString()", formData,);
+  //  format(new Date(), "dd-MM-yyyy")
   return (
     <div className={styles.ReportGeneration}>
 
@@ -47,6 +128,8 @@ const ReportGeneration: FC<ReportGenerationProps> = () => {
           display: "flex",
           flexDirection: "column"
         }}>
+
+
 
           <Box sx={{ p: { xs: 2, sm: 3, md: 4 } }} ></Box>
           <h3 className='td-text-lg td-font-bold'>Generate Report</h3>
@@ -81,7 +164,7 @@ const ReportGeneration: FC<ReportGenerationProps> = () => {
                 </h4>
 
               </Box>
-              <FormControl required sx={{
+              <FormControl required disabled={stateStage != StoreConstants.reportGeneration.stage.initial} sx={{
                 flex: {
                   sx: "unset",
                   md: "1 1 0%",
@@ -94,11 +177,13 @@ const ReportGeneration: FC<ReportGenerationProps> = () => {
                   name="startDate"
 
                   onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                  value={formData.startDate}
+
 
                   slotProps={{
 
                     input: {
-                      min: format(subDays(new Date(), 200), "yyyy-MM-dd"), 
+                      min: format(subDays(new Date(), 200), "yyyy-MM-dd"),
                       max: format(new Date(), "yyyy-MM-dd")
 
                       // min: '2018-06-07T00:00',
@@ -133,7 +218,7 @@ const ReportGeneration: FC<ReportGenerationProps> = () => {
                 </h4>
 
               </Box>
-              <FormControl required sx={{
+              <FormControl required disabled={stateStage != StoreConstants.reportGeneration.stage.initial} sx={{
                 flex: {
                   sx: "unset",
                   md: "1 1 0%",
@@ -145,7 +230,7 @@ const ReportGeneration: FC<ReportGenerationProps> = () => {
                   type="date"
                   name="endDate"
                   onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
-
+                  value={formData.endDate}
                   slotProps={{
                     input: {
                       min: format(subDays(new Date(), 200), "yyyy-MM-dd"), max: format(new Date(), "yyyy-MM-dd")
@@ -166,7 +251,7 @@ const ReportGeneration: FC<ReportGenerationProps> = () => {
 
             }}>
 
-              <Button loading={loading} type="submit"   >Generate Report</Button>
+              <Button loading={stateStage == StoreConstants.reportGeneration.stage.loading} type="submit"   >{stateStage == StoreConstants.reportGeneration.stage.initial ? "Generate Report" : "Download Report"}</Button>
             </Box>
 
           </form>

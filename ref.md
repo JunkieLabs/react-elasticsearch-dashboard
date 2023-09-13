@@ -43,3 +43,8 @@
 ### Pincode
 - https://github.com/sauravazad/pincode
 - https://github.com/sanand0/pincode
+
+
+### map
+
+- https://github.com/colbyfayock/next-leaflet-starter/blob/main/src/components/Map/DynamicMap.js

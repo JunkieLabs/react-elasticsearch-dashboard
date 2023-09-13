@@ -16,6 +16,7 @@ import { BouquetsReducers } from './bouquets/reducer';
 import { DeviceMonitorReducers } from './deviceMonitor/reducer';
 import { DeviceLogsReducers } from './deviceLogs/reducer';
 import { SlowChannelReducers } from './slowChannel/reducer';
+import { ReportGenerationReducers } from './reportGeneration/reducer';
 
 
 
@@ -34,7 +35,8 @@ export const store = configureStore({
         SlowChannel: SlowChannelReducers,
         Bouquets: BouquetsReducers,
         DeviceMonitor: DeviceMonitorReducers,
-        DeviceLogs: DeviceLogsReducers
+        DeviceLogs: DeviceLogsReducers,
+        ReportGeneration: ReportGenerationReducers
     },
     middleware:[sagaMiddleware]
 })
