@@ -1,0 +1,70 @@
+version: "3.8"
+
+services:
+  web:
+    build:
+      context: .
+      # target: runner
+      dockerfile: Dockerfile
+    container_name: web
+    restart: always
+    volumes:
+      - ./:/app
+      # - node_modules:/app/node_modules
+
+    environment:
+      BASE_URL: http://localhost:3000
+      NEXT_ELASTIC_URL: http://elasticsearch:9200
+      
+    ports:
+      - "3000:3000"
+
+    networks:
+      - secure_network
+      - els
+
+   #####################
+  ### Nginx Proxy
+  #####################
+  proxy:
+    restart: unless-stopped
+    image: nginx
+    ports:
+      - 80:80
+      - 443:443
+      # - 443:443
+    depends_on:
+      - web
+    volumes:
+      - ./nginx/conf/:/etc/nginx/conf.d/:rw
+      - ./certbot/www:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
+
+    networks:
+      - secure_network
+      - els
+
+
+  # certbot:
+  #   image: certbot/certbot
+  #   container_name: certbot
+  #   volumes: 
+  #     - ./certbot/conf:/etc/letsencrypt:rw
+  #     - ./certbot/www:/var/www/certbot:rw
+  #   command: certonly --webroot -w /var/www/certbot --force-renewal --email admin@smardtv.com -d dummy-dashboard.smardtv.com --agree-tos
+
+
+networks:
+
+
+  secure_network:
+    driver: bridge
+  els:
+    external: true  
+
+
+volumes:
+  node_modules:
+
+
+

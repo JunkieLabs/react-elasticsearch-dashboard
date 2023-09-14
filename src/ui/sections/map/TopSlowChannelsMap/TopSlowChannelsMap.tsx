@@ -1,3 +1,5 @@
+
+'use client';
 import React, { FC, useEffect } from 'react';
 import styles from './TopSlowChannelsMap.module.scss';
 import Container from '@mui/joy/Container';
@@ -9,7 +11,6 @@ import {
   Marker,
   Popup,
   TileLayer,
-  useMap,
   
 } from 'react-leaflet';
 

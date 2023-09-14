@@ -1,14 +1,17 @@
 
-
-"use client" 
+'use client';
 
 import React, { FC, useCallback } from 'react';
 
 import styles from './styles.module.scss';
-import TopChannels from '@/ui/sections/analysis/TopChannels/TopChannels';
-import TopSlowChannelsMap from '@/ui/sections/map/TopSlowChannelsMap/TopSlowChannelsMap';
+// import TopSlowChannelsMap from '@/ui/sections/map/TopSlowChannelsMap/TopSlowChannelsMap';
+import dynamic from "next/dynamic"
 
 interface PagesProps {}
+
+const TopSlowChannelsMap = dynamic(() => import("@/ui/sections/map/TopSlowChannelsMap/TopSlowChannelsMap"), { ssr:false })
+
+
 
 const Pages: FC<PagesProps> = () =>{
   

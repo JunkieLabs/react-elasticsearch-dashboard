@@ -19,7 +19,7 @@ const createElasticSearchClient = async (options: ClientOptions) => {
 
 
 const DEFAULTS: ClientOptions = {
-    node: process.env.NEXT_ELASTIC_URL ?? 'http://localhost:9200',
+    node: process.env.NEXT_ELASTIC_URL ?? 'http://localhost:92011',
 };
 
 export const getElasticClient = async () => {

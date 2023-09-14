@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { RootState } from '@/domain/store/store';
 import { StoreConstants } from '@/domain/store/store.constants';
 import { StoreActionReportGeneration } from '@/domain/store/reportGeneration/reducer';
-import { exportToCsv, exportToCsv2 } from '@/tools/csvDownload';
+import {  exportToCsv2 } from '@/tools/csvDownload';
 
 // import ObjectToCSV from 'objects-to-csv';
 
