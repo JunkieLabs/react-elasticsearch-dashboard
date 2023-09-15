@@ -21,7 +21,7 @@ services:
 
     networks:
       - secure_network
-      - els
+      # - els
 
    #####################
   ### Nginx Proxy
@@ -59,8 +59,8 @@ networks:
 
   secure_network:
     driver: bridge
-  els:
-    external: true  
+  # els:
+  #   external: true  
 
 
 volumes:

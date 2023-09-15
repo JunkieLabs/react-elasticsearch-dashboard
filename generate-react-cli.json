@@ -8,28 +8,28 @@
       "path": "src/ui/components",
       "withStyle": true,
       "withTest": false,
-      "withStory": true,
-      "withLazy": true
+      "withStory": false,
+      "withLazy": false
     },
     "page": {
       "path": "src/app",
       "withStyle": true,
       "withTest": false,
       "withStory": false,
-      "withLazy": true
+      "withLazy": false
     },
     "common": {
       "path": "src/ui/common",
       "withStyle": true,
       "withTest": false,
       "withStory": false,
-      "withLazy": true
+      "withLazy": false
     },
     "widget": {
       "withStyle": true,
       "withTest": false,
       "withStory": false,
-      "withLazy": true
+      "withLazy": false
     },
     "layout": {
       "path": "src/ui/layouts",
