@@ -5,9 +5,9 @@ import { ElasticConstants } from "../elastic.constants";
 
 import { formatISO } from 'date-fns';
 
-const getTopN = async ({ n = 5, locations, pincodes, ageRange, gender, dateRange, order }:
+const getTopSlowN = async ({ n = 5, locations, pincodes, ageRange, gender, dateRange, order, subAggsByDay = false  }:
     { n: number, locations: ModelElasticGeoPoint[], ageRange?: number[], pincodes?: string[], gender?: string, 
-        dateRange: Date[], order?: string }): Promise<ModelElasticAggsResultItem[]> => {
+        dateRange: Date[], order?: string, subAggsByDay?: boolean}): Promise<ModelElasticAggsResultItem[]> => {
     // Simulate API delay
 
     var searchParam = new URLSearchParams();
@@ -29,7 +29,10 @@ const getTopN = async ({ n = 5, locations, pincodes, ageRange, gender, dateRange
         searchParam.append('date-range', JSON.stringify(dateRange.map(date => date.toISOString())));
 
     }
-    searchParam.append('sub-aggs', ElasticConstants.checks.aggs.subAggsType.byDay);
+
+    if(subAggsByDay){
+        searchParam.append('sub-aggs', ElasticConstants.checks.aggs.subAggsType.byDay);
+    }
     
     searchParam.append('n', `${n}`);
 
@@ -37,7 +40,8 @@ const getTopN = async ({ n = 5, locations, pincodes, ageRange, gender, dateRange
         searchParam.append('order', order);
     }
 
-    console.log("getTopN search Params: ", ageRange, pincodes)
+   
+    console.log("getTopSlowN search Params: ", ageRange, pincodes)
 
     var response: ModelElasticAggsResult = await fetcher('/api/elastic/events/aggs?' + searchParam)
     // if (response.status >= 400 && response.status < 500) {
@@ -66,7 +70,10 @@ const getTopN = async ({ n = 5, locations, pincodes, ageRange, gender, dateRange
 
 }
 
-export const ElasticTopChannelAggRepo = {
 
-    getTopN: getTopN
+
+
+export const ElasticTopSlowChannelAggRepo = {
+
+    getTopSlowN: getTopSlowN
 }

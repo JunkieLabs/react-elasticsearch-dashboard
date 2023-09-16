@@ -22,6 +22,7 @@ export const ElasticConstants = {
             channelName:"channel_name",
             channelNumber:"channel_number",
             volume:"volume",
+            location:"location",
             pincode:"pincode",
             gender:"users_gender",
             bouquet:"bouquet_name",

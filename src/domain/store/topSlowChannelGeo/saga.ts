@@ -1,11 +1,13 @@
 import { takeLatest, put, select, call, all, fork } from 'redux-saga/effects';
 import { StoreActionTopSlowChannelGeo } from './reducer';
 import { StoreActionCommonFilters } from '@/domain/store/commonFilters/reducer';
-import { ElasticTopChannelAggRepo } from '@/data/elastic/topChannel';
+import { ElasticTopSlowChannelAggRepo } from '@/data/elastic/topSlowChannel';
 import { RootState } from '../store';
 import { ModelTopSlowChannelGeoFilters } from '@/types/store/topSlowChannelGeo';
 import { ModelElasticAggsResultItem } from '@/types/elastic/aggs';
 import { StoreHelper } from '../helper';
+import { ElasticDeviceLogsHitRepo } from '@/data/elastic/deviceLogs';
+import { ModelElasticEventHitPart } from '@/types/elastic/events/events';
 
 function* handleCommonFilterChange() {
 
@@ -13,25 +15,13 @@ function* handleCommonFilterChange() {
      const filter: Date[] = yield select((state: RootState) => state.CommonFilters.value);
     const subFilter: ModelTopSlowChannelGeoFilters = yield select((state: RootState) => state.SlowChannel.subFilter);
     const channelCount: number = yield select((state: RootState) => state.Configuration.slowChannelsCount);
-    // let pincodes: ModelElasticPincode[] =[]
-    // if(subFilter.pincodes.length>0){
-    //     const pincodesResult: ModelElasticPincode[] = yield ElasticPincodeRepo.getAll(subFilter.pincodes);
-    //     pincodes = pincodesResult
-
-    // }else {
-    //     pincodes =[]
-    // }
-
-
-    // console.log("handleCommonFilterChange filter: ", filter)
-
-    // console.log("handleCommonFilterChange Pincodes: ", pincodes)
+   
 
 
 
 
 
-    const items: ModelElasticAggsResultItem[] = yield ElasticTopChannelAggRepo.getTopN({
+    const items: ModelElasticAggsResultItem[] = yield ElasticTopSlowChannelAggRepo.getTopSlowN({
         pincodes: subFilter.pincodes,
         dateRange: filter,
         locations: subFilter.region ? [subFilter.region.location] : [],
@@ -42,9 +32,36 @@ function* handleCommonFilterChange() {
         order: 'asc'
     });
 
+    var channelNames: string[] = []
+
+    var limit = 0;
+
+    for(let item of items){
+        limit+=item.doc_count
+        channelNames.push(item.key as string)
+        
+
+    }
+
+    console.log("handleCommonFilterChange: limit ", limit, items)
+
+    const geoHits: ModelElasticEventHitPart[] = yield ElasticDeviceLogsHitRepo.getHitsGeo({
+
+        pincodes: subFilter.pincodes,
+        dateRange: filter,
+        locations: subFilter.region ? [subFilter.region.location] : [],
+        gender: StoreHelper.filterCommon.genderToElasticGender(subFilter.gender),
+        // locations: pincodes.map(ele => ele.location),
+        channelNames: channelNames,
+        limit: channelCount,
+        ageRange: subFilter.ageRange
+    });
+
+    // geoHits[0]._source.location
+
     // console.log("ModelElasticAggsResultItem: ", items)
 
-    yield put(StoreActionTopSlowChannelGeo.setAggregation(items));
+    yield put(StoreActionTopSlowChannelGeo.setHits(geoHits));
 }
 
 
@@ -56,7 +73,7 @@ export function* watchAllFilterChange() {
 //     yield takeLatest(channelPerformanceSetSubFilter.type, handleSubFilterChange);
 // }
 
-export function* watchTopSlowChannel() {
+export function* watchTopSlowChannelGeo() {
     yield all([fork(watchAllFilterChange)]);
 }
 

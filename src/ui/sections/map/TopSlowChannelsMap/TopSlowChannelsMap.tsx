@@ -13,16 +13,21 @@ import {
   Popup,
   TileLayer,
 
+
 } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-cluster'
+
 import DateRangeInput from '@/ui/widgets/inputs/DateRangeInput/DateRangeInput';
 import Filters from './Filters/Filters';
-import { subDays } from 'date-fns';
+import { format, parseISO, subDays } from 'date-fns';
 import { ModelChartCommonItem } from '@/types/charts/common';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/domain/store/store';
 import { ChartHelper } from '@/domain/charts/helper';
 import { StoreActionCommonFilters } from '@/domain/store/commonFilters/reducer';
 import SwitchTopSlow from './SwitchTopSlow/SwitchTopSlow';
+import { GeoHelper } from '@/domain/geo/helper';
+import { ModelElasticEventHitPart, ModelElasticEventPartial } from '@/types/elastic/events/events';
 
 interface TopSlowChannelsMapProps { }
 
@@ -39,29 +44,23 @@ const TopSlowChannelsMap: FC<TopSlowChannelsMapProps> = () => {
   }, []);
 
   const [dateRange, setDateRange] = useState<Date[]>([subDays(new Date(), 7), new Date()]);
-  const [chartCommonItems, setChartCommonItems] = useState<ModelChartCommonItem[]>([])
+  const [pointersMap, setPointersMap] = useState<Map<string, ModelElasticEventPartial[]>>(new Map<string, ModelElasticEventPartial[]>())
 
-  const aggregatedItems = useSelector((state: RootState) => state.TopSlowChannelGeo.aggregation);
+  const geoHits = useSelector((state: RootState) => state.TopSlowChannelGeo.hits);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
 
-    var chartCommonItems = ChartHelper.elasticAggregationToChartJsCommon(aggregatedItems)
-    setChartCommonItems(chartCommonItems)
+    var calcPointersMap = GeoHelper.groupHitsByChannelName(geoHits)
+    setPointersMap(calcPointersMap);
 
 
 
-  }, [aggregatedItems])
 
-  useEffect(() => {
-
-    var modelChartJs = ChartHelper.chartCommonToChartJs(chartCommonItems ?? [])
-    // setChartData(modelChartJs)
+  }, [geoHits])
 
 
-
-  }, [chartCommonItems])
 
 
   useEffect(() => {
@@ -97,7 +96,7 @@ const TopSlowChannelsMap: FC<TopSlowChannelsMapProps> = () => {
 
         <Container className={"tb-position--relative"}>
 
-          {/* <Box sx={{ p: { xs: 1, sm: 1, md: 1 } }} ></Box> */}
+          <Box sx={{ p: { xs: 1, sm: 1, md: 1 } }} ></Box>
           <Box sx={{
             display: "flex",
             flexDirection: 'column'
@@ -132,11 +131,32 @@ const TopSlowChannelsMap: FC<TopSlowChannelsMapProps> = () => {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
-            <Marker position={[51.505, -0.09]}>
+            {Array.from(pointersMap.entries()).map(([key, geoPartials]) => (
+              <MarkerClusterGroup key={key}
+                chunkedLoading
+              >
+                {geoPartials.filter(value => (value.location?.coordinates.length ?? 0) == 2).map((geoPartial, index) => (
+                  <Marker
+                    key={index}
+                    position={[geoPartial.location!.coordinates[1], geoPartial.location!.coordinates[0]]}
+                    title={geoPartial.channel_name}
+                  //  icon={customIcon}
+
+                  >
+                    <Popup>
+                      Channel Name: {geoPartial.channel_name} <br />
+                      
+                      Date:  {format(parseISO(geoPartial.timestamp!), "dd-MM-yyyy hh:mm")}.
+                    </Popup>
+                  </Marker>
+                ))}
+              </MarkerClusterGroup>
+            ))}
+            {/* <Marker position={[51.505, -0.09]}>
               <Popup>
                 A pretty CSS3 popup. <br /> Easily customizable.
               </Popup>
-            </Marker>
+            </Marker> */}
           </MapContainer>
         </Box>
 

@@ -1,4 +1,4 @@
-import { ModelElasticEventHit } from "./events/events"
+import { ModelElasticEventHit, ModelElasticEventHitPart } from "./events/events"
 
 export interface ModelElasticAggsStatsResult {
     count: number//,
@@ -38,6 +38,11 @@ export interface ModelElasticHitsResult {
     skip?: number
     limit? : number
     items: ModelElasticEventHit[]
+}
+
+export interface ModelElasticHitsPartialResult {
+    total?: number
+    items: ModelElasticEventHitPart[]
 }
 
 export interface ModelElasticAggsResultItem {

@@ -4,19 +4,22 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ModelElasticAggsResultItem } from '@/types/elastic/aggs';
 import { StoreConstants } from '../store.constants';
 import { ModelTopSlowChannelGeoFilters } from '@/types/store/topSlowChannelGeo';
+import { ModelElasticEventHitPart } from '@/types/elastic/events/events';
 
 
 
 interface TopSlowChannelGeoState {
     dummyData: DummyData[];
-    aggregation: ModelElasticAggsResultItem[],
+    // aggregation: ModelElasticAggsResultItem[],
     subFilter: ModelTopSlowChannelGeoFilters;
+    
+    hits: ModelElasticEventHitPart[],
 }
 
 
 const initialState: TopSlowChannelGeoState = {
     dummyData: [],
-    aggregation: [],
+    hits: [],
     subFilter: {
         gender: StoreConstants.filterCommon.gender.all,
         pincodes: [],
@@ -29,8 +32,8 @@ const topSlowChannelGeoSlice = createSlice({
     name: 'TopSlowChannelGeo',
     initialState,
     reducers: {
-        setAggregation: (state, action: PayloadAction<ModelElasticAggsResultItem[]>) => {
-            state.aggregation = action.payload;
+        setHits: (state, action: PayloadAction<ModelElasticEventHitPart[]>) => {
+            state.hits = action.payload;
         },
         setSubFilter: (state, action: PayloadAction<ModelTopSlowChannelGeoFilters>) => {
             state.subFilter = action.payload;

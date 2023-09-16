@@ -1,32 +1,53 @@
+// import { getElasticClient } from "@/data/elastic/elastic";
+// import { ElasticConstants } from "@/data/elastic/elastic.constants";
+// import { TransformHelper } from "@/tools/parserTools";
+// import { ModelElasticAggsResult, ModelElasticAggsTermsResult } from "@/types/elastic/aggs";
+// import { ModelElasticGeoPoint } from "@/types/elastic/common";
 import { getElasticClient } from "@/data/elastic/elastic";
 import { ElasticConstants } from "@/data/elastic/elastic.constants";
 import { TransformHelper } from "@/tools/parserTools";
-import { ModelElasticAggsResult, ModelElasticAggsTermsResult } from "@/types/elastic/aggs";
+import { ModelElasticAggsResult, ModelElasticAggsTermsResult, ModelElasticHitsPartialResult, ModelElasticHitsResult } from "@/types/elastic/aggs";
 import { ModelElasticGeoPoint } from "@/types/elastic/common";
+import { ModelElasticEventHit, ModelElasticEventHitPart } from "@/types/elastic/events/events";
 import { NextResponse } from "next/server";
+import { skip } from "node:test";
+import { inspect } from "util";
 
 export async function GET(req: Request) {
     let { searchParams } = new URL(req.url);
+    // let deviceIds = searchParams.getAll('device-id');
+
+
     let locationsStr = searchParams.getAll('location');
     let pincodes = searchParams.getAll('pincode');
+    let channelNames = searchParams.getAll('channel-name');
     let ageRangeStr = searchParams.get('age-range');
     let dateRangeStr = searchParams.get('date-range');
     let gender = searchParams.get('gender');
-    let orderStr = searchParams.get('order') ?? "desc";
+    // let orderStr = searchParams.get('order') ?? "desc";
 
-    let n = TransformHelper.toNumber(searchParams.get('n') as string | undefined, {
-        
-        min: 5
-    });
+    // let limit = TransformHelper.toNumber(searchParams.get('limit') as string | undefined, {
+
+    //     min: 5
+    // });
     // let gender = searchParams.get('gender');
     let field = searchParams.get('field');
-    let subAggs = searchParams.get('sub-aggs');
+    // let subAggs = searchParams.get('sub-aggs');
 
     let locations: ModelElasticGeoPoint[] = locationsStr.map(loc => JSON.parse(loc))
     let ageRange = ageRangeStr ? JSON.parse(ageRangeStr) : [];
     let dateRange = dateRangeStr ? JSON.parse(dateRangeStr) : [];
 
-    console.log("GET aggs: ", field, ageRange, dateRange, locations, pincodes)
+
+    let limit = TransformHelper.toNumber(searchParams.get('limit') as string | undefined, {
+        // max: 100,
+        min: 0
+    });
+    console.log("GET geo hits: ", limit,  field, ageRange, dateRange, channelNames, locations, pincodes)
+
+    // let gender = searchParams.get('gender');
+
+    // let locations: ModelElasticGeoPoint[] = locationsStr.map(loc => JSON.parse(loc))
 
     const elastic = await getElasticClient();
 
@@ -40,6 +61,7 @@ export async function GET(req: Request) {
 
 
     }
+
 
     if (pincodes && pincodes.length > 0) {
         query.bool.must.push({
@@ -79,21 +101,14 @@ export async function GET(req: Request) {
         });
     }
 
+
+
     if (locations && locations.length > 0) {
 
         query.bool.must.push(
             {
                 bool: {
                     should: [
-                        // {
-                        //     "geo_distance": {
-                        //         "distance": "20km",
-                        //         "location": {
-                        //             "lat": 28.6139,
-                        //             "lon": 77.209
-                        //         }
-                        //     }
-                        // },
 
                         ...locations.map(location => {
                             return {
@@ -116,56 +131,67 @@ export async function GET(req: Request) {
 
     }
 
-    const aggs = {
-        result: {
-            terms: {
-                size: n ?? 5,
-                field: `${field as string}.keyword`,
-                order: {
-                    "_count": orderStr // Sort in ascending order based on document count
-                } as any
+
+    if (channelNames && channelNames.length > 0) {
+        query.bool.must.push({
+            "terms": {
+                [`${ElasticConstants.indexes.eventLogs.channelName}.keyword`]: channelNames
             }
-        } as any
+        });
     }
 
 
-    if (subAggs && subAggs == ElasticConstants.checks.aggs.subAggsType.byDay) {
-        aggs.result[`aggs`] = {
-            sub: {
-                date_histogram: {
-                    field: `${ElasticConstants.indexes.eventLogs.timestamp}`,
-                    "calendar_interval": "1d" // You can adjust the interval as needed
-                }
-            }
-        }
-    }
+    console.log("query.bool.must: ", query)
+    // inspect(query.bool)
 
-    var response: ModelElasticAggsResult = {
-        items: [],
-        field: field ?? undefined
+
+
+    // const aggs = {
+    //     total: {
+    //         value_count: {
+    //             field:  `${ElasticConstants.indexes.eventLogs.deviceId}.keyword`
+    //         }
+    //     }
+    // }
+
+    var response: ModelElasticHitsPartialResult = {
+        total: 0,
+        items: [] as ModelElasticEventHitPart[],
+        // skip: skip,
+        // limit: limit,
     }
     // console.log("quey pin: ", query.bool.must)
 
-    // console.log("quey: ", query.bool.must)
+    // console.log("quey: ", query.bool.must, query.bool.must[0])
 
     const result = await elastic.search({
         index: ElasticConstants.indexes.eventLogs._,
         body: {
-            size: 0,
+            size: limit,
+            _source: [ElasticConstants.indexes.eventLogs.location, ElasticConstants.indexes.eventLogs.channelName, ElasticConstants.indexes.eventLogs.timestamp],
+            // size: limit,
+            // from: skip,
+
             query: query,
-            aggs: aggs
+            // aggs: aggs
         }
     });
-    const terms = (result.aggregations as Result)?.result;//??[];//.map((item) => item._source);
-    response.items = terms?.buckets ?? []
+
+    console.log("results: ", result.hits)
+    const terms = (result.hits.hits ?? []) as unknown as ModelElasticEventHitPart[];//??[];//.map((item) => item._source);
+    response.items = terms ?? []
+    response.total = ((result.hits.total as any)?.[`value`] as number | undefined) ?? 0;
+
 
     return NextResponse.json(response);
 
 
 }
 
-interface Result {
 
-    result?: ModelElasticAggsTermsResult
 
-}
+// interface Result {
+
+//     result?: ModelElasticAggsTermsResult
+
+// }

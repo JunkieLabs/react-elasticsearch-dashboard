@@ -4,6 +4,14 @@ export interface ModelElasticEventHit {
    
 }
 
+export interface ModelElasticEventHitPart {
+    _id: string,// "Channel 75",
+    _source: ModelElasticEventPartial,// "75",
+   
+}
+
+
+
 
 export interface ModelElasticEvent {
     channel_name: string,// "Channel 75",
@@ -18,6 +26,12 @@ export interface ModelElasticEvent {
     users_gender: string[]
     users_age: number[]
 }
+
+
+export interface ModelElasticEventPartial extends Partial<ModelElasticEvent>{
+    
+}
+
 
 export interface ModelElasticLocationPoint {
     type: string,

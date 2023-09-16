@@ -1,7 +1,7 @@
 import { takeLatest, put, select, call, all, fork } from 'redux-saga/effects';
 import { StoreActionSlowChannel } from './reducer';
 import { StoreActionCommonFilters } from '@/domain/store/commonFilters/reducer';
-import { ElasticTopChannelAggRepo } from '@/data/elastic/topChannel';
+import { ElasticTopSlowChannelAggRepo } from '@/data/elastic/topSlowChannel';
 import { RootState } from '../store';
 import { ModelSlowChannelFilters } from '@/types/store/slowChannel';
 import { ModelElasticAggsResultItem } from '@/types/elastic/aggs';
@@ -32,7 +32,7 @@ function* handleCommonFilterChange() {
 
 
 
-    const items: ModelElasticAggsResultItem[] = yield ElasticTopChannelAggRepo.getTopN({
+    const items: ModelElasticAggsResultItem[] = yield ElasticTopSlowChannelAggRepo.getTopSlowN({
         pincodes: subFilter.pincodes,
         dateRange: filter,
         locations: subFilter.region ? [subFilter.region.location] : [],
