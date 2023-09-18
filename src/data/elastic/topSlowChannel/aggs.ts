@@ -41,7 +41,7 @@ const getTopSlowN = async ({ n = 5, locations, pincodes, ageRange, gender, dateR
     }
 
    
-    console.log("getTopSlowN search Params: ", ageRange, pincodes)
+    // console.log("getTopSlowN search Params: ", ageRange, pincodes, order)
 
     var response: ModelElasticAggsResult = await fetcher('/api/elastic/events/aggs?' + searchParam)
     // if (response.status >= 400 && response.status < 500) {

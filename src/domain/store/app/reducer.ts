@@ -5,12 +5,14 @@ interface AppState {
   section: string;
   subSection: string;
   routePath: string;
+  sidenavXsOpen: boolean;
 }
 
 const initialState: AppState = {
     section: '',
     subSection:'',
-    routePath: ''
+    routePath: '',
+    sidenavXsOpen: false
 };
 
 const appSlice = createSlice({
@@ -25,9 +27,14 @@ const appSlice = createSlice({
       state.section = paths.length>0 ? paths[0] :"";
       state.subSection = paths.length>1 ? paths[1] :"";
     },
+
+    sidenavXsToggle: (state, action: PayloadAction<boolean>) => {
+      var sidenavXsToggle = action.payload;
+      state.sidenavXsOpen = sidenavXsToggle;
+    },
   },
 });
 
-export const { appSetSectionFromPath } = appSlice.actions;
-
+// export const { appSetSectionFromPath } = appSlice.actions;
+export const StoreActionApp = appSlice.actions;
 export const AppReducers =  appSlice.reducer;

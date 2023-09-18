@@ -1,6 +1,8 @@
 const XLSX = require('xlsx');
 const fs = require('fs');
-const elasticsearch = require('elasticsearch');
+// const elasticsearch = require('elasticsearch');
+const { ClientOptions, Client } = require('@elastic/elasticsearch');
+
 
 // Load the XLSX file
 const data = JSON.parse(fs.readFileSync('data/data_logs.json'));
@@ -29,25 +31,53 @@ for (const cityItem of data) {
     bulk.push(document);
 }
 
-const client = new elasticsearch.Client({
-    host: '192.168.1.16:9200'
+const client = new Client({
+    node: 'http://192.168.1.16:9200'
 });
 
 
-if (client.indices.exists({ index: index })) {
+// try{
 
-    console.log("client.indices.exists: ", bulk[1], data[1])
-    client.indices.delete({
-        index: index
-    }, (err, res) => {
-        if (err) {
-            console.error(err);
+client.indices.exists({ index: index }).then(
+
+    (isExist) => {
+        if (isExist) {
+
+            try {
+
+                console.log("client.delete: ", bulk[1], data[1])
+
+
+                client.indices.delete({
+                    index: index
+                }).then((val) => {
+
+                    console.log('Index deleted successfully');
+
+                    createAndAdd();
+
+
+                }, (err) => {
+                    console.log('Index deleted err');
+
+                    console.error(err);
+                });
+            } catch (e) {
+
+            }
+
+
         } else {
-            console.log('Index deleted successfully');
+            createAndAdd();
         }
-    });
+    }
+)
 
-}
+// }catch(e){
+
+// }
+
+
 const settings = {
     "mappings": {
 
@@ -94,26 +124,32 @@ const settings = {
     }
 };
 
-console.log("bulk: ", bulk[1])
 
-client.indices.create({
-    index: index,
-    body: settings
-}, (err, res) => {
-    if (err) {
-        console.error(err);
-    } else {
+function createAndAdd() {
+
+    console.log("bulk: ", bulk[1], bulk.length)
+
+    client.indices.create({
+        index: index,
+        body: settings
+    }).then((res) => {
+
         client.bulk({
             body: bulk
-        }, (err, res) => {
-            if (err) {
-                console.error(err);
-            } else {
-                console.log('Documents added successfully');
-            }
+        }).then((res) => {
+
+            console.log('Documents added successfully');
+
+        }, (err) => {
+            console.error(err);
         });
-    }
-});
+
+    }, err => {
+        console.error(err);
+    });
+}
+
+
 
 
 // client.bulk({

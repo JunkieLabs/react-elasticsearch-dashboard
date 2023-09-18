@@ -21,7 +21,7 @@ import { Providers } from '@/domain/store/provider';
 
 import { usePathname } from 'next/navigation';
 import { useDispatch } from 'react-redux';
-import { appSetSectionFromPath } from '@/domain/store/app/reducer';
+import { StoreActionApp } from '@/domain/store/app/reducer';
 // import { StoreActionCommonFilters } from '@/domain/store/commonFilters/reducer';
 // import { StoreActionCities } from '@/domain/store/cities/reducer';
 
@@ -117,7 +117,7 @@ function ReduxLayout({ children,
   useEffect(() => {
 
     // store.
-    dispatch(appSetSectionFromPath(router))
+    dispatch(StoreActionApp.appSetSectionFromPath(router))
 
 
     return () => { }

@@ -1,10 +1,9 @@
 "use client"
 
-import { FC } from 'react';
+import { FC, useState } from 'react';
 
 import GlobalStyles from '@mui/joy/GlobalStyles';
 import Box from '@mui/joy/Box';
-import Card from '@mui/joy/Card';
 import Divider from '@mui/joy/Divider';
 import IconButton from '@mui/joy/IconButton';
 
@@ -12,9 +11,7 @@ import BarChartRounded from '@mui/icons-material/BarChartRounded';
 import PublicRounded from '@mui/icons-material/PublicRounded';
 import TokenRounded from '@mui/icons-material/TokenRounded';
 import ElectricBoltRounded from '@mui/icons-material/ElectricBoltRounded';
-import RemoveRounded from '@mui/icons-material/RemoveRounded';
 // import Link from '@mui/joy/Link';
-import LinearProgress from '@mui/joy/LinearProgress';
 import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
 import ListDivider from '@mui/joy/ListDivider';
@@ -28,8 +25,9 @@ import Sheet from '@mui/joy/Sheet';
 import styles from './styles.module.scss';
 import Link from 'next/link';
 import { RootState } from '@/domain/store/store';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { UiNavigationConstants } from '@/ui/navigation.constants';
+import { StoreActionApp } from '@/domain/store/app/reducer';
 
 export interface SideNavProps { }
 
@@ -38,7 +36,19 @@ const SideNav: FC<SideNavProps> = (props) => {
 
   const routePath = useSelector((state: RootState) => state.App.routePath);
 
-  // console.log("SideNav: ", routePath);
+  const sidenavXsOpen = useSelector((state: RootState) => state.App.sidenavXsOpen);
+
+
+  const dispatch = useDispatch();
+  // const [filterIsTop, setFilterIsTop] = useState<boolean>(sidenavOpen);
+
+  const handleSidenavXsOpen = async (isOpen: boolean) => {
+    // console.log("handleRegionChange: ", region);
+    dispatch(StoreActionApp.sidenavXsToggle(isOpen))
+
+  }
+
+  console.log("SideNav: ", sidenavXsOpen);
 
   return (
     //   <div className={styles.Main}>
@@ -51,7 +61,8 @@ const SideNav: FC<SideNavProps> = (props) => {
           lg: 'sticky',
         },
         transform: {
-          xs: 'translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1)))',
+          xs: `translateX(calc(100% * ${sidenavXsOpen ? 0 : -1}))`,
+          // xs: 'translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1)))',
           lg: 'none',
         },
         transition: 'transform 0.4s, width 0.4s',
@@ -89,15 +100,16 @@ const SideNav: FC<SideNavProps> = (props) => {
           width: '100vw',
           height: '100vh',
 
-          opacity: 'calc(var(--SideNavigation-slideIn, 0) - 0.2)',
+          opacity: `calc(${sidenavXsOpen ? 0 : -1} - 0.2)`,
+          // opacity: 'calc(var(--SideNavigation-slideIn, 0) - 0.2)',
           transition: 'opacity 0.4s',
           transform: {
-            xs: 'translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1) + var(--SideNavigation-slideIn, 0) * var(--Sidebar-width, 0px)))',
-            md: 'translateX(-100%)',
+            xs: sidenavXsOpen ? `translateX(calc( var(--Sidebar-width, 0px)))` : `translateX(calc(100% * ( -1 ) ))`,
+            // xs: 'translateX(calc(100% * (var(--SideNavigation-slideIn, 0) - 1) + var(--SideNavigation-slideIn, 0) * var(--Sidebar-width, 0px)))',
+            lg: 'translateX(-100%)',
           },
         }}
-        onClick={() => {/**
-    closeSidebar() */}}
+        onClick={() => {handleSidenavXsOpen(false)}}
       />
       <Box sx={{ display: 'flex', gap: 2, minHeight: "4rem", alignItems: 'center', justifyContent: 'center' }}>
         <ElectricBoltRounded />
@@ -182,13 +194,13 @@ const SideNav: FC<SideNavProps> = (props) => {
               <ListItemContent>Map</ListItemContent>
             </Box></ListSubheader>
             <Link href="/map/top-slow-channels" legacyBehavior passHref>
-           
-            <ListItemButton component="a"  selected={routePath.includes(UiNavigationConstants.map.topSlowChannels)}>
-              <ListItemDecorator>
-                <Box className={`td-align-middle td-w-1 td-h-1 td-bg-gray-700`} ></Box>
-              </ListItemDecorator>
-              <ListItemContent>Top/Slow Channel</ListItemContent>
-            </ListItemButton>
+
+              <ListItemButton component="a" selected={routePath.includes(UiNavigationConstants.map.topSlowChannels)}>
+                <ListItemDecorator>
+                  <Box className={`td-align-middle td-w-1 td-h-1 td-bg-gray-700`} ></Box>
+                </ListItemDecorator>
+                <ListItemContent>Top/Slow Channel</ListItemContent>
+              </ListItemButton>
             </Link>
 
           </ListItem>
@@ -267,4 +279,6 @@ const SideNav: FC<SideNavProps> = (props) => {
 }
 
 export default SideNav;
+
+
 

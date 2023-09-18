@@ -37,6 +37,15 @@ export const StoreConstants = {
             loading: 2,
             loaded: 3
         }
+    },
+
+    loadingStage: {
+        initial: 1,
+        loading: 2,
+        loaded: 3
+    
     }
+
+    
 
 }

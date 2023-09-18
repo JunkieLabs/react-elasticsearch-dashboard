@@ -42,7 +42,8 @@ function* handleCommonFilterChange() {
         gender: StoreHelper.filterCommon.genderToElasticGender(subFilter.gender),
         // locations: pincodes.map(ele => ele.location),
         n: topChannelCount,
-        ageRange: subFilter.ageRange
+        ageRange: subFilter.ageRange,
+        subAggsByDay: true
     });
 
     // console.log("ModelElasticAggsResultItem: ", items)
@@ -53,18 +54,18 @@ function* handleCommonFilterChange() {
 
 
 
-function* handleSubFilterChange(action: ReturnType<typeof StoreActionTopChannel.setSubFilter>) {
-    /*
-      // TODO can be used to update subfilter
+// function* handleSubFilterChange(action: ReturnType<typeof StoreActionTopChannel.setSubFilter>) {
+//     /*
+//       // TODO can be used to update subfilter
     
-      const subFilterValue = action.payload;
-      yield put(channelPerformanceSetSubFilter(subFilterValue));
-     */
-    console.log("handleSubFilterChange Pincodes: ")
+//       const subFilterValue = action.payload;
+//       yield put(channelPerformanceSetSubFilter(subFilterValue));
+//      */
+//     console.log("handleSubFilterChange Pincodes: ")
 
 
-    yield call(handleCommonFilterChange); // Fetch again when sub-filter changes
-}
+//     yield call(handleCommonFilterChange); // Fetch again when sub-filter changes
+// }
 
 export function* watchAllFilterChange() {
     yield takeLatest([StoreActionConfiguration.topChannelCounts.type, StoreActionCommonFilters.commonFilterSet.type, StoreActionTopChannel.setSubFilter.type], handleCommonFilterChange);

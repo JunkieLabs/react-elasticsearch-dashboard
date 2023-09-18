@@ -6,18 +6,22 @@ import Box from '@mui/joy/Box';
 import IconButton from '@mui/joy/IconButton';
 
 import BarChartRounded from '@mui/icons-material/BarChartRounded';
+import MoreVertRounded from '@mui/icons-material/MoreVertRounded';
 import { Theme } from '@mui/joy/styles';
 import { useRouter } from 'next/router';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/domain/store/store';
 import Typography from '@mui/joy/Typography';
+import { StoreActionApp } from '@/domain/store/app/reducer';
 
 interface TopNavProps { }
 
 const TopNav: FC<TopNavProps> = () => {
   const section = useSelector((state: RootState) => state.App.section);
   const subSection = useSelector((state: RootState) => state.App.subSection);
+  const sidenavXsOpen = useSelector((state: RootState) => state.App.sidenavXsOpen);
 
+  const dispatch = useDispatch();
   // const router = useRouter()
 
   // useEffect(() => {
@@ -35,7 +39,13 @@ const TopNav: FC<TopNavProps> = () => {
 
   // console.log("firstTwoPaths: ", firstTwoPaths)
   // const gtMd = useMediaQuery(customTheme.breakpoints.up("md"));
+  const toggleSidebar = () => {
+    // console.log("handleRegionChange: ", region);
+    var isOpen = sidenavXsOpen;
 
+    dispatch(StoreActionApp.sidenavXsToggle(!isOpen))
+
+  }
   return (
     <Box className={styles.TopNav} sx={[
       (theme: Theme) => ({
@@ -83,28 +93,35 @@ const TopNav: FC<TopNavProps> = () => {
         })}
       /> */}
 
-        {/* <IconButton
-          // onClick={() => toggleSidebar()}
+        <IconButton
+          onClick={() => { toggleSidebar() }}
           variant="outlined"
           color="neutral"
           size="sm"
+          sx={[
+            (theme: Theme) => ({
+              [theme.breakpoints.up('lg')]: {
+                'display': 'none',
+              }
+      
+            }),]}
         >
-          <BarChartRounded />
-        </IconButton> */}
+          <MoreVertRounded />
+        </IconButton>
 
         <h4 className={`td-text-md td-font-medium td-capitalize`}>
           {section.replace("-", " ")}
         </h4>
         {
-          subSection && 
-          
+          subSection &&
+
           <Box className={styles[`small-vline`]}>
-           
+
           </Box>
         }
         {
-          subSection && 
-          
+          subSection &&
+
           <h4 className={`td-text-sm td-capitalize`}>
             {subSection.replace("-", " ")}
           </h4>
@@ -116,7 +133,4 @@ const TopNav: FC<TopNavProps> = () => {
 };
 
 export default TopNav;
-function useMediaQuery(arg0: any) {
-  throw new Error('Function not implemented.');
-}
 

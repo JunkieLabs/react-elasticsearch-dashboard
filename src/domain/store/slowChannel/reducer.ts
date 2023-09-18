@@ -2,8 +2,6 @@ import { ModelSlowChannelFilters } from '@/types/store/slowChannel';
 import { DummyData } from '@/types/store/dummyData';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ModelElasticAggsResultItem } from '@/types/elastic/aggs';
-import { ModelElasticCity } from '@/types/elastic/cities/cities';
-import { ElasticConstants } from '@/data/elastic/elastic.constants';
 import { StoreConstants } from '../store.constants';
 
 
@@ -12,6 +10,7 @@ interface SlowChannelState {
     dummyData: DummyData[];
     aggregation: ModelElasticAggsResultItem[],
     subFilter: ModelSlowChannelFilters;
+    loadingStage: number;
 }
 
 
@@ -22,6 +21,7 @@ const initialState: SlowChannelState = {
         gender: StoreConstants.filterCommon.gender.all,
         pincodes: [],
     },
+    loadingStage: StoreConstants.loadingStage.initial
     
 };
 
@@ -34,6 +34,9 @@ const slowChannelSlice = createSlice({
         },
         setAggregation: (state, action: PayloadAction<ModelElasticAggsResultItem[]>) => {
             state.aggregation = action.payload;
+        },
+        setLoadingStage: (state, action: PayloadAction<number>) => {
+            state.loadingStage = action.payload;
         },
         setSubFilter: (state, action: PayloadAction<ModelSlowChannelFilters>) => {
             state.subFilter = action.payload;

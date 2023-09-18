@@ -177,7 +177,7 @@ export async function GET(req: Request) {
         }
     });
 
-    console.log("results: ", result.hits)
+    // console.log("results: ", result.hits)
     const terms = (result.hits.hits ?? []) as unknown as ModelElasticEventHitPart[];//??[];//.map((item) => item._source);
     response.items = terms ?? []
     response.total = ((result.hits.total as any)?.[`value`] as number | undefined) ?? 0;

@@ -16,6 +16,7 @@ import { ModelSlowChannelFilters } from '@/types/store/slowChannel';
 import { StoreConstants } from '@/domain/store/store.constants';
 import { StoreActionBouquets } from '@/domain/store/bouquets/reducer';
 
+
 interface FiltersProps { }
 
 const Filters: FC<FiltersProps> = () => {
@@ -197,7 +198,7 @@ const Filters: FC<FiltersProps> = () => {
             }}>
 
               <Chip
-                id={"Gender"}
+                key={"Gender"}
                 size="sm"
                 variant="soft"
                 color="neutral"
@@ -356,32 +357,7 @@ const Filters: FC<FiltersProps> = () => {
                   }}>
 
                   <h4 className='td-text-xs td-font-medium'>Select Region</h4>
-                  {/* <Autocomplete
 
-                    onChange={(event, values) => {
-
-                      console.log("auto onChange: ", values)
-                      // onChange(values);
-                    }}
-                    inputValue={filterRegion?.city??""}
-                    onInputChange={(event, newInputValue) => {
-                      handleRegionChange(newInputValue);
-                    }}
-
-                    getOptionLabel={(option) => option.city}
-                    freeSolo={false}
-                    placeholder="Region"
-                    options={regions}
-                    renderOption={(props, option) => {
-                      var { key, ...propsExc } = props as any;
-                      return (
-                        <AutocompleteOption variant="soft" key={"op" + option.city}  {...propsExc}>
-                          {option.city}
-                        </AutocompleteOption>
-                      );
-                    }}
-
-                  /> */}
 
                   <Autocomplete
 

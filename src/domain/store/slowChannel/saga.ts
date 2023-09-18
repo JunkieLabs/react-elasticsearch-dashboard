@@ -7,6 +7,7 @@ import { ModelSlowChannelFilters } from '@/types/store/slowChannel';
 import { ModelElasticAggsResultItem } from '@/types/elastic/aggs';
 import { StoreActionConfiguration } from '../configuration/reducer';
 import { StoreHelper } from '../helper';
+import { StoreConstants } from '../store.constants';
 
 function* handleCommonFilterChange() {
 
@@ -14,15 +15,7 @@ function* handleCommonFilterChange() {
     const topChannelCount: number = yield select((state: RootState) => state.Configuration.slowChannelsCount);
     const filter: Date[] = yield select((state: RootState) => state.CommonFilters.value);
     const subFilter: ModelSlowChannelFilters = yield select((state: RootState) => state.SlowChannel.subFilter);
-    // let pincodes: ModelElasticPincode[] =[]
-    // if(subFilter.pincodes.length>0){
-    //     const pincodesResult: ModelElasticPincode[] = yield ElasticPincodeRepo.getAll(subFilter.pincodes);
-    //     pincodes = pincodesResult
-
-    // }else {
-    //     pincodes =[]
-    // }
-
+   
 
     // console.log("handleCommonFilterChange filter: ", filter)
 
@@ -31,6 +24,7 @@ function* handleCommonFilterChange() {
 
 
 
+    yield put(StoreActionSlowChannel.setLoadingStage(StoreConstants.loadingStage.loading));
 
     const items: ModelElasticAggsResultItem[] = yield ElasticTopSlowChannelAggRepo.getTopSlowN({
         pincodes: subFilter.pincodes,
@@ -40,12 +34,14 @@ function* handleCommonFilterChange() {
         // locations: pincodes.map(ele => ele.location),
         n: topChannelCount,
         ageRange: subFilter.ageRange,
-        order: 'asc'
+        order: 'asc',
+        subAggsByDay: true
     });
 
     // console.log("ModelElasticAggsResultItem: ", items)
 
     yield put(StoreActionSlowChannel.setAggregation(items));
+    yield put(StoreActionSlowChannel.setLoadingStage(StoreConstants.loadingStage.loaded));
 }
 
 

@@ -71,7 +71,7 @@ const getHitsGeo = async ({ limit = 5, locations, channelNames, pincodes, ageRan
         searchParam.append('order', order);
     }
 
-    console.log("getHitsGeo search Params: ", ageRange, pincodes)
+    // console.log("getHitsGeo search Params: ", ageRange, pincodes, limit)
 
     var response: ModelElasticHitsPartialResult = await fetcher('/api/elastic/events/hits/geo?' + searchParam)
    
@@ -79,7 +79,7 @@ const getHitsGeo = async ({ limit = 5, locations, channelNames, pincodes, ageRan
         return []
     }
 
-    console.log("response: ", response)
+    // console.log("response: ", response)
 
     // if(result.data ty ModelElasticAggsResult.){
     //   result.data

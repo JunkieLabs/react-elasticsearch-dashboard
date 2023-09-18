@@ -15,6 +15,10 @@ import { StoreActionPincodes } from '@/domain/store/pincodes/reducer';
 import { ModelTopSlowChannelGeoFilters } from '@/types/store/topSlowChannelGeo';
 import { StoreActionBouquets } from '@/domain/store/bouquets/reducer';
 import { StoreConstants } from '@/domain/store/store.constants';
+import { subDays } from 'date-fns';
+import { StoreActionCommonFilters } from '@/domain/store/commonFilters/reducer';
+import DateRangeInput from '@/ui/widgets/inputs/DateRangeInput/DateRangeInput';
+import SwitchTopSlow from '../SwitchTopSlow/SwitchTopSlow';
 
 interface FiltersProps { }
 
@@ -27,11 +31,14 @@ const Filters: FC<FiltersProps> = () => {
 
   const stateSubFilter = useSelector((state: RootState) => state.TopSlowChannelGeo.subFilter);
 
+  const [dateRange, setDateRange] = useState<Date[]>([subDays(new Date(), 7), new Date()]);
+
   const [filterGender, setFilterGender] = useState<string>(StoreConstants.filterCommon.gender.all);
   const [filterAgeRange, setFilterAgeRange] = useState<number[]>([0, 100]);// useState([30, 50]);
   const [filterPincode, setFilterPincode] = useState<string[]>([]);
   const [filterRegion, setFilterRegion] = useState<ModelElasticCity | null>(null);
   const [filterBouquet, setFilterBouquet] = useState<string | null>(null);
+  const [filterIsTop, setFilterIsTop] = useState<boolean>(true);
   const [pincodeInputText, setPincodeInputText] = useState<string>('');
 
 
@@ -49,12 +56,21 @@ const Filters: FC<FiltersProps> = () => {
 
   }, []);
 
+
+  useEffect(() => {
+
+    dispatch(StoreActionCommonFilters.commonFilterSet(dateRange))
+    return () => { }
+
+  }, [dateRange]);
+
   useEffect(() => {
     // filterGender.
     setFilterRegion(stateSubFilter.region ?? null)
     setFilterPincode(stateSubFilter.pincodes ?? [])
     setFilterGender(stateSubFilter.gender)
     setFilterBouquet(stateSubFilter.bouquet ?? null)
+    setFilterIsTop(stateSubFilter.isTop)
     // = stateSubFilter.region
 
   }, [stateSubFilter])
@@ -78,23 +94,6 @@ const Filters: FC<FiltersProps> = () => {
 
   }, [pincodeInputText])
 
-  /*
-    useEffect(() => {
-      console.log("filterAgeRange: ", filterAgeRange, filterAgeDefaultRange, filterAgeDefaultRange === filterAgeRange)
-  
-      // console.log("filterAgeRange: ", filterAgeRange, filterAgeDefaultRange, filterAgeDefaultRange === filterAgeRange)
-  
-      dispatch(StoreActionTopSlowChannelGeo.setSubFilter({
-        gender: filterGender,
-        pincodes: filterPincode,
-        ageRange: filterAgeRangeDebaunced,
-        region: filterRegion
-  
-      }))
-      return () => { }
-  
-    }, [filterGender, filterAgeRangeDebaunced, filterPincode, filterRegion]);
-  */
 
   const handleStoreChange = async (topSlowChannelGeoFilters: ModelTopSlowChannelGeoFilters) => {
     // return (){}
@@ -169,12 +168,42 @@ const Filters: FC<FiltersProps> = () => {
     handleStoreChange({ ...stateSubFilter, ageRange: newAge })
   }
 
+  const handleIsTop = async (isTop: boolean) => {
+
+    if (isTop) {
+
+      setFilterIsTop(isTop);
+
+    }
+
+    handleStoreChange({ ...stateSubFilter, isTop: isTop })
+  }
+
 
   // console.log("debounce filterPincode: ", filterPincode)
 
 
   return (
-    <Box id='e4' className={styles.Filters}>
+    <Box id='e4' className={styles.Filters} sx={{ display: "flex", flexDirection: "column" }}>
+      <Box sx={{ p: { xs: 1, sm: 1, md: 1 } }} ></Box>
+
+
+
+      <Box sx={{
+        display: "flex",
+        alignItems: "center",
+        flexDirection: "row"
+      }}>
+
+        <Box sx={{ flex: "1 1 0%" }}>
+          {/* <h4 className="td-text-lg td-font-medium">Filters</h4> */}
+          <SwitchTopSlow onChange={handleIsTop} input={filterIsTop}></SwitchTopSlow>
+
+        </Box>
+        <DateRangeInput setDateRange={setDateRange}></DateRangeInput>
+      </Box>
+
+      <Box sx={{ p: { xs: 1, sm: 1, md: 1 } }} ></Box>
       <List id='232'
         variant="outlined"
         className='td-bg-white td-shadow-sm '
@@ -484,6 +513,8 @@ const Filters: FC<FiltersProps> = () => {
           </AccordionContent>
         </Accordian.Item>
       </List>
+
+      <Box sx={{ p: { xs: 1, sm: 1, md: 1 } }} ></Box>
     </Box>
   )
 };

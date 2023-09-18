@@ -13,10 +13,18 @@ function* handleCommonFilterChange() {
 
     // Fetch based on filter and sub-filter
      const filter: Date[] = yield select((state: RootState) => state.CommonFilters.value);
-    const subFilter: ModelTopSlowChannelGeoFilters = yield select((state: RootState) => state.SlowChannel.subFilter);
-    const channelCount: number = yield select((state: RootState) => state.Configuration.slowChannelsCount);
+    const subFilter: ModelTopSlowChannelGeoFilters = yield select((state: RootState) => state.TopSlowChannelGeo.subFilter);
+    
+    
+    let  channelCount: number = 0
    
+if(subFilter.isTop){
+    channelCount =  yield select((state: RootState) => state.Configuration.topChannelsCount);
 
+}else{
+    channelCount =  yield select((state: RootState) => state.Configuration.slowChannelsCount);
+
+}
 
 
 
@@ -29,7 +37,7 @@ function* handleCommonFilterChange() {
         // locations: pincodes.map(ele => ele.location),
         n: channelCount,
         ageRange: subFilter.ageRange,
-        order: 'asc'
+        order: subFilter.isTop ? 'desc' :  'asc'
     });
 
     var channelNames: string[] = []
@@ -43,7 +51,7 @@ function* handleCommonFilterChange() {
 
     }
 
-    console.log("handleCommonFilterChange: limit ", limit, items)
+    console.log("handleCommonFilterChange: limit ", limit, items, subFilter.isTop)
 
     const geoHits: ModelElasticEventHitPart[] = yield ElasticDeviceLogsHitRepo.getHitsGeo({
 
@@ -53,7 +61,7 @@ function* handleCommonFilterChange() {
         gender: StoreHelper.filterCommon.genderToElasticGender(subFilter.gender),
         // locations: pincodes.map(ele => ele.location),
         channelNames: channelNames,
-        limit: channelCount,
+        limit: limit,
         ageRange: subFilter.ageRange
     });
 

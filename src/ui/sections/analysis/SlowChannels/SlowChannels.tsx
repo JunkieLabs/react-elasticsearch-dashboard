@@ -4,7 +4,7 @@ import styles from './SlowChannels.module.scss';
 import Box from '@mui/joy/Box';
 import DateRangeInput from '@/ui/widgets/inputs/DateRangeInput/DateRangeInput';
 import Container from '@mui/joy/Container';
-import Filters from './Filters/Filters';
+// import Filters from './Filters/Filters';
 import { subDays } from 'date-fns';
 import { useDispatch, useSelector } from 'react-redux';
 import { StoreActionCommonFilters } from '@/domain/store/commonFilters/reducer';
@@ -16,13 +16,17 @@ import ChartPie from '@/ui/widgets/charts/ChartPie/ChartPie';
 import ChartBar from '@/ui/widgets/charts/ChartBar/ChartBar';
 import ChartTable from './ChartTable/ChartTable';
 import ChannelDetails from './ChannelDetails/ChannelDetails';
+import dynamic from 'next/dynamic';
 
 
-interface SlowChannelsProps {}
+interface SlowChannelsProps { }
+
+const Filters = dynamic(() => import("./Filters/Filters"), { ssr: false })
+
 
 const SlowChannels: FC<SlowChannelsProps> = () => {
 
-  
+
   const [dateRange, setDateRange] = useState<Date[]>([new Date(), subDays(new Date(), 7),]);
   const [chartCommonItems, setChartCommonItems] = useState<ModelChartCommonItem[]>([])
   const [chartData, setChartData] = useState<ModelChartJs>()
@@ -62,33 +66,38 @@ const SlowChannels: FC<SlowChannelsProps> = () => {
   }, [dateRange]);
 
   return (
-    <div className={styles.SlowChannels}>
-      <Container className={"tb-position--relative"}>
+    <Box className={styles.SlowChannels} sx={{ minHeight: "100vh", width: "100%" }}>
+      <Container className={"tb-position--relative"} sx={{
+        display: "flex",
+        flexDirection: 'column'
+
+      }}>
+
+        {/* <Box > */}
         <Box sx={{ p: { xs: 1, sm: 1, md: 1 } }} ></Box>
 
         <Box sx={{
           display: "flex",
+          alignItems: "center",
+          flexDirection: "row"
+        }}>
+
+          <Box sx={{ flex: "1 1 0%" }}>
+            <h4 className="td-text-lg td-font-medium">Filters</h4>
+
+          </Box>
+          <DateRangeInput setDateRange={setDateRange}></DateRangeInput>
+        </Box>
+        <Box sx={{ p: { xs: 1, sm: 1, md: 1 } }} ></Box>
+
+        <Filters></Filters>
+
+        <Box sx={{ p: { xs: 1, sm: 1, md: 1 } }} ></Box>
+        <Box className="td-relative" sx={{
+          display: "flex",
           flexDirection: 'column'
 
         }}>
-          <Box sx={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "row"
-          }}>
-
-            <Box sx={{ flex: "1 1 0%" }}>
-              <h4 className="td-text-lg td-font-medium">Filters</h4>
-
-            </Box>
-            <DateRangeInput setDateRange={setDateRange}></DateRangeInput>
-          </Box>
-          <Box sx={{ p: { xs: 1, sm: 1, md: 1 } }} ></Box>
-
-          <Filters></Filters>
-
-          <Box sx={{ p: { xs: 1, sm: 1, md: 1 } }} ></Box>
-
           <Box sx={{
             display: "flex",
             flexFlow: "row wrap",
@@ -144,16 +153,16 @@ const SlowChannels: FC<SlowChannelsProps> = () => {
             <Box sx={{
               maxHeight: 400,
               display: "flex",
-              alignItems:"center",
-              flexDirection:"column",
+              alignItems: "center",
+              flexDirection: "column",
               flex: { xs: '1 1 calc( 100%  )', sm: '1 1 calc( 40% - 2rem )' },
               maxWidth: { xs: 'calc( 99% )', sm: 'calc( 40% - 2rem )' }
 
             }}>
               <ChartPie data={chartData} sx={{
-                maxHeight:"100%",
+                maxHeight: "100%",
                 height: `unset`,
-                width:'100%'
+                width: '100%'
 
               }}></ChartPie>
             </Box>
@@ -176,13 +185,14 @@ const SlowChannels: FC<SlowChannelsProps> = () => {
           {/* <ChartTable data={chartCommonItems}></ChartTable> */}
           <ChannelDetails dateRange={dateRange} sx={{}}></ChannelDetails>
 
-          
-        <Box sx={{ p: { xs: 2, sm: 4, md: 6 } }} ></Box>
-      </Box>
-    </Container>
-    </div >
+
+          <Box sx={{ p: { xs: 2, sm: 4, md: 6 } }} ></Box>
+        </Box>
+        {/* </Box> */}
+      </Container>
+    </Box>
   );
-  
-            }
+
+}
 
 export default SlowChannels;

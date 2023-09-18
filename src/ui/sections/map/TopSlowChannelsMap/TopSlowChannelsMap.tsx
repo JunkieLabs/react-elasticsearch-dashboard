@@ -15,19 +15,13 @@ import {
 
 
 } from 'react-leaflet';
-import MarkerClusterGroup from 'react-leaflet-cluster'
-
-import DateRangeInput from '@/ui/widgets/inputs/DateRangeInput/DateRangeInput';
+import MarkerClusterGroup from 'react-leaflet-cluster';
 import Filters from './Filters/Filters';
 import { format, parseISO, subDays } from 'date-fns';
-import { ModelChartCommonItem } from '@/types/charts/common';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/domain/store/store';
-import { ChartHelper } from '@/domain/charts/helper';
-import { StoreActionCommonFilters } from '@/domain/store/commonFilters/reducer';
-import SwitchTopSlow from './SwitchTopSlow/SwitchTopSlow';
 import { GeoHelper } from '@/domain/geo/helper';
-import { ModelElasticEventHitPart, ModelElasticEventPartial } from '@/types/elastic/events/events';
+import {  ModelElasticEventPartial } from '@/types/elastic/events/events';
 
 interface TopSlowChannelsMapProps { }
 
@@ -39,11 +33,11 @@ const TopSlowChannelsMap: FC<TopSlowChannelsMapProps> = () => {
         iconRetinaUrl: '/leaflet/marker-icon-2x.png',
         iconUrl: '/leaflet/marker-icon.png',
         shadowUrl: '/leaflet/marker-shadow.png',
+
       });
     })();
   }, []);
 
-  const [dateRange, setDateRange] = useState<Date[]>([subDays(new Date(), 7), new Date()]);
   const [pointersMap, setPointersMap] = useState<Map<string, ModelElasticEventPartial[]>>(new Map<string, ModelElasticEventPartial[]>())
 
   const geoHits = useSelector((state: RootState) => state.TopSlowChannelGeo.hits);
@@ -54,25 +48,13 @@ const TopSlowChannelsMap: FC<TopSlowChannelsMapProps> = () => {
 
     var calcPointersMap = GeoHelper.groupHitsByChannelName(geoHits)
     setPointersMap(calcPointersMap);
-
-
-
-
   }, [geoHits])
 
+  // const customIcon = new Leaflet.Icon({
+  //   iconUrl: require('./leaflet/location.svg').default,
+  //   iconSize: new Leaflet.Point(40, 47),
+  // })
 
-
-
-  useEffect(() => {
-    // console.log("filterAgeRange: ", filterAgeRange, filterAgeDefaultRange, filterAgeDefaultRange === filterAgeRange)
-
-    dispatch(StoreActionCommonFilters.commonFilterSet(dateRange))
-
-
-
-    return () => { }
-
-  }, [dateRange]);
 
   return (
     <Box className={styles.TopSlowChannelsMap} sx={[
@@ -96,37 +78,21 @@ const TopSlowChannelsMap: FC<TopSlowChannelsMapProps> = () => {
 
         <Container className={"tb-position--relative"}>
 
-          <Box sx={{ p: { xs: 1, sm: 1, md: 1 } }} ></Box>
-          <Box sx={{
+          {/* <Box sx={{ p: { xs: 1, sm: 1, md: 1 } }} ></Box> */}
+          {/* <Box sx={{
             display: "flex",
             flexDirection: 'column'
 
           }}>
-            <Box sx={{
-              display: "flex",
-              alignItems: "center",
-              flexDirection: "row"
-            }}>
-
-              <Box sx={{ flex: "1 1 0%" }}>
-                {/* <h4 className="td-text-lg td-font-medium">Filters</h4> */}
-                <SwitchTopSlow></SwitchTopSlow>
-
-              </Box>
-              <DateRangeInput setDateRange={setDateRange}></DateRangeInput>
-            </Box>
-            <Box sx={{ p: { xs: 1, sm: 1, md: 1 } }} ></Box>
-
-            <Filters></Filters>
-
-            <Box sx={{ p: { xs: 1, sm: 1, md: 1 } }} ></Box>
-          </Box>
-
+            
+            
+          </Box> */}
+          <Filters></Filters>
         </Container>
 
         <Box sx={{ flex: "1 1 0%", position: "relative" }}>
 
-          <MapContainer className='td-absolute td-w-full td-h-full td-z-0' center={[51.505, -0.09]} zoom={13} scrollWheelZoom={false}>
+          <MapContainer className='td-absolute td-w-full td-h-full td-z-0' center={[21.4586, 75.7303]} zoom={4} scrollWheelZoom={true}>
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -134,6 +100,7 @@ const TopSlowChannelsMap: FC<TopSlowChannelsMapProps> = () => {
             {Array.from(pointersMap.entries()).map(([key, geoPartials]) => (
               <MarkerClusterGroup key={key}
                 chunkedLoading
+
               >
                 {geoPartials.filter(value => (value.location?.coordinates.length ?? 0) == 2).map((geoPartial, index) => (
                   <Marker
