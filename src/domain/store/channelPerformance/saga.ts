@@ -8,6 +8,7 @@ import { StoreActionCommonFilters } from '../commonFilters/reducer';
 import { StoreConstants } from '../store.constants';
 import { UiResourceColor } from '@/ui/resource/color';
 import { AnyAction } from 'redux';
+import { StoreActionTopSlowChannelGeo } from '../topSlowChannelGeo/reducer';
 
 
 // export function* watchSubFilterChange() {
@@ -26,6 +27,8 @@ function* handleTimeSeries(): Generator<any, void, any> {
     const subFilter: ModelChannelPerformanceFilters = yield select((state: RootState) => state.ChannelPerformance.subFilter);
 
 
+
+    yield put(StoreActionChannelPerformance.setLoadingStage(StoreConstants.loadingStage.loading));
 
 
 
@@ -78,6 +81,8 @@ function* handleTimeSeries(): Generator<any, void, any> {
     yield put(StoreActionChannelPerformance.setPlots(plots));
 
     yield put(StoreActionChannelPerformance.setAggregation(resultItems));
+    
+    yield put(StoreActionChannelPerformance.setLoadingStage(StoreConstants.loadingStage.loaded));
 
     const aggsResult: ModelElasticMultiAggsResult = yield ElasticChannelPerformanceAggRepo.getAggs({
         bouquets: subFilter.bouquets,

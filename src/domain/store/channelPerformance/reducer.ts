@@ -2,7 +2,7 @@ import { ModelChannelPerformanceFilters } from '@/types/store/channelPerformance
 import { DummyData } from '@/types/store/dummyData';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { StoreConstants } from '../store.constants';
-import { ModelElasticAggsResultItem, ModelElasticMultiAggsResult } from '@/types/elastic/aggs';
+import { ModelElasticAggsResultItem } from '@/types/elastic/aggs';
 
 
 
@@ -16,6 +16,10 @@ interface ChannelPerformanceState {
     },
 
     timeSeries: ModelElasticAggsResultItem[],
+
+    
+    loadingStage: number;
+    initialStage: number;
 }
 
 
@@ -32,7 +36,10 @@ const initialState: ChannelPerformanceState = {
         total:0
     },
     plots: [],
-    timeSeries: []
+    timeSeries: [],
+    loadingStage: StoreConstants.loadingStage.loading,
+
+    initialStage: StoreConstants.initialStage.initial
 
 };
 
@@ -67,6 +74,14 @@ const channelPerformanceSlice = createSlice({
         },
         setAggregation: (state, action: PayloadAction<ModelElasticAggsResultItem[]>) => {
             state.timeSeries = action.payload;
+        },
+        setLoadingStage: (state, action: PayloadAction<number>) => {
+
+            if (action.payload == StoreConstants.loadingStage.loaded && state.initialStage == StoreConstants.initialStage.initial) {
+                state.initialStage = StoreConstants.initialStage.loaded
+            }
+            state.loadingStage = action.payload;
+
         },
 
         setMultiAggregation: (state, action: PayloadAction< {

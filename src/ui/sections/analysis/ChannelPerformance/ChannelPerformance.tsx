@@ -9,7 +9,7 @@ import DateRangeInput from '@/ui/widgets/inputs/DateRangeInput/DateRangeInput';
 import { subDays } from 'date-fns';
 import { useDispatch, useSelector } from 'react-redux';
 import { StoreActionCommonFilters } from '@/domain/store/commonFilters/reducer';
-import Filters from './Filters/Filters';
+// import Filters from './Filters/Filters';
 import { StoreActionBouquets } from '@/domain/store/bouquets/reducer';
 import { RootState } from '@/domain/store/store';
 import ChartHighstock from '@/ui/widgets/charts/ChartHighstock/ChartHighstock';
@@ -20,12 +20,17 @@ import { ModelChartJs } from '@/types/charts/chartjs';
 import ChartBar from '@/ui/widgets/charts/ChartBar/ChartBar';
 import ChartPie from '@/ui/widgets/charts/ChartPie/ChartPie';
 import ChartTable from './ChartTable/ChartTable';
+import { StoreConstants } from '@/domain/store/store.constants';
+import { CircularProgress } from '@mui/joy';
+import dynamic from 'next/dynamic';
 
 interface ChannelPerformanceProps {
 
 
   searchParams: Record<string, string> | null | undefined;
 }
+
+const Filters = dynamic(() => import("./Filters/Filters"), { ssr: false })
 
 const ChannelPerformance: FC<ChannelPerformanceProps> = (props) => {
   const modal = props.searchParams && props.searchParams['modal'] ? TransformHelper.toBoolean(props.searchParams['modal'] as string) : false;
@@ -37,6 +42,10 @@ const ChannelPerformance: FC<ChannelPerformanceProps> = (props) => {
 
   const stateTimeSeries = useSelector((state: RootState) => state.ChannelPerformance.timeSeries);
   const [chartTimeSeriesData, setChartTimeSeriesData] = useState<ModelChartHighStock>()
+
+  const loadingStage = useSelector((state: RootState) => state.TopChannel.loadingStage);
+  const initialStage = useSelector((state: RootState) => state.TopChannel.initialStage);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -94,8 +103,12 @@ const ChannelPerformance: FC<ChannelPerformanceProps> = (props) => {
   // console.log("modal: ", modal)
 
   return (
-    <div className={styles.ChannelPerformance}>
-      <Container className={"tb-position--relative"}>
+    <Box className={styles.ChannelPerformance}>
+      <Container className={"tb-position--relative"} sx={{
+        display: "flex",
+        flexDirection: 'column'
+
+      }}>
 
         <Box sx={{
           display: "flex",
@@ -135,66 +148,96 @@ const ChannelPerformance: FC<ChannelPerformanceProps> = (props) => {
           <Button>Modal cancel</Button>
         </Link>} */}
         {/* <Box> What</Box>} */}
-        <Box sx={{
-          height: 400,
-          display: "flex",
-          width: "100%",
-          maxWidth: 'calc( 99% )'
-        }
-        } >
-          <ChartHighstock data={chartTimeSeriesData} sx={{
-            width: '100%'
 
-          }}></ChartHighstock>
+        {/* // //////////////////// */}
+
+        <Box className="td-relative" sx={{
 
 
-
-        </Box>
-
-
-        <Box sx={{ p: { xs: 2, sm: 4, md: 6 } }} ></Box>
-
-        <Box sx={{
-          display: "flex",
-          flexFlow: "row wrap",
-          gap: 2
         }}>
-          <Box sx={{
-            flex: { xs: '1 1 calc( 100%  )', sm: '1 1 calc( 60% - 2rem )' },
-            maxWidth: { xs: 'calc( 99% )', sm: 'calc( 60% - 2rem )' }
 
-          }}>
-            <ChartBar data={chartData} sx={{
-
-            }}></ChartBar>
-          </Box>
-          <Box sx={{
-            maxHeight: 400,
-            display: "flex",
+          {(loadingStage == StoreConstants.loadingStage.loading) && <Box className="td-absolute td-my-8" sx={{
+            width: `100%`,
+            flex: `1 1 0%`,
             alignItems: "center",
-            flexDirection: "column",
-            flex: { xs: '1 1 calc( 100%  )', sm: '1 1 calc( 40% - 2rem )' },
-            maxWidth: { xs: 'calc( 99% )', sm: 'calc( 40% - 2rem )' }
-
+            display: 'flex',
+            zIndex: 2,
+            justifyContent: 'center'
           }}>
-            <ChartPie data={chartData} sx={{
-              maxHeight: "100%",
-              height: `unset`,
-              width: '100%'
+            <CircularProgress />
+          </Box>}
 
-            }}></ChartPie>
-          </Box>
+          {(initialStage == StoreConstants.initialStage.loaded) &&
+            <Box className="td-relative" sx={{
+              display: "flex",
+              flexDirection: 'column'
+
+            }}>
+              {/* //////////////////////////////// */}
+
+              <Box sx={{
+                height: 400,
+                display: "flex",
+                width: "100%",
+                maxWidth: 'calc( 99% )'
+              }
+              } >
+                <ChartHighstock data={chartTimeSeriesData} sx={{
+                  width: '100%'
+
+                }}></ChartHighstock>
+
+
+
+              </Box>
+
+
+              <Box sx={{ p: { xs: 2, sm: 4, md: 6 } }} ></Box>
+
+              <Box sx={{
+                display: "flex",
+                flexFlow: "row wrap",
+                gap: 2
+              }}>
+                <Box sx={{
+                  flex: { xs: '1 1 calc( 100%  )', sm: '1 1 calc( 60% - 2rem )' },
+                  maxWidth: { xs: 'calc( 99% )', sm: 'calc( 60% - 2rem )' }
+
+                }}>
+                  <ChartBar data={chartData} sx={{
+
+                  }}></ChartBar>
+                </Box>
+                <Box sx={{
+                  maxHeight: 400,
+                  display: "flex",
+                  alignItems: "center",
+                  flexDirection: "column",
+                  flex: { xs: '1 1 calc( 100%  )', sm: '1 1 calc( 40% - 2rem )' },
+                  maxWidth: { xs: 'calc( 99% )', sm: 'calc( 40% - 2rem )' }
+
+                }}>
+                  <ChartPie data={chartData} sx={{
+                    maxHeight: "100%",
+                    height: `unset`,
+                    width: '100%'
+
+                  }}></ChartPie>
+                </Box>
+              </Box>
+
+              <Box sx={{ p: { xs: 2, sm: 2, md: 3 } }} ></Box>
+
+              <ChartTable data={chartCommonItems}></ChartTable>
+
+
+              <Box sx={{ p: { xs: 2, sm: 2, md: 3 } }} ></Box>
+            </Box>
+          }
         </Box>
-
-        <Box sx={{ p: { xs: 2, sm: 2, md: 3 } }} ></Box>
-
-        <ChartTable data={chartCommonItems}></ChartTable>
-
-        
-        <Box sx={{ p: { xs: 2, sm: 2, md: 3 } }} ></Box>
 
       </Container>
-    </div>
+    </Box>
   );
 }
 

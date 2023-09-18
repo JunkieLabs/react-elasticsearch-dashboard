@@ -25,7 +25,7 @@ const Filters: FC<FiltersProps> = (props) => {
 
   const modalBouquetChannel = props.searchParams && props.searchParams['bouquet-channel-picker'] ? TransformHelper.toBoolean(props.searchParams['bouquet-channel-picker'] as string) : false;
 
-
+  
   const stateSubFilter = useSelector((state: RootState) => state.ChannelPerformance.subFilter);
   
   const statePlots = useSelector((state: RootState) => state.ChannelPerformance.plots);

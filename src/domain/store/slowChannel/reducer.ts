@@ -11,6 +11,7 @@ interface SlowChannelState {
     aggregation: ModelElasticAggsResultItem[],
     subFilter: ModelSlowChannelFilters;
     loadingStage: number;
+    initialStage: number;
 }
 
 
@@ -21,8 +22,10 @@ const initialState: SlowChannelState = {
         gender: StoreConstants.filterCommon.gender.all,
         pincodes: [],
     },
-    loadingStage: StoreConstants.loadingStage.initial
-    
+    loadingStage: StoreConstants.loadingStage.loading,
+
+    initialStage: StoreConstants.initialStage.initial
+
 };
 
 const slowChannelSlice = createSlice({
@@ -36,11 +39,16 @@ const slowChannelSlice = createSlice({
             state.aggregation = action.payload;
         },
         setLoadingStage: (state, action: PayloadAction<number>) => {
+
+            if (action.payload == StoreConstants.loadingStage.loaded && state.initialStage == StoreConstants.initialStage.initial) {
+                state.initialStage = StoreConstants.initialStage.loaded
+            }
             state.loadingStage = action.payload;
+
         },
         setSubFilter: (state, action: PayloadAction<ModelSlowChannelFilters>) => {
             state.subFilter = action.payload;
-        }, 
+        },
         // setSubFilterRegion: (state, action: PayloadAction<ModelElasticCity| undefined>) => {
         //     state.subFilter.region = action.payload;
         //     dispatch()

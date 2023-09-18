@@ -22,6 +22,7 @@ interface FiltersProps { }
 const Filters: FC<FiltersProps> = () => {
 
   const stateAgeRangeDefault = useSelector((state: RootState) => state.CommonFilters.ageRange);
+  const stateConfigurationFilters = useSelector((state: RootState) => state.Configuration.filters);
 
   const stateDefaultRegions = useSelector((state: RootState) => state.Cities.values);
   const stateDefaultBouquets = useSelector((state: RootState) => state.Bouquets.items);
@@ -171,9 +172,10 @@ const Filters: FC<FiltersProps> = () => {
   }
 
 
+  console.log("stateConfigurationFilters: ", stateConfigurationFilters);
   // console.log("debounce filterPincode: ", filterPincode)
 
-
+  // stateConfigurationFilters.entities[StoreConstants.configuration.filters.filterGender].isEnabled
   return (
     <Box id='e4' className={styles.Filters}>
       <List id='232'
@@ -271,62 +273,67 @@ const Filters: FC<FiltersProps> = () => {
                 flexDirection: { xs: "column", sm: "row" },
               }}>
 
-                <Box
-                  sx={{
-                    maxWidth: { xs: "unset", sm: "50%" },
-                    flex: "1 1 0%",
-                    display: "flex", flexDirection: "column",
-                    gap: `0.5rem`
-                  }}>
 
-                  <h4 className='td-text-xs td-font-medium'>Select Gender</h4>
-                  <ToggleButtonGroup
+                {stateConfigurationFilters.entities[StoreConstants.configuration.filters.filterGender].isEnabled &&
 
-                    value={filterGender}
-                    onChange={(event, newValue) => {
-                      // setValue(newValue);
-                      console.log("ToggleButtonGroup gender: ", newValue);
-                      handleGenderChange(newValue);
-                      // setFilterGender(newValue ?? 'all');
-                    }}
-                  >
-                    <Button value={StoreConstants.filterCommon.gender.all}>All</Button>
-                    <Button value={StoreConstants.filterCommon.gender.male}>Male</Button>
-                    <Button value={StoreConstants.filterCommon.gender.female}>Female</Button>
-                    <Button value={StoreConstants.filterCommon.gender.other}>Others</Button>
-                  </ToggleButtonGroup>
-                </Box>
+                  <Box
+                    sx={{
+                      maxWidth: { xs: "unset", sm: "50%" },
+                      flex: "1 1 0%",
+                      display: "flex", flexDirection: "column",
+                      gap: `0.5rem`
+                    }}>
+
+                    <h4 className='td-text-xs td-font-medium'>Select Gender</h4>
+                    <ToggleButtonGroup
+
+                      value={filterGender}
+                      onChange={(event, newValue) => {
+                        // setValue(newValue);
+                        console.log("ToggleButtonGroup gender: ", newValue);
+                        handleGenderChange(newValue);
+                        // setFilterGender(newValue ?? 'all');
+                      }}
+                    >
+                      <Button value={StoreConstants.filterCommon.gender.all}>All</Button>
+                      <Button value={StoreConstants.filterCommon.gender.male}>Male</Button>
+                      <Button value={StoreConstants.filterCommon.gender.female}>Female</Button>
+                      <Button value={StoreConstants.filterCommon.gender.other}>Others</Button>
+                    </ToggleButtonGroup>
+                  </Box>}
 
 
+                {stateConfigurationFilters.entities[StoreConstants.configuration.filters.filterAge].isEnabled &&
 
-                <Box
-                  sx={{
-                    maxWidth: { xs: "unset", sm: "50%" },
-                    flex: "1 1 0%",
-                    display: "flex", flexDirection: "column",
-                    gap: `0.5rem`
-                  }}>
 
-                  <h4 className='td-text-xs td-font-medium'>Select Age</h4>
-                  <Slider
-                    getAriaLabel={() => 'Age range'}
-                    value={filterAgeRange}
-                    defaultValue={stateAgeRangeDefault.length > 0 ? stateAgeRangeDefault : [0, 90]}
+                  <Box
+                    sx={{
+                      maxWidth: { xs: "unset", sm: "50%" },
+                      flex: "1 1 0%",
+                      display: "flex", flexDirection: "column",
+                      gap: `0.5rem`
+                    }}>
 
-                    max={stateAgeRangeDefault.length > 1 ? stateAgeRangeDefault[1] : 100}
-                    min={stateAgeRangeDefault.length > 1 ? stateAgeRangeDefault[0] : 0}
+                    <h4 className='td-text-xs td-font-medium'>Select Age</h4>
+                    <Slider
+                      getAriaLabel={() => 'Age range'}
+                      value={filterAgeRange}
+                      defaultValue={stateAgeRangeDefault.length > 0 ? stateAgeRangeDefault : [0, 90]}
 
-                    onChange={(event, newValue) => {
-                      // setValue(newValue);
-                      // console.log("ToggleButtonGroup age: ", newValue, filterAgeDefaultRange);
-                      handleAgeChange(newValue as number[])
-                      // setFilterAgeRange((newValue as number[]) ?? stateAgeRangeDefault);
-                    }}
-                    valueLabelDisplay="auto"
-                  // getAriaValueText={valueText}
-                  />
-                </Box>
+                      max={stateAgeRangeDefault.length > 1 ? stateAgeRangeDefault[1] : 100}
+                      min={stateAgeRangeDefault.length > 1 ? stateAgeRangeDefault[0] : 0}
 
+                      onChange={(event, newValue) => {
+                        // setValue(newValue);
+                        // console.log("ToggleButtonGroup age: ", newValue, filterAgeDefaultRange);
+                        handleAgeChange(newValue as number[])
+                        // setFilterAgeRange((newValue as number[]) ?? stateAgeRangeDefault);
+                      }}
+                      valueLabelDisplay="auto"
+                    // getAriaValueText={valueText}
+                    />
+                  </Box>
+                }
 
 
 
@@ -347,17 +354,19 @@ const Filters: FC<FiltersProps> = () => {
                 },
                 flexDirection: { xs: "column", sm: "row" },
               }}>
+                {stateConfigurationFilters.entities[StoreConstants.configuration.filters.filterRegion].isEnabled &&
 
-                <Box
-                  sx={{
-                    maxWidth: { xs: "unset", sm: "50%" },
-                    flex: "1 1 0%",
-                    display: "flex", flexDirection: "column",
-                    gap: `0.5rem`
-                  }}>
 
-                  <h4 className='td-text-xs td-font-medium'>Select Region</h4>
-                  {/* <Autocomplete
+                  <Box
+                    sx={{
+                      maxWidth: { xs: "unset", sm: "50%" },
+                      flex: "1 1 0%",
+                      display: "flex", flexDirection: "column",
+                      gap: `0.5rem`
+                    }}>
+
+                    <h4 className='td-text-xs td-font-medium'>Select Region</h4>
+                    {/* <Autocomplete
 
                     onChange={(event, values) => {
 
@@ -384,97 +393,106 @@ const Filters: FC<FiltersProps> = () => {
 
                   /> */}
 
-                  <Autocomplete
+                    <Autocomplete
 
-                    onChange={(event, values) => {
+                      onChange={(event, values) => {
 
-                      console.log("auto onChange: ", values)
-                      // onChange(values);
-                      handleRegionChange(values ?? undefined);
-                    }}
-                    // defaultValue={filterRegion}
-                    value={filterRegion}
-                    // isOptionEqualToValue={(option ,  val) => option.city == val.city}
-                    // defaultValue={filterRegion?.city ?? ""}
-                    // onInputChange={(event, newInputValue) => {
-                    //   handleRegionChange(newInputValue);
-                    // }}
+                        console.log("auto onChange: ", values)
+                        // onChange(values);
+                        handleRegionChange(values ?? undefined);
+                      }}
+                      // defaultValue={filterRegion}
+                      value={filterRegion}
+                      // isOptionEqualToValue={(option ,  val) => option.city == val.city}
+                      // defaultValue={filterRegion?.city ?? ""}
+                      // onInputChange={(event, newInputValue) => {
+                      //   handleRegionChange(newInputValue);
+                      // }}
 
-                    getOptionLabel={(option) => option.city}
-                    // freeSolo={false}
-                    // placeholder="Region"
-                    options={stateDefaultRegions}
-                    renderOption={(props, option) => {
-                      var { key, ...propsExc } = props as any;
-                      return (
-                        <AutocompleteOption variant="soft" key={"op" + option.city}  {...propsExc}>
-                          {option.city}
-                        </AutocompleteOption>
-                      );
-                    }}
+                      getOptionLabel={(option) => option.city}
+                      // freeSolo={false}
+                      // placeholder="Region"
+                      options={stateDefaultRegions}
+                      renderOption={(props, option) => {
+                        var { key, ...propsExc } = props as any;
+                        return (
+                          <AutocompleteOption variant="soft" key={"op" + option.city}  {...propsExc}>
+                            {option.city}
+                          </AutocompleteOption>
+                        );
+                      }}
 
-                  // sx={{ width: 300 }}
-                  />
-                </Box>
+                    // sx={{ width: 300 }}
+                    />
+                  </Box>
 
+                }
 
-
-                <Box
-                  sx={{
-                    maxWidth: { xs: "unset", sm: "50%" },
-                    flex: "1 1 0%",
-                    display: "flex", flexDirection: "column",
-                    gap: `0.5rem`
-                  }}>
-
-                  <h4 className='td-text-xs td-font-medium'>Select Pincode</h4>
-                  <ChipsInput chips={filterPincode}
-
-                    onChipsChange={handlePincodesChange}
-                    onTextChange={setPincodeInputText}
-                    options={pincodesAutoComplete}
-                    placeholder='type pincode '></ChipsInput>
-                </Box>
-
-                <Box
-                  sx={{
-                    maxWidth: { xs: "unset", sm: "50%" },
-                    flex: "1 1 0%",
-                    display: "flex", flexDirection: "column",
-                    gap: `0.5rem`
-                  }}>
-
-                  <h4 className='td-text-xs td-font-medium'>Select Bouquet</h4>
-
-                  <Autocomplete
-
-                    onChange={(event, values) => {
-
-                      console.log("auto onChange: ", values)
-                      // onChange(values);
-                      handleBouquetChange(values ?? undefined);
-                    }}
-                    // defaultValue={filterRegion}
-                    value={filterBouquet}
+                {stateConfigurationFilters.entities[StoreConstants.configuration.filters.filterPincode].isEnabled &&
 
 
-                    getOptionLabel={(option) => option}
-                    // freeSolo={false}
-                    // placeholder="Region"
-                    options={stateDefaultBouquets}
-                    renderOption={(props, option) => {
-                      var { key, ...propsExc } = props as any;
-                      return (
-                        <AutocompleteOption variant="soft" key={"op" + option}  {...propsExc}>
-                          {option}
-                        </AutocompleteOption>
-                      );
-                    }}
 
-                  // sx={{ width: 300 }}
-                  />
-                </Box>
+                  <Box
+                    sx={{
+                      maxWidth: { xs: "unset", sm: "50%" },
+                      flex: "1 1 0%",
+                      display: "flex", flexDirection: "column",
+                      gap: `0.5rem`
+                    }}>
 
+                    <h4 className='td-text-xs td-font-medium'>Select Pincode</h4>
+                    <ChipsInput chips={filterPincode}
+
+                      onChipsChange={handlePincodesChange}
+                      onTextChange={setPincodeInputText}
+                      options={pincodesAutoComplete}
+                      placeholder='type pincode '></ChipsInput>
+                  </Box>
+                }
+
+                {stateConfigurationFilters.entities[StoreConstants.configuration.filters.filterBouquet].isEnabled &&
+
+
+
+                  <Box
+                    sx={{
+                      maxWidth: { xs: "unset", sm: "50%" },
+                      flex: "1 1 0%",
+                      display: "flex", flexDirection: "column",
+                      gap: `0.5rem`
+                    }}>
+
+                    <h4 className='td-text-xs td-font-medium'>Select Bouquet</h4>
+
+                    <Autocomplete
+
+                      onChange={(event, values) => {
+
+                        console.log("auto onChange: ", values)
+                        // onChange(values);
+                        handleBouquetChange(values ?? undefined);
+                      }}
+                      // defaultValue={filterRegion}
+                      value={filterBouquet}
+
+
+                      getOptionLabel={(option) => option}
+                      // freeSolo={false}
+                      // placeholder="Region"
+                      options={stateDefaultBouquets}
+                      renderOption={(props, option) => {
+                        var { key, ...propsExc } = props as any;
+                        return (
+                          <AutocompleteOption variant="soft" key={"op" + option}  {...propsExc}>
+                            {option}
+                          </AutocompleteOption>
+                        );
+                      }}
+
+                    // sx={{ width: 300 }}
+                    />
+                  </Box>
+                }
 
               </Box>
 

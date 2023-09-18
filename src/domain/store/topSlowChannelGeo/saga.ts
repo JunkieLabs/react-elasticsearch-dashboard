@@ -27,6 +27,8 @@ if(subFilter.isTop){
 }
 
 
+console.log("saga channelCount: ", channelCount)
+
 
 
     const items: ModelElasticAggsResultItem[] = yield ElasticTopSlowChannelAggRepo.getTopSlowN({

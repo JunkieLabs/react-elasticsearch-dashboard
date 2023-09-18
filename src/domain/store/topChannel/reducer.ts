@@ -12,6 +12,8 @@ interface TopChannelState {
     dummyData: DummyData[];
     aggregation: ModelElasticAggsResultItem[],
     subFilter: ModelTopChannelFilters;
+    loadingStage: number;
+    initialStage: number;
 }
 
 
@@ -22,6 +24,9 @@ const initialState: TopChannelState = {
         gender: StoreConstants.filterCommon.gender.all,
         pincodes: [],
     },
+    loadingStage: StoreConstants.loadingStage.loading,
+
+    initialStage: StoreConstants.initialStage.initial
     
 };
 
@@ -34,6 +39,14 @@ const topChannelSlice = createSlice({
         },
         setAggregation: (state, action: PayloadAction<ModelElasticAggsResultItem[]>) => {
             state.aggregation = action.payload;
+        },
+        setLoadingStage: (state, action: PayloadAction<number>) => {
+
+            if (action.payload == StoreConstants.loadingStage.loaded && state.initialStage == StoreConstants.initialStage.initial) {
+                state.initialStage = StoreConstants.initialStage.loaded
+            }
+            state.loadingStage = action.payload;
+
         },
         setSubFilter: (state, action: PayloadAction<ModelTopChannelFilters>) => {
             state.subFilter = action.payload;

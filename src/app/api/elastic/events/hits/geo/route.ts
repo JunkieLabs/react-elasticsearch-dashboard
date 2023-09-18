@@ -43,7 +43,7 @@ export async function GET(req: Request) {
         // max: 100,
         min: 0
     });
-    console.log("GET geo hits: ", limit,  field, ageRange, dateRange, channelNames, locations, pincodes)
+    // console.log("GET geo hits: ", limit,  field, ageRange, dateRange, channelNames, locations, pincodes)
 
     // let gender = searchParams.get('gender');
 

@@ -26,7 +26,7 @@ export async function GET(req: Request) {
     let ageRange = ageRangeStr ? JSON.parse(ageRangeStr) : [];
     let dateRange = dateRangeStr ? JSON.parse(dateRangeStr) : [];
 
-    console.log("GET aggs: ", field, ageRange, dateRange, locations, pincodes)
+    console.log("GET aggs: ", field, n, ageRange, dateRange, locations, pincodes)
 
     const elastic = await getElasticClient();
 

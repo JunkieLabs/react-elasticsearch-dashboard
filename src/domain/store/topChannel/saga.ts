@@ -10,6 +10,7 @@ import { ModelElasticAggsResultItem } from '@/types/elastic/aggs';
 import { StoreActionConfiguration } from '../configuration/reducer';
 import { ElasticConstants } from '@/data/elastic/elastic.constants';
 import { StoreHelper } from '../helper';
+import { StoreConstants } from '../store.constants';
 
 function* handleCommonFilterChange() {
 
@@ -33,6 +34,7 @@ function* handleCommonFilterChange() {
 
 
 
+    yield put(StoreActionTopChannel.setLoadingStage(StoreConstants.loadingStage.loading));
 
 
     const items: ModelElasticAggsResultItem[] = yield ElasticTopSlowChannelAggRepo.getTopSlowN({
@@ -49,6 +51,8 @@ function* handleCommonFilterChange() {
     // console.log("ModelElasticAggsResultItem: ", items)
 
     yield put(StoreActionTopChannel.setAggregation(items));
+    
+    yield put(StoreActionTopChannel.setLoadingStage(StoreConstants.loadingStage.loaded));
 }
 
 
