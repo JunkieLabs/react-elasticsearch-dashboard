@@ -3,6 +3,7 @@ import { ElasticConstants } from "@/data/elastic/elastic.constants";
 import { TransformHelper } from "@/tools/parserTools";
 import { ModelElasticAggsResult, ModelElasticAggsTermsResult } from "@/types/elastic/aggs";
 import { ModelElasticGeoPoint } from "@/types/elastic/common";
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
@@ -27,6 +28,12 @@ export async function GET(req: Request) {
     let dateRange = dateRangeStr ? JSON.parse(dateRangeStr) : [];
 
     console.log("GET aggs: ", field, n, ageRange, dateRange, locations, pincodes)
+
+    const cookieStore = cookies()
+    const token = cookieStore.get('token')
+
+    console.log("GET cookieStore: ", token)
+
 
     const elastic = await getElasticClient();
 

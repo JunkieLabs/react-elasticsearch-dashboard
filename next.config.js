@@ -18,6 +18,11 @@ const nextConfig = {
           destination: '/analysis/channel-performance', // Matched parameters can be used in the destination
           permanent: true,
         },
+        {
+          source: '/auth',
+          destination: '/auth/login', // Matched parameters can be used in the destination
+          permanent: true,
+        },
       ]
 
     // compiler: {

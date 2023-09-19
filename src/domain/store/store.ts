@@ -18,6 +18,7 @@ import { DeviceLogsReducers } from './deviceLogs/reducer';
 import { SlowChannelReducers } from './slowChannel/reducer';
 import { ReportGenerationReducers } from './reportGeneration/reducer';
 import { TopSlowChannelGeoReducers } from './topSlowChannelGeo/reducer';
+import { AuthReducers } from './auth/reducer';
 
 
 
@@ -38,7 +39,8 @@ export const store = configureStore({
         DeviceMonitor: DeviceMonitorReducers,
         DeviceLogs: DeviceLogsReducers,
         ReportGeneration: ReportGenerationReducers,
-        TopSlowChannelGeo: TopSlowChannelGeoReducers
+        TopSlowChannelGeo: TopSlowChannelGeoReducers,
+        Auth: AuthReducers
     },
     middleware:[sagaMiddleware]
 })

@@ -1,0 +1,3 @@
+// type ErrorWithMessage = {
+//     message: string
+//   }

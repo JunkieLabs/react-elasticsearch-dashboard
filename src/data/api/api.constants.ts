@@ -4,6 +4,7 @@ export const ApiConstants = {
         notFound: 404,
         forbidden: 403,
         badRequest: 400,
-        unauthorized: 401
+        unauthorized: 401,
+        internalServer: 500,
     }
 }

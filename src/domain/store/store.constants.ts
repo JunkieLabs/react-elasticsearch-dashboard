@@ -47,6 +47,11 @@ export const StoreConstants = {
         loading: 2,
         loaded: 3
     
+    },
+    runningStage:{
+        notRunning: 0,
+        running: 1,
+        completed: 2
     }
 
     

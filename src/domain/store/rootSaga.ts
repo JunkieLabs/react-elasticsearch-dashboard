@@ -11,6 +11,7 @@ import { watchDeviceLogs } from './deviceLogs/saga';
 import { watchSlowChannel } from './slowChannel/saga';
 import { watchReportGeneration } from './reportGeneration/saga';
 import { watchTopSlowChannelGeo } from './topSlowChannelGeo/saga';
+import { watchAuth } from './auth/saga';
 export function* rootSaga() {
   yield all([ 
     watchChannelPerformance(), 
@@ -24,6 +25,7 @@ export function* rootSaga() {
     watchDeviceLogs(),
     watchReportGeneration(),
     watchTopSlowChannelGeo(),
-    watchDummyCharts()
+    watchDummyCharts(),
+    watchAuth()
   ]);
 }

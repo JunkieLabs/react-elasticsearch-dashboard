@@ -1,9 +1,10 @@
+'use client'
 import React, { FC, FormEvent, useState } from 'react';
 import styles from './Login.module.scss';
 import Box from '@mui/joy/Box';
 import Link from 'next/link';
 import Button from '@mui/joy/Button';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import FormControl from '@mui/joy/FormControl';
 import FormLabel from '@mui/joy/FormLabel';
 import Input from '@mui/joy/Input';
@@ -11,6 +12,9 @@ import FormHelperText from '@mui/joy/FormHelperText';
 import Checkbox from '@mui/joy/Checkbox';
 
 import Done from '@mui/icons-material/Done';
+import { RootState } from '@/domain/store/store';
+import { StoreConstants } from '@/domain/store/store.constants';
+import { StoreActionAuth } from '@/domain/store/auth/reducer';
 
 interface LoginProps { }
 
@@ -19,12 +23,13 @@ const Login: FC<LoginProps> = () => {
   const dispatch = useDispatch()
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState({ email: "", password: "" });
-  const [loading, setLoding] = useState<boolean>(false);
+  // const [loading, setLoding] = useState<boolean>(false);
+
+  const runningStage = useSelector((state: RootState) => state.Auth.runningStage);
+ 
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-
-
-    console.log("handleSubmit",formData.email )
+    // console.log("handleSubmit", formData.email)
 
     event.preventDefault();
     if (!formData.email) {
@@ -35,8 +40,9 @@ const Login: FC<LoginProps> = () => {
       setError({ ...error, password: "Password Field is required" })
       return;
     }
-
-    setLoding(true);
+    dispatch(StoreActionAuth.login(formData))
+    console.log("StoreActionAuth: ")
+    // setLoding(true);
     // const res = await login_me(formData);
     // if (res.success) {
     //   setLoding(false);
@@ -71,19 +77,20 @@ const Login: FC<LoginProps> = () => {
         <h1 className="td-text-xl td-text-center td-font-bold td-leading-tight td-tracking-tight td-text-gray-900 md:text-2xl ">
           Sign in to your account
         </h1>
-        
+
         <Box sx={{ p: { xs: 1, sm: 2, md: 2 } }} ></Box>
-        <form onSubmit={handleSubmit} className="td-space-y-4 md:td-space-y-6" action="#">
-          <FormControl required>
-            <FormLabel>Email</FormLabel>
-            <Input placeholder="type email " name="email" type='email' onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
+        {/* action="#" */}
+        <form onSubmit={handleSubmit} className="td-space-y-4 md:td-space-y-6" >
+          <FormControl required >
+            <FormLabel id="email-label">Email</FormLabel>
+            <Input key={"in-1"} id='email-input' placeholder="type email " name="email" type='email' onChange={(e) => setFormData({ ...formData, email: e.target.value })} />
             {/* <FormHelperText >This is a helper text.</FormHelperText> */}
             {error.email && <FormHelperText className="td-red-500">{error.email}</FormHelperText>}
-           </FormControl>
+          </FormControl>
 
-          <FormControl required>
-            <FormLabel>Password</FormLabel>
-            <Input placeholder="••••••••" name="password" type='password' onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
+          <FormControl required key={13}>
+            <FormLabel id="password-label">Password</FormLabel>
+            <Input key={"in-2"} id='password-input' placeholder="••••••••" name="password" type='password' onChange={(e) => setFormData({ ...formData, password: e.target.value })} />
             {error.password && <FormHelperText className="td-red-500">{error.password}</FormHelperText>}
           </FormControl>
 
@@ -97,7 +104,7 @@ const Login: FC<LoginProps> = () => {
               flex: "1 1 0%"
             }}>
 
-              <Checkbox
+              {/* <Checkbox
               name="persistent"
                 uncheckedIcon={<Done />}
                 label="Remember Me"
@@ -113,7 +120,7 @@ const Login: FC<LoginProps> = () => {
                       : undefined,
                   }),
                 }}
-              />
+              /> */}
             </Box>
 
             <Link href="/auth/reset" className="td-font-medium td-text-orange-600 hover:td-underline ">Forgot password?</Link>
@@ -136,9 +143,9 @@ const Login: FC<LoginProps> = () => {
               error.password && <p className="td-text-sm text-red-500">{error.password}</p>
             }
           </div> */}
-          
+
           {
-            <Button loading={loading} type="submit" className="td-w-full">Sign in</Button>
+            <Button loading={runningStage==StoreConstants.runningStage.running} type="submit" className="td-w-full">Sign in</Button>
           }
 
           <p className="td-text-sm  td-text-center text-black ">
