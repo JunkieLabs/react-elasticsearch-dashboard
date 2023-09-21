@@ -14,7 +14,7 @@ services:
 
     environment:
       BASE_URL: http://localhost:3000
-      NEXT_ELASTIC_URL: http://192.168.1.16:9200
+      NEXT_ELASTIC_URL: http://10.27.14.126:9200
       
     ports:
       - "3000:3000"
