@@ -22,35 +22,35 @@ const DummyCharts: FC<DummyChartsProps> = () => {
   const highChartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
 
-  const { data, error } = useSWR<DummyResultBucket>(`/api/elastic/dummy`, fetcher);
+  // const { data, error } = useSWR<DummyResultBucket>(`/api/elastic/events/`, fetcher);
 
   const [chartData, setChartData] = useState<ModelChartJs>()
 
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    var labels: string[] = data?.buckets?.map(ele => isNumeric(ele.key) ?
-      `${Number(ele.key)}`
-      : ele.key.toString()) ?? [];
+  //   var labels: string[] = data?.buckets?.map(ele => isNumeric(ele.key) ?
+  //     `${Number(ele.key)}`
+  //     : ele.key.toString()) ?? [];
 
-    var values = data?.buckets?.map(ele => ele.doc_count);
+  //   var values = data?.buckets?.map(ele => ele.doc_count);
 
-    var modelChartJs: ModelChartJs = {
+  //   var modelChartJs: ModelChartJs = {
 
-      labels: labels,
-      data: [{
-        data: values ?? [],
-        label: "check",
-        backgroundColor: '#3456f2'
-      }]
-    }
+  //     labels: labels,
+  //     data: [{
+  //       data: values ?? [],
+  //       label: "check",
+  //       backgroundColor: '#3456f2'
+  //     }]
+  //   }
 
-    setChartData(modelChartJs);
+  //   setChartData(modelChartJs);
 
-  }, [data])
+  // }, [data])
 
 
-  console.log("data1:", data);
+  // console.log("data1:", data);
   return (
     <div className={styles.DummyCharts}>
 
@@ -61,16 +61,14 @@ const DummyCharts: FC<DummyChartsProps> = () => {
       }}>
 
 
-        <HighchartsReact
+       <HighchartsReact
           highcharts={Highcharts}
           options={options}
           ref={highChartComponentRef}
           
-
-          
-          // {...props}
         
         />
+        
         <Box sx={{
           height: 400
         }}>
