@@ -177,7 +177,10 @@ const Filters: FC<FiltersProps> = () => {
 
   // stateConfigurationFilters.entities[StoreConstants.configuration.filters.filterGender].isEnabled
   return (
-    <Box id='e4' className={styles.Filters}>
+    <Box id='e4' className={styles.Filters} sx={{
+      display:"flex",
+      flexDirection:"column"
+    }}>
       <List id='232'
         variant="outlined"
         className='td-bg-white td-shadow-sm '
@@ -261,8 +264,6 @@ const Filters: FC<FiltersProps> = () => {
               },
             }}>
 
-              {/* Filter age , gender */}
-
 
               <Box sx={{
                 display: "flex",
@@ -292,7 +293,6 @@ const Filters: FC<FiltersProps> = () => {
                         // setValue(newValue);
                         console.log("ToggleButtonGroup gender: ", newValue);
                         handleGenderChange(newValue);
-                        // setFilterGender(newValue ?? 'all');
                       }}
                     >
                       <Button value={StoreConstants.filterCommon.gender.all}>All</Button>
@@ -335,16 +335,7 @@ const Filters: FC<FiltersProps> = () => {
                   </Box>
                 }
 
-
-
               </Box>
-
-
-              {/* Filter region , pincode */}
-
-
-
-
 
               <Box sx={{
                 display: "flex",
@@ -352,7 +343,13 @@ const Filters: FC<FiltersProps> = () => {
                 gap: {
                   xs: "1.5rem", sm: "1.5rem"
                 },
-                flexDirection: { xs: "column", sm: "row" },
+                flexWrap:{
+                  xs:"nowrap",
+                  
+                  sm:"wrap"
+
+                },
+                flexDirection: { xs: "column", sm: "row", },
               }}>
                 {stateConfigurationFilters.entities[StoreConstants.configuration.filters.filterRegion].isEnabled &&
 
@@ -366,32 +363,7 @@ const Filters: FC<FiltersProps> = () => {
                     }}>
 
                     <h4 className='td-text-xs td-font-medium'>Select Region</h4>
-                    {/* <Autocomplete
-
-                    onChange={(event, values) => {
-
-                      console.log("auto onChange: ", values)
-                      // onChange(values);
-                    }}
-                    inputValue={filterRegion?.city??""}
-                    onInputChange={(event, newInputValue) => {
-                      handleRegionChange(newInputValue);
-                    }}
-
-                    getOptionLabel={(option) => option.city}
-                    freeSolo={false}
-                    placeholder="Region"
-                    options={regions}
-                    renderOption={(props, option) => {
-                      var { key, ...propsExc } = props as any;
-                      return (
-                        <AutocompleteOption variant="soft" key={"op" + option.city}  {...propsExc}>
-                          {option.city}
-                        </AutocompleteOption>
-                      );
-                    }}
-
-                  /> */}
+                    
 
                     <Autocomplete
 

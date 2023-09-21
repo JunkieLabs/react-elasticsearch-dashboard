@@ -101,14 +101,17 @@ export async function POST(
         console.log("result: ", token)
 
         // return NextResponse.json(tasks);
-        return NextResponse.json({isLoggedIn:true}, {
+        return NextResponse.json({ isLoggedIn: true, token: token }, {
             status: 200,
-            headers: { 'Set-Cookie': `token=${token}` },
-            
+            headers: {
+                'Set-Cookie': `token=${token}`,
+                
+            },
+
         })
 
         // return new Response({ss:'Hello, Next.js!'}, {
-           
+
         // })
 
     } catch (err) {

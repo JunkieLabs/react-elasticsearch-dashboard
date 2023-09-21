@@ -55,7 +55,7 @@ export async function GET(req: Request) {
     if (datatype == ElasticConstants.datatype.number) {
 
         const result = await elastic.search({
-            index: ElasticConstants.indexes.testTime._,
+            index: ElasticConstants.indexes.eventLogs._,
             body: {
                 size: 0,
                 aggs: {
@@ -76,7 +76,7 @@ export async function GET(req: Request) {
 
     } else if (datatype == ElasticConstants.datatype.string) {
         const result = await elastic.search({
-            index: ElasticConstants.indexes.testTime._,
+            index: ElasticConstants.indexes.eventLogs._,
             body: {
                 size: limit,
                 aggs: {

@@ -15,7 +15,7 @@ const getTopSlowN = async ({ n = 5, locations, pincodes, ageRange, gender, dateR
     pincodes?.forEach(pincode => searchParam.append('pincode', pincode))
 
     locations.forEach(location => searchParam.append('location', JSON.stringify(location)))
-    searchParam.append('field', ElasticConstants.indexes.testTime.channelName);
+    searchParam.append('field', ElasticConstants.indexes.eventLogs.channelName);
 
     if (ageRange) {
         searchParam.append('age-range', JSON.stringify(ageRange));

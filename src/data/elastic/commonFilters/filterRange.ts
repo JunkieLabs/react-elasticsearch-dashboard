@@ -6,9 +6,9 @@ import { ModelElasticAggsResult, ModelElasticAggsResultItem } from "@/types/elas
   // Simulate API delay
   
 
-  var response: ModelElasticAggsResult = await fetcher('/api/elastic/test-time/filters/aggs?' + new URLSearchParams({
+  var response: ModelElasticAggsResult = await fetcher('/api/elastic/events/filters/aggs?' + new URLSearchParams({
     // secret: process.env[`RECAPTCHA_SERVER`] ?? "",
-    field: ElasticConstants.indexes.testTime.age,
+    field: ElasticConstants.indexes.eventLogs.age,
     datatype: ElasticConstants.datatype.number
   }))
   // if (response.status >= 400 && response.status < 500) {

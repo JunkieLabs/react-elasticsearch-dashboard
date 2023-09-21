@@ -39,6 +39,8 @@ const SideNav: FC<SideNavProps> = (props) => {
   const sidenavXsOpen = useSelector((state: RootState) => state.App.sidenavXsOpen);
 
 
+  const emailStage = useSelector((state: RootState) => state.Auth.email);
+
   const dispatch = useDispatch();
   // const [filterIsTop, setFilterIsTop] = useState<boolean>(sidenavOpen);
 
@@ -263,10 +265,10 @@ const SideNav: FC<SideNavProps> = (props) => {
       <Divider />
       <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
         <Box sx={{ minWidth: 0, flex: 1 }}>
-          <Typography fontSize="sm" fontWeight="lg">
+          {/* <Typography fontSize="sm" fontWeight="lg">
             Admin
-          </Typography>
-          <Typography level="body-xs">@smardtv</Typography>
+          </Typography> */}
+          <Typography level="body-xs">{emailStage??""}</Typography>
         </Box>
         <IconButton variant="plain" color="neutral">
           {/* <i data-feather="log-out" /> */}

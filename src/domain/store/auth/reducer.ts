@@ -10,6 +10,8 @@ interface AuthState {
     //   search: string
     error?: string
     runningStage: number
+    authStage: number
+    
     //   bouquetChannelsMap: {
     //     [key:string]: string[]
     //   }
@@ -19,6 +21,7 @@ const initialState: AuthState = {
     //   items: [],
 
     runningStage: StoreConstants.runningStage.notRunning,
+    authStage: StoreConstants.auth.stage.initial
     //   search:"", 
     //   bouquetChannelsMap: {}
 };
@@ -38,8 +41,15 @@ const authSlice = createSlice({
             state.token = action.payload;
         },
 
+        setAuthStage: (state, action: PayloadAction<number>) => {
+            state.authStage = action.payload;
+        },
+
         setError: (state, action: PayloadAction<string>) => {
             state.error = action.payload;
+
+            console.log("setError action.payload: ", action.payload)
+            return state
         },
 
         login: (state, action: PayloadAction<ModelAuthLogin>) => {
@@ -50,13 +60,9 @@ const authSlice = createSlice({
 
             if (action.payload == StoreConstants.runningStage.notRunning) {
                 state.error = undefined
-
-
             }
 
             state.runningStage = action.payload
-
-
         },
 
 

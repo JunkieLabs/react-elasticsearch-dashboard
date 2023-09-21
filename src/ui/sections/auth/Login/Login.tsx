@@ -1,5 +1,5 @@
 'use client'
-import React, { FC, FormEvent, useState } from 'react';
+import React, { FC, FormEvent, useEffect, useState } from 'react';
 import styles from './Login.module.scss';
 import Box from '@mui/joy/Box';
 import Link from 'next/link';
@@ -10,11 +10,15 @@ import FormLabel from '@mui/joy/FormLabel';
 import Input from '@mui/joy/Input';
 import FormHelperText from '@mui/joy/FormHelperText';
 import Checkbox from '@mui/joy/Checkbox';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Done from '@mui/icons-material/Done';
 import { RootState } from '@/domain/store/store';
 import { StoreConstants } from '@/domain/store/store.constants';
 import { StoreActionAuth } from '@/domain/store/auth/reducer';
+
+
+import { toast, ToastContainer } from 'react-toastify';
 
 interface LoginProps { }
 
@@ -26,7 +30,26 @@ const Login: FC<LoginProps> = () => {
   // const [loading, setLoding] = useState<boolean>(false);
 
   const runningStage = useSelector((state: RootState) => state.Auth.runningStage);
- 
+  const stateError = useSelector((state: RootState) => state.Auth.error);
+  const token = useSelector((state: RootState) => state.Auth.token);
+
+  useEffect(() => {
+    
+    console.log("useEffect stateError 1: ", stateError)
+    if (stateError) {
+
+      console.log("useEffect stateError: ", stateError)
+      toast.error(stateError);
+    }
+
+  }, [stateError])
+
+  useEffect(() => {
+    
+    // console.log("useEffect stateError 1: ", stateError)
+  //  Router.navigate
+
+  }, [token])
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     // console.log("handleSubmit", formData.email)
@@ -40,6 +63,8 @@ const Login: FC<LoginProps> = () => {
       setError({ ...error, password: "Password Field is required" })
       return;
     }
+    
+    dispatch(StoreActionAuth.setRunningStage(StoreConstants.runningStage.notRunning))
     dispatch(StoreActionAuth.login(formData))
     console.log("StoreActionAuth: ")
     // setLoding(true);
@@ -67,6 +92,7 @@ const Login: FC<LoginProps> = () => {
 
   return (
     <div className={styles.Login}>
+      <ToastContainer />
       <Box className="td-py-6 td-px-6 td-bg-white td-rounded-2xl td-shadow-xl" sx={{
         display: "flex",
         flexDirection: "column",
@@ -145,7 +171,7 @@ const Login: FC<LoginProps> = () => {
           </div> */}
 
           {
-            <Button loading={runningStage==StoreConstants.runningStage.running} type="submit" className="td-w-full">Sign in</Button>
+            <Button loading={runningStage == StoreConstants.runningStage.running} type="submit" className="td-w-full">Sign in</Button>
           }
 
           <p className="td-text-sm  td-text-center text-black ">

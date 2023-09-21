@@ -350,6 +350,11 @@ const Filters: FC<FiltersProps> = () => {
                 gap: {
                   xs: "1.5rem", sm: "1.5rem"
                 },
+                flexWrap:{
+                  xs:"nowrap",
+                  sm:"wrap"
+
+                },
                 flexDirection: { xs: "column", sm: "row" },
               }}>
                 {stateConfigurationFilters.entities[StoreConstants.configuration.filters.filterRegion].isEnabled &&

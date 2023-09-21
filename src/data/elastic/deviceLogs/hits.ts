@@ -44,7 +44,7 @@ const getHitsGeo = async ({ limit = 5, locations, channelNames, pincodes, ageRan
     pincodes?.forEach(pincode => searchParam.append('pincode', pincode))
 
     locations.forEach(location => searchParam.append('location', JSON.stringify(location)))
-    searchParam.append('field', ElasticConstants.indexes.testTime.channelName);
+    searchParam.append('field', ElasticConstants.indexes.eventLogs.channelName);
 
     channelNames.forEach(channelName => searchParam.append('channel-name', channelName))
 

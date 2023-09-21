@@ -164,11 +164,13 @@ const Configuration: FC<ConfigurationProps> = () => {
                 <Input
                   type="number"
                   name="topChannelCounts"
+                  slotProps={{
+                    input: {
+                      min: 5
+                    },
+                  }}
                   value={formData.topChannelCounts}
-
                   onChange={handleFormTopChannel}
-
-
                 />
                 {/* <FormHelperText >This is a helper text.</FormHelperText> */}
                 {error.topChannelCounts && <FormHelperText className="td-red-500">{error.topChannelCounts}</FormHelperText>}
@@ -209,7 +211,11 @@ const Configuration: FC<ConfigurationProps> = () => {
                   type="number"
                   name="slowChannelCounts"
                   value={formData.slowChannelCounts}
-
+                  slotProps={{
+                    input: {
+                      min: 5
+                    },
+                  }}
                   onChange={handleFormSlowChannel}
                   // /onChange={(e) => setFormData({ ...formData, slowChannelCounts: e.target.value })}
 

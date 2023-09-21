@@ -3,7 +3,7 @@ import { ModelAuthLogin, ModelAuthLoginResponse } from "@/types/auth/auth";
 import { ModelElasticAggsResult, ModelElasticAggsResultItem, ModelElasticMultiAggsResult, ModelElasticMultiAggsResultItem } from "@/types/elastic/aggs";
 
 const login = async (req:
-    ModelAuthLogin): Promise<boolean> => {
+    ModelAuthLogin): Promise<ModelAuthLoginResponse> => {
     // Simulate API delay
 
 
@@ -23,7 +23,7 @@ const login = async (req:
             // cookie.
 
         }
-        return response.isLoggedIn;
+        return response;
     // } catch (error: any) {
     //     if (error && error['error'] && error!.error!.message) {
     //         throw new Error((error!.error as any).message)

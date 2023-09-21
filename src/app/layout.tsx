@@ -16,12 +16,16 @@ import { CacheProvider } from '@emotion/react';
 import CssBaseline from '@mui/joy/CssBaseline';
 import React, { useEffect } from 'react';
 import { Providers } from '@/domain/store/provider';
-// import { useRouter } from 'next/router';
+// import { useRouter } from 'next/routerPath';
 // 'use client';
 
+import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { StoreActionApp } from '@/domain/store/app/reducer';
+import { StoreActionAuth } from '@/domain/store/auth/reducer';
+import { RootState } from '@/domain/store/store';
+import { StoreConstants } from '@/domain/store/store.constants';
 // import { StoreActionCommonFilters } from '@/domain/store/commonFilters/reducer';
 // import { StoreActionCities } from '@/domain/store/cities/reducer';
 
@@ -110,21 +114,46 @@ function ReduxLayout({ children,
 }) {
 
   const dispatch = useDispatch();
-  var router = usePathname()
+  var routerPath = usePathname()
+  
+  const stateAuth = useSelector((state: RootState) => state.Auth);
 
-  console.log("router: ", router)
+ 
+
+  const router = useRouter()
+  
+
+  console.log("router: ", routerPath)
 
   useEffect(() => {
 
     // store.
-    dispatch(StoreActionApp.appSetSectionFromPath(router))
+    dispatch(StoreActionApp.appSetSectionFromPath(routerPath))
+    dispatch(StoreActionAuth.init())
 
 
     return () => { }
 
-  }, [router, dispatch]);
+  }, [routerPath, dispatch]);
 
-  
+  useEffect(() => {
+
+    console.log("stateAuth.authStage: ", stateAuth)
+    if(stateAuth.authStage == StoreConstants.auth.stage.loaded){
+      if(!stateAuth.token){
+        router.replace(`/auth`)
+      }else {
+        if(routerPath.includes("auth")){
+          router.replace(`/analysis`)
+          
+        }
+        console.log("routerPath:", routerPath)
+        // router.replace(`/analysis`)
+      }
+    }
+  }, [stateAuth])
+
+
 
 
   return (<ThemeRegistry options={{ key: 'joy' }}>
@@ -147,18 +176,18 @@ export default function RootLayout({
 }) {
 
 
-  
+
 
 
   return (
 
     <html lang="en">
-    <head>
+      <head>
 
-    <title>Title</title>
+        <title>Title</title>
         <meta name='description' content='Description' />
-      
-    </head>
+
+      </head>
       <body className={inter.className}>
         <Providers>
           {/* {children} */}

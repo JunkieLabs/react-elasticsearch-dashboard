@@ -25,6 +25,8 @@ export async function GET(
    
     // return NextResponse.json(tasks);
 
+    // if(token )
+
     return new Response('Hello, Next.js!', {
         status: 200,
         headers: { 'Set-Cookie': `token=${token?.value}` },

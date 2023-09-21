@@ -38,6 +38,15 @@ export const StoreConstants = {
             loaded: 3
         }
     },
+
+    auth:{
+        stage:{
+            
+            initial: 0,
+            loaded: 1
+        }
+       
+    },
     initialStage: {
         initial: 1,
         loaded: 2

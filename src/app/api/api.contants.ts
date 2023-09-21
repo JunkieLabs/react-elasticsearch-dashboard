@@ -1,7 +1,7 @@
 export const ServerApiConstants = {
 
     credentials: {
-        "admin@smardtv.com": "admin123",
+        "admin@smardtv.com": "123",
         "customer@smardtv.com": "admin324"
     },
     secret: {

@@ -9,10 +9,11 @@ import { ErrorHelper } from "@/tools/errorHelper";
 
 
 
-
 export function* handleLogin(action: PayloadAction<ModelAuthLogin>) {
     try {
         console.log("handleLogin:")
+
+        // useCookies
 
         yield put(StoreActionAuth.setRunningStage(StoreConstants.runningStage.running));
 
@@ -22,14 +23,21 @@ export function* handleLogin(action: PayloadAction<ModelAuthLogin>) {
 
 
         // const bouquet: string = yield select((state: RootState) => state.Bouquets.activeBouquet);
-        const result: boolean = yield ApiAuthRepo.login(action.payload)
+        const result: ModelAuthLoginResponse = yield ApiAuthRepo.login(action.payload)
 
         console.log("handleLogin result: ", result)
 
-        if (result) {
+        if (result.isLoggedIn) {
 
             yield put(StoreActionAuth.setEmail(email));
             // yield put(StoreActionAuth.setToken(result.token));
+
+            if (result.token) {
+                yield put(StoreActionAuth.setToken(result.token));
+                localStorage.setItem("email", email)
+                localStorage.setItem("token", result.token)
+
+            }
 
             yield put(StoreActionAuth.setRunningStage(StoreConstants.runningStage.completed));
 
@@ -39,7 +47,6 @@ export function* handleLogin(action: PayloadAction<ModelAuthLogin>) {
         }
         // if (result.length > 0) {
         //     yield put(StoreActionBouquets.setBouquetChannels({ bouquet: bouquet, channels: result.map(item => (item.key as string)) }));
-
         // }
 
 
@@ -50,13 +57,33 @@ export function* handleLogin(action: PayloadAction<ModelAuthLogin>) {
         var message = ErrorHelper.getErrorMessage(error)
         console.log("handleLogin error message: ", message)
 
-        // TODO if(error.){
-        //     yield put(StoreActionAuth.setError(error.me));
 
-        // }
+
+        yield put(StoreActionAuth.setError(message ?? "something went worng!!"));
+
+        yield put(StoreActionAuth.setRunningStage(StoreConstants.runningStage.completed));
+
 
         // err
     }
+}
+
+export function* handleAuthInit() {
+   var email =  localStorage.getItem("email")
+   var token =  localStorage.getItem("token")
+
+   if(email){
+   yield put(StoreActionAuth.setEmail(email));
+ 
+   }
+   if (token){
+    yield put(StoreActionAuth.setToken(token));
+ 
+   }
+
+   yield put(StoreActionAuth.setAuthStage(StoreConstants.auth.stage.loaded));
+           
+    // localStorage.setItem("token", result.token)
 }
 
 // export function* onlyOnceCommonFilterAgeRange() {
@@ -69,6 +96,10 @@ export function* handleLogin(action: PayloadAction<ModelAuthLogin>) {
 export function* watchLogin() {
     yield takeLatest(StoreActionAuth.login.type, handleLogin);
 }
+
+export function* watchAuthInit() {
+    yield takeLatest(StoreActionAuth.init.type, handleAuthInit);
+}
 export function* watchAuth() {
-    yield all([fork(watchLogin)]);
+    yield all([fork(watchAuthInit), fork(watchLogin)]);
 }

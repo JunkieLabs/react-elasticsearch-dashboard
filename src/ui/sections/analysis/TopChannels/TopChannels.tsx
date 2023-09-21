@@ -14,7 +14,6 @@ import { ChartHelper } from '@/domain/charts/helper';
 import ChartPie from '@/ui/widgets/charts/ChartPie/ChartPie';
 import ChartBar from '@/ui/widgets/charts/ChartBar/ChartBar';
 import ChartTable from './ChartTable/ChartTable';
-import AirBnbSlider from '@/ui/widgets/AirBnbSlider/AirBnbSlider';
 import ChannelDetails from './ChannelDetails/ChannelDetails';
 import CircularProgress from '@mui/joy/CircularProgress';
 import { StoreConstants } from '@/domain/store/store.constants';
@@ -205,7 +204,6 @@ const TopChannels: FC<TopChannelsProps> = () => {
 
               <Box sx={{ p: { xs: 2, sm: 2, md: 3 } }} ></Box>
 
-              {/* <AirBnbSlider></AirBnbSlider> */}
 
               {/* <ChartTable data={chartCommonItems}></ChartTable> */}
               <ChannelDetails dateRange={dateRange} sx={{}}></ChannelDetails>

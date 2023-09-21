@@ -5,6 +5,7 @@ export interface ModelAuthLogin {
 
 export interface ModelAuthLoginResponse {
     isLoggedIn: boolean
+    token?: string
 }
 export interface ModelAuthTokenParsed {
     token: string
