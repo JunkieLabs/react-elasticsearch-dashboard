@@ -12,7 +12,7 @@ const data = JSON.parse(fs.readFileSync('data/data_logs.json'));
 
 
 
-const index = 'event_log';
+const index = 'test_script';
 
 const bulk = [];
 

@@ -14,7 +14,7 @@ services:
 
     environment:
       BASE_URL: http://localhost:3000
-      NEXT_ELASTIC_URL: http://elasticsearch:9200
+      NEXT_ELASTIC_URL: http://192.168.1.16:9200
       
     ports:
       - "3000:3000"
@@ -42,7 +42,7 @@ services:
 
     networks:
       - secure_network
-      - els
+      # - els
 
 
   # certbot:
@@ -51,7 +51,7 @@ services:
   #   volumes: 
   #     - ./certbot/conf:/etc/letsencrypt:rw
   #     - ./certbot/www:/var/www/certbot:rw
-  #   command: certonly --webroot -w /var/www/certbot --force-renewal --email admin@smardtv.com -d datavault.smardtv.com --agree-tos
+  #   command: certonly --webroot -w /var/www/certbot --force-renewal --email kirubakaran.selvaraj@smardtv.com -d datavault.smardtv.com --agree-tos
 
 
 networks:

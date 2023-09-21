@@ -17,7 +17,7 @@ export const ElasticConstants = {
         },
 
         eventLogs:{
-            _: "event_log",
+            _: "test_script",
             age:"users_age",
             channelName:"channel_name",
             channelNumber:"channel_number",
