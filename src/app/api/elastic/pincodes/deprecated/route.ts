@@ -41,7 +41,9 @@ export async function GET(req: Request) {
         });
     }
 
+    /*
 
+    TODO not in use
     const result = await elastic.search({
         index: ElasticConstants.indexes.pincodes._,
         body: {
@@ -56,6 +58,7 @@ export async function GET(req: Request) {
     });
     response.items = (result.hits.hits).map(ele=> ele._source) as ModelElasticPincode[];//?.result 
     response.size = ((result.hits.total  as any)?.[`value`] as number | undefined) ?? 0;//?.result 
+    */
     //as ModelElasticAggsTermsResult
     // console.log("string result: ", terms)
 

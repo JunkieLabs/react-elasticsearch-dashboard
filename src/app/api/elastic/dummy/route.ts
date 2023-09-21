@@ -1,4 +1,5 @@
 import { getElasticClient } from "@/data/elastic/elastic";
+import { ElasticConstants } from "@/data/elastic/elastic.constants";
 import {  NextResponse } from "next/server";
 
 export async function GET(
@@ -16,7 +17,7 @@ export async function GET(
     const elastic = await getElasticClient();
    
     const result = await elastic.search({
-        index: 'test_time',
+        index: ElasticConstants.indexes.testTime._,
         body: {
           size: 0,
           aggs: {

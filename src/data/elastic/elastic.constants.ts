@@ -9,7 +9,7 @@ export const ElasticConstants = {
     indexes:{
 
         testTime:{
-           _: "test_time",
+           _: "test_script",
            age:"user_age",
            channelName:"channel_name",
            channelNumber:"channel_number",
