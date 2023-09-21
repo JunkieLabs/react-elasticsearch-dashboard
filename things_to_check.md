@@ -16,6 +16,17 @@ Node.js Runtime: 18.x or newer;
 
 - Implement proper error handling and logging to diagnose issues with data retrieval or aggregation.
 
+
+### Device Monitor Check
+
+- if one device's last received timestamp matches with 2 hours +/- with current time, then, that device is connected state.
+
+- if one device's last received timestamp is less than 168 hours +/- with current time, then, that device is active state.
+
+- if one device's last received timestamp is greater than 168 hours +/- with current time, then, that device is inactive state.
+
+
+
 ## Dummy Auth API
 
 - Remember that the Dummy Auth API is for development and testing purposes only. Replace it with a robust authentication system in future.
