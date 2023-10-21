@@ -11,10 +11,6 @@ services:
     volumes:
       - ./:/app
       # - node_modules:/app/node_modules
-
-    environment:
-      BASE_URL: http://localhost:3000
-      NEXT_ELASTIC_URL: http://10.27.14.126:9200
       
     ports:
       - "3000:3000"

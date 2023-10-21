@@ -136,22 +136,22 @@ function ReduxLayout({ children,
 
   }, [routerPath, dispatch]);
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    console.log("stateAuth.authStage: ", stateAuth)
-    if(stateAuth.authStage == StoreConstants.auth.stage.loaded){
-      if(!stateAuth.token){
-        router.replace(`/auth`)
-      }else {
-        if(routerPath.includes("auth")){
-          router.replace(`/analysis`)
+  //   console.log("stateAuth.authStage: ", stateAuth)
+  //   if(stateAuth.authStage == StoreConstants.auth.stage.loaded){
+  //     if(!stateAuth.token){
+  //       router.replace(`/auth`)
+  //     }else {
+  //       if(routerPath.includes("auth")){
+  //         router.replace(`/analysis`)
           
-        }
-        console.log("routerPath:", routerPath)
-        // router.replace(`/analysis`)
-      }
-    }
-  }, [stateAuth])
+  //       }
+  //       console.log("routerPath:", routerPath)
+  //       // router.replace(`/analysis`)
+  //     }
+  //   }
+  // }, [stateAuth])
 
 
 

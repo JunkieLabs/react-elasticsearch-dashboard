@@ -18,15 +18,13 @@ RUN apt-get install -y python
 COPY . .
 
 
-# COPY .env.production .
+COPY .env.production .
 
 
 
 RUN npm install  
 # --force 
 # --loglevel=error
-
-ENV NEXT_ELASTIC_URL http://10.27.14.126:9200
 
 # ENV NEXT_ELASTIC_URL http://192.168.1.16:9200
 

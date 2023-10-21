@@ -10,7 +10,7 @@ const nextConfig = {
     redirects: async ()=>[
         {
           source: '/',
-          destination: '/auth', // Matched parameters can be used in the destination
+          destination: '/analysis', // Matched parameters can be used in the destination
           permanent: true,
         },
         {
