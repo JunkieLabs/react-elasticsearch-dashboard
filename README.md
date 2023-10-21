@@ -51,7 +51,7 @@ Here's the folder structure for the project:
 
 ```csharp
 
-smardtv-dashboard/
+swamped-dashboard/
 │
 ├── app/
 │   ├── (dashboard)

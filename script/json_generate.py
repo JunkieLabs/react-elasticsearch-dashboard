@@ -22,7 +22,7 @@ cities = {
 # Randomly associate device_ids with city coordinates
 device_to_city = {device_id: random.choice(list(cities.keys())) for device_id in device_ids}
 
-base_timestamp = datetime.fromisoformat("2023-09-17T13:01:55.000Z")
+base_timestamp = datetime.fromisoformat("2023-10-22T13:01:55.000")
 
 # Generate JSON data
 data = []

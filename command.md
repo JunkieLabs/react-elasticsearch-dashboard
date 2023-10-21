@@ -1,6 +1,9 @@
 # env
 python -m venv venv
 venv\Scripts\activate
+or
+source venv/bin/activate
+
 
 # run
  python simulation_time_auto_generate.py

@@ -5,7 +5,7 @@ import uuid
 from elasticsearch import Elasticsearch
 
 # Establish a connection to Elasticsearch
-es = Elasticsearch(hosts=[{'host': '192.168.1.16', 'port': 9200, 'scheme': 'http'}])
+es = Elasticsearch(hosts=[{'host': '192.168.0.103', 'port': 9200, 'scheme': 'http'}])
 
 # Coordinates
 device_locations = {

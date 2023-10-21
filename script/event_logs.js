@@ -32,7 +32,7 @@ for (const cityItem of data) {
 }
 
 const client = new Client({
-    node: 'http://192.168.1.16:9200'
+    node: 'http://192.168.0.102:9200'
 });
 
 
