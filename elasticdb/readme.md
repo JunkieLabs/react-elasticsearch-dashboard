@@ -17,6 +17,11 @@ curl -X POST elastic:password "http://localhost:9200/_security/api/realm/interna
 curl -X POST -u elastic:password "localhost:9200/_security/service/elastic/kibana/credential/token/token1?pretty"
 ```
 
+- delete token
+```
+curl -X DELETE -u elastic:password "http://localhost:9200/_security/service/elastic/kibana/credential/token/token1"
+```
+
 ## common issue
 
 - value of "elastic" is forbidden.
