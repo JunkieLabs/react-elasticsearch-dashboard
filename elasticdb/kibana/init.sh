@@ -10,6 +10,9 @@ until curl -sS -XGET "http://elasticsearch:9200" > /dev/null; do
   sleep 5
 done
 
+sleep 10
+# read -p "Pause Time .5 seconds" -t 0.5
+
 
 
 echo "Creating the service account token..."
