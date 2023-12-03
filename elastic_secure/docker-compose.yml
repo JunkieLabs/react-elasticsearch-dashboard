@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
+    container_name: es01
+    environment:
+      - discovery.type=single-node
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+      - xpack.license.self_generated.type=basic
+      - xpack.security.enabled=true
+      - xpack.security.authc.api_key.enabled=true
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.key=$CERTS_DIR/es01/es01.key
+      - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
+      - xpack.security.http.ssl.certificate=$CERTS_DIR/es01/es01.crt
+      - xpack.security.transport.ssl.enabled=false
+      - xpack.security.transport.ssl.verification_mode=certificate
+      - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
+      - xpack.security.transport.ssl.certificate=$CERTS_DIR/es01/es01.crt
+      - xpack.security.transport.ssl.key=$CERTS_DIR/es01/es01.key
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+      - certs:$CERTS_DIR
+    expose:
+      - ${ELASTIC_PORT}:9200
+    networks:
+      - elastic
+    restart: always
+    healthcheck:
+      test: curl --cacert $CERTS_DIR/ca/ca.crt -s https://localhost:${ELASTIC_PORT} >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+ 
+
+  kib01:
+    image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
+    container_name: kib01
+    depends_on: { 'es01': { 'condition': 'service_healthy' } }
+    expose:
+      - ${KIBANA_PORT}:5601
+    environment:
+      - SERVERNAME=localhost
+      # - ELASTICSEARCH_URL=https://es01:9200
+      - ELASTICSEARCH_URL=http://elasticsearch:${ELASTIC_PORT}
+      # - ELASTICSEARCH_HOSTS=https://es01:9200
+      - ELASTIC_PORT=${ELASTIC_PORT}
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=$ELASTIC_PASSWORD
+      - XPACK_SECURITY_ENABLED='true'
+      - XPACK_INGESTMANAGER_FLEET_TLSCHECKDISABLED='true'
+      - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=$KIBANA_ENCRYPTION_KEY
+      - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=$CERTS_DIR/ca/ca.crt
+      - SERVER_SSL_ENABLED='true'
+      - SERVER_SSL_KEY=$CERTS_DIR/kib01/kib01.key
+      - SERVER_SSL_CERTIFICATE=$CERTS_DIR/kib01/kib01.crt
+    volumes:
+      - certs:$CERTS_DIR
+    networks:
+      - elastic
+    restart: always
+
+ 
+
+volumes:
+  data01:
+    driver: local
+  certs:
+    driver: local
+
+networks:
+  elastic:
+    driver: bridge
