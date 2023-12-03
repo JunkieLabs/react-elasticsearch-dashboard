@@ -29,7 +29,7 @@ yarn-error.log*
 .env.*
 /.env
 
-/certs
+/elastic_secure/certs
 
 # vercel
 .vercel
