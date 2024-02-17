@@ -5,29 +5,39 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
     container_name: es01
     environment:
+      - node.name=es01
       - discovery.type=single-node
       - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+      - http.cors.enabled=true
+      # - http.cors.allow-origin=*
+      - network.host=0.0.0.0
       - xpack.license.self_generated.type=basic
       - xpack.security.enabled=true
-      - xpack.security.authc.api_key.enabled=true
+      # - xpack.security.authc.api_key.enabled=true
       - xpack.security.http.ssl.enabled=true
       - xpack.security.http.ssl.key=$CERTS_DIR/es01/es01.key
       - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
       - xpack.security.http.ssl.certificate=$CERTS_DIR/es01/es01.crt
-      - xpack.security.transport.ssl.enabled=false
+
+      - xpack.security.transport.ssl.enabled=true
       - xpack.security.transport.ssl.verification_mode=certificate
       - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
       - xpack.security.transport.ssl.certificate=$CERTS_DIR/es01/es01.crt
       - xpack.security.transport.ssl.key=$CERTS_DIR/es01/es01.key
+      - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
+      - KIBANA_PASSWORD=$KIBANA_PASSWORD
     ulimits:
       nofile:
         soft: 65536
         hard: 65536
-
+    mem_limit: 512m 
+    cpus: 0.7
     volumes:
       - data01:/usr/share/elasticsearch/data
-      - certs:$CERTS_DIR
-    expose:
+      - ./certs:$CERTS_DIR
+      - ./certs/ca/ca.crt:/usr/local/share/ca-certificates/ca.crt
+      - ./changePassword.sh:/changePassword.sh
+    ports:
       - ${ELASTIC_PORT}:9200
     networks:
       - elastic
@@ -44,25 +54,28 @@ services:
     image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
     container_name: kib01
     depends_on: { 'es01': { 'condition': 'service_healthy' } }
-    expose:
+    ports:
       - ${KIBANA_PORT}:5601
     environment:
       - SERVERNAME=localhost
       # - ELASTICSEARCH_URL=https://es01:9200
-      - ELASTICSEARCH_URL=http://elasticsearch:${ELASTIC_PORT}
+      # - ELASTICSEARCH_URL=http://es01:${ELASTIC_PORT}
       # - ELASTICSEARCH_HOSTS=https://es01:9200
-      - ELASTIC_PORT=${ELASTIC_PORT}
-      - ELASTICSEARCH_USERNAME=kibana_system
-      - ELASTICSEARCH_PASSWORD=$ELASTIC_PASSWORD
-      - XPACK_SECURITY_ENABLED='true'
-      - XPACK_INGESTMANAGER_FLEET_TLSCHECKDISABLED='true'
+      - SERVER_HOST=0.0.0.0
+      - ELASTICSEARCH_HOSTS=https://es01:9200
+      # - ELASTIC_PORT=${ELASTIC_PORT}
+      - ELASTICSEARCH_USERNAME=kibana
+      - ELASTICSEARCH_PASSWORD=$KIBANA_PASSWORD
+      - XPACK_SECURITY_ENABLED=true
+      # - XPACK_INGESTMANAGER_FLEET_TLSCHECKDISABLED=true
       - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=$KIBANA_ENCRYPTION_KEY
       - ELASTICSEARCH_SSL_CERTIFICATEAUTHORITIES=$CERTS_DIR/ca/ca.crt
-      - SERVER_SSL_ENABLED='true'
+      - ELASTICSEARCH_SSL_VERIFICATIONMODE=certificate
+      - SERVER_SSL_ENABLED=true
       - SERVER_SSL_KEY=$CERTS_DIR/kib01/kib01.key
       - SERVER_SSL_CERTIFICATE=$CERTS_DIR/kib01/kib01.crt
     volumes:
-      - certs:$CERTS_DIR
+      - ./certs:$CERTS_DIR
     networks:
       - elastic
     restart: always

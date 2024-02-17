@@ -10,7 +10,7 @@ services:
 
 
         if [[ ! -f /certs/bundle.zip ]]; then
-          bin/elasticsearch-certutil cert --ca-cert=./config/certificates/certs/ca/ca.crt --ca-key=./config/certificates/certs/ca/ca.key --silent --pem --in config/certificates/instances.yml -out /certs/bundle.zip;
+          bin/elasticsearch-certutil cert --ca-cert=/certs/ca/ca.crt --ca-key=/certs/ca/ca.key --silent --pem --in config/certificates/instances.yml -out /certs/bundle.zip;
           unzip /certs/bundle.zip -d /certs;
         fi;
         chown -R 1000:0 /certs;
@@ -18,7 +18,7 @@ services:
     user: "0"
     working_dir: /usr/share/elasticsearch
     volumes:
-      - certs:/certs
+      - ./certs:/certs
       - .:/usr/share/elasticsearch/config/certificates
     networks:
       - elastic

@@ -1,0 +1,2 @@
+- docker exec -it es01 sh
+- - docker exec -it es01 bash
