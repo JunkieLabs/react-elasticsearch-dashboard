@@ -1,0 +1,22 @@
+{
+  "name": "es_data_provider",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx tsc",
+    "watch": "tsc -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@elastic/elasticsearch": "^8.12.1",
+    "dotenv": "^16.4.4",
+    "xlsx": "^0.18.5"
+  }
+}
