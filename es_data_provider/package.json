@@ -11,12 +11,16 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/luxon": "^3.4.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.3.3"
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.12.1",
     "dotenv": "^16.4.4",
+    "fix-esm": "^1.0.1",
+    "luxon": "^3.4.4",
+    "random": "^4.1.0",
     "xlsx": "^0.18.5"
   }
 }

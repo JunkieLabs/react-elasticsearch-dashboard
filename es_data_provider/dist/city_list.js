@@ -1,20 +1,11 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const xlsx_1 = __importDefault(require("xlsx"));
 const elasticsearch_1 = require("@elastic/elasticsearch");
-const extract = () => __awaiter(void 0, void 0, void 0, function* () {
+const extract = async () => {
     // Load the XLSX file
     const workbook = xlsx_1.default.readFile('data/city_list.xlsx');
     // Assume the first sheet is the one you want to work with
@@ -49,9 +40,8 @@ const extract = () => __awaiter(void 0, void 0, void 0, function* () {
         bulk.push(document);
     }
     return bulk;
-});
-const upload = (bulk) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
+};
+const upload = async (bulk) => {
     console.log("Upload: ", process.env.ELASTIC_URL);
     const esIndex = 'cities';
     let client;
@@ -62,8 +52,8 @@ const upload = (bulk) => __awaiter(void 0, void 0, void 0, function* () {
                 ca: Buffer.from(process.env.CA_64_KEY, 'base64').toString('utf8')
             },
             auth: {
-                username: (_a = process.env.ELASTIC_USERNAME) !== null && _a !== void 0 ? _a : "",
-                password: (_b = process.env.ELASTIC_PASSWORD) !== null && _b !== void 0 ? _b : ""
+                username: process.env.ELASTIC_USERNAME ?? "",
+                password: process.env.ELASTIC_PASSWORD ?? ""
             }
         });
     }
@@ -72,7 +62,7 @@ const upload = (bulk) => __awaiter(void 0, void 0, void 0, function* () {
             node: process.env.ELASTIC_URL,
         });
     }
-    let exist = yield client.indices.exists({ index: esIndex });
+    let exist = await client.indices.exists({ index: esIndex });
     console.log("exits: ", exist);
     if (exist) {
         let isDeleted = client.indices.delete({
@@ -96,7 +86,7 @@ const upload = (bulk) => __awaiter(void 0, void 0, void 0, function* () {
             }
         }
     };
-    let isCreated = yield client.indices.create({
+    let isCreated = await client.indices.create({
         index: esIndex,
         mappings: { "properties": {
                 "location": {
@@ -105,7 +95,7 @@ const upload = (bulk) => __awaiter(void 0, void 0, void 0, function* () {
             } }
     });
     if (isCreated) {
-        let result = yield client.bulk({
+        let result = await client.bulk({
             body: bulk
         });
         console.log("result: ", result);
@@ -129,12 +119,12 @@ const upload = (bulk) => __awaiter(void 0, void 0, void 0, function* () {
     //         });
     //     }
     // });
-});
-const complete = () => __awaiter(void 0, void 0, void 0, function* () {
-    let bulk = yield extract();
+};
+const complete = async () => {
+    let bulk = await extract();
     console.log("Result: ", bulk);
-    yield upload(bulk);
-});
+    await upload(bulk);
+};
 require("dotenv").config();
 complete().then((result) => {
     console.log("Result: ", result);
