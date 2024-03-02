@@ -1,6 +1,7 @@
 // app/ThemeRegistry.tsx
 'use client';
 
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
 import './globals.scss'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
@@ -97,6 +98,9 @@ const ThemeRegistry = (props: ThemeProps) => {
 
 
   return (
+    
+
+    <GoogleReCaptchaProvider reCaptchaKey={process.env.NEXT_GOOGLE_V3_SITE ?? ""}>
     <CacheProvider value={cache}>
       <CssVarsProvider theme={customTheme}>
         {/* the custom theme is optional */}
@@ -104,6 +108,7 @@ const ThemeRegistry = (props: ThemeProps) => {
         {children}
       </CssVarsProvider>
     </CacheProvider>
+    </GoogleReCaptchaProvider>
   );
 }
 

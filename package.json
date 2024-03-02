@@ -18,7 +18,8 @@
   },
   "dependencies": {
     "@elastic/elasticsearch": "^8.9.0",
-    "@emotion/react": "^11.11.1",
+    "@emotion/cache": "^11.11.0",
+    "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
     "@fontsource/inter": "^5.0.7",
     "@mui/base": "^5.0.0-beta.11",
@@ -51,6 +52,7 @@
     "react": "18.2.0",
     "react-date-range": "^1.4.0",
     "react-dom": "18.2.0",
+    "react-google-recaptcha-v3": "^1.10.1",
     "react-leaflet": "^4.2.1",
     "react-leaflet-cluster": "^2.1.0",
     "react-object-view": "^0.3.4",
