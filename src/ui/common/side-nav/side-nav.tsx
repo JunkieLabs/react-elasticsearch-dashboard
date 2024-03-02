@@ -115,7 +115,7 @@ const SideNav: FC<SideNavProps> = (props) => {
       />
       <Box sx={{ display: 'flex', gap: 2, minHeight: "4rem", alignItems: 'center', justifyContent: 'center' }}>
         <ElectricBoltRounded />
-        <Typography fontWeight="xl">SmarDtv</Typography>
+        <Typography fontWeight="xl">SwampedDtv</Typography>
         {/* <ColorSchemeToggle sx={{ ml: 'auto' }} /> */}
       </Box>
       <Box

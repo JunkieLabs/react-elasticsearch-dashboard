@@ -49,7 +49,10 @@ const upload = async (bulk) => {
         client = new elasticsearch_1.Client({
             node: process.env.ELASTIC_URL,
             tls: {
-                ca: Buffer.from(process.env.CA_64_KEY, 'base64').toString('utf8')
+                ca: Buffer.from(process.env.CA_64_KEY, 'base64').toString('utf8'),
+                checkServerIdentity: (host, cert) => {
+                    return undefined;
+                }
             },
             auth: {
                 username: process.env.ELASTIC_USERNAME ?? "",

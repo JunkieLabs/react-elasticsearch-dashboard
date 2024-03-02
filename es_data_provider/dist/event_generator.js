@@ -30,7 +30,7 @@ const boquetNames = Array.from({ length: 20 }, (_, i) => `Boquet ${i + 1}`);
 const deviceToCity = {};
 const deviceToPincode = {};
 // Define base timestamp
-const baseTimestamp = luxon_1.DateTime.fromISO("2023-10-22T13:01:55.000");
+const baseTimestamp = luxon_1.DateTime.fromISO("2024-03-02T00:00:55.000");
 const assign = async () => {
     // const random  = await import("random");
     deviceIds.forEach(deviceId => {
@@ -89,7 +89,10 @@ const upload = async (bulk) => {
         client = new elasticsearch_1.Client({
             node: process.env.ELASTIC_URL,
             tls: {
-                ca: Buffer.from(process.env.CA_64_KEY, 'base64').toString('utf8')
+                ca: Buffer.from(process.env.CA_64_KEY, 'base64').toString('utf8'),
+                checkServerIdentity: (host, cert) => {
+                    return undefined;
+                }
             },
             auth: {
                 username: process.env.ELASTIC_USERNAME ?? "",

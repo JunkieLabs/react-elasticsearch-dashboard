@@ -39,7 +39,7 @@ const deviceToPincode: { [key: string]: string } = {};
 
 
 // Define base timestamp
-const baseTimestamp: DateTime = DateTime.fromISO("2023-10-22T13:01:55.000");
+const baseTimestamp: DateTime = DateTime.fromISO("2024-03-02T00:00:55.000");
 
 const assign = async () => {
     // const random  = await import("random");
@@ -122,8 +122,11 @@ const upload = async (bulk: any[]) => {
         client = new Client({
             node: process.env.ELASTIC_URL,
             tls: {
-                ca: Buffer.from(process.env.CA_64_KEY, 'base64').toString('utf8')
+                ca: Buffer.from(process.env.CA_64_KEY, 'base64').toString('utf8'),
+                checkServerIdentity : (host, cert) => {
+                    return undefined
 
+                }
             },
             auth: {
                 username: process.env.ELASTIC_USERNAME ?? "",

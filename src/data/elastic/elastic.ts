@@ -28,9 +28,36 @@ export const getElasticClient = async () => {
 
 function getElasticOptions(): ClientOptions {
     // this branch is for dev
-    return {
-        node: DEFAULTS.node,
-    };
+
+    if (process.env.NEXT_ELASTIC_CA_64_KEY) {
+
+        console.log("getElasticOptions elastic : ", )
+        return {
+            node: process.env.NEXT_ELASTIC_URL,
+            tls: {
+                ca: Buffer.from(process.env.NEXT_ELASTIC_CA_64_KEY, 'base64').toString('utf8'),
+                checkServerIdentity : (host, cert) => {
+                    return undefined
+
+                }
+
+            },
+            
+            auth: {
+                username: process.env.NEXT_ELASTIC_USERNAME ?? "",
+                password: process.env.NEXT_ELASTIC_PASSWORD ?? ""
+            }
+
+        };
+    } else {
+       return {
+            node: process.env.NEXT_ELASTIC_URL,
+
+        };
+    }
+    // return {
+    //     node: DEFAULTS.node,
+    // };
 }
 
 // process.env.NEXT_PUBLIC_RECAPTCHA_CLIENT
