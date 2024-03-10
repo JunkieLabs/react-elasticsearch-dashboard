@@ -100,7 +100,7 @@ const ThemeRegistry = (props: ThemeProps) => {
   return (
     
 
-    <GoogleReCaptchaProvider reCaptchaKey={process.env.NEXT_GOOGLE_V3_SITE ?? ""}>
+    // <GoogleReCaptchaProvider reCaptchaKey={process.env.NEXT_GOOGLE_V3_SITE ?? ""}>
     <CacheProvider value={cache}>
       <CssVarsProvider theme={customTheme}>
         {/* the custom theme is optional */}
@@ -108,7 +108,7 @@ const ThemeRegistry = (props: ThemeProps) => {
         {children}
       </CssVarsProvider>
     </CacheProvider>
-    </GoogleReCaptchaProvider>
+    // </GoogleReCaptchaProvider>
   );
 }
 
