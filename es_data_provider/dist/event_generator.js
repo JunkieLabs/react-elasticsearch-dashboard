@@ -30,7 +30,7 @@ const boquetNames = Array.from({ length: 20 }, (_, i) => `Boquet ${i + 1}`);
 const deviceToCity = {};
 const deviceToPincode = {};
 // Define base timestamp
-const baseTimestamp = luxon_1.DateTime.fromISO("2024-03-10T00:00:55.000");
+const baseTimestamp = luxon_1.DateTime.now(); //.fromISO("2024-03-10T00:00:55.000");
 const assign = async () => {
     // const random  = await import("random");
     deviceIds.forEach(deviceId => {
