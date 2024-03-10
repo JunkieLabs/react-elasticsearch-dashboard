@@ -6,15 +6,9 @@ services:
     volumes:
       - elasticsearch-data:/usr/share/elasticsearch/data
     environment:
-      # - bootstrap.memory_lock=true
       - discovery.type=single-node
       - "ES_JAVA_OPTS=-Xms256m -Xmx256m"
-      - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
-      - xpack.security.enabled=$ELASTIC_SECURITY
-    # ulimits:
-    #   memlock:
-    #     soft: -1
-    #     hard: -1
+      - xpack.security.enabled=false
     mem_limit: 512m 
     cpus: 0.7
     ports:
@@ -23,25 +17,11 @@ services:
       - stack
 
   kibana:
-    # image: docker.elastic.co/kibana/kibana:$ELASTIC_VERSION
-    build:
-      context: . # Build context is the "kibana" directory
-      dockerfile: Dockerfile
-      args:
-        - ELASTIC_VERSION=${ELASTIC_VERSION}
-    # command: ["sh", "-c", "/usr/share/kibana/init.sh"]
+    image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
     volumes:
       - kibana-data:/usr/share/kibana/data
-    # volumes:
-    #   - ./kibana/init.sh:/usr/share/kibana/init.sh:z  # Mount the script as a volume
     environment:
-      # - ELASTICSEARCH_USERNAME=elastic
-      - ELASTICSEARCH_PASSWORD=$ELASTIC_PASSWORD
-      - ELASTIC_PORT=${ELASTIC_PORT}
-      # - ELASTIC_VERSION=$ELASTIC_VERSION
-      - ELASTICSEARCH_SERVICEACCOUNTTOKEN=${ELASTIC_TOKEN}
-      - ELASTICSEARCH_URL=http://elasticsearch:${ELASTIC_PORT}
-      # - ELASTICSEARCH_HOSTS=http://elasticsearch:${ELASTIC_PORT}
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
     ports: 
       - ${KIBANA_PORT}:5601
     networks: 
