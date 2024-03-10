@@ -14,7 +14,7 @@ services:
 
     environment:
       BASE_URL: http://localhost:3000
-      NEXT_ELASTIC_URL: http://192.168.0.102:9200
+      NEXT_ELASTIC_URL: http://localhost:9200
       
     ports:
       - "3000:3000"
@@ -51,7 +51,7 @@ services:
   #   volumes: 
   #     - ./certbot/conf:/etc/letsencrypt:rw
   #     - ./certbot/www:/var/www/certbot:rw
-  #   command: certonly --webroot -w /var/www/certbot --force-renewal --email kirubakaran.selvaraj@swamped.com -d datavault.swamped.com --agree-tos
+  #   command: certonly --webroot -w /var/www/certbot --force-renewal --email test@swamped.com -d datavault.swamped.com --agree-tos
 
 
 networks:

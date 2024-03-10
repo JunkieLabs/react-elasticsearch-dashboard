@@ -39,7 +39,7 @@ const deviceToPincode: { [key: string]: string } = {};
 
 
 // Define base timestamp
-const baseTimestamp: DateTime = DateTime.fromISO("2024-03-02T00:00:55.000");
+const baseTimestamp: DateTime = DateTime.fromISO("2024-03-10T00:00:55.000");
 
 const assign = async () => {
     // const random  = await import("random");
@@ -145,7 +145,7 @@ const upload = async (bulk: any[]) => {
     console.log("exits: ", exist)
 
     if (exist) {
-        let isDeleted = client.indices.delete({
+        let isDeleted = await client.indices.delete({
             index: esIndex
         })
 
@@ -208,10 +208,13 @@ const upload = async (bulk: any[]) => {
         let result = await client.bulk({
             body: bulk
         })
+        // console.log("result: ", result)
 
-        console.log("result: ", result)
+        return true
+
     }
 
+    return false
     // console.log("bulk: ", bulk[1])
 
 
@@ -222,8 +225,9 @@ const complete = async () => {
 
     assign()
     let bulk = await extract()
-    console.log("Result: ", bulk.length)
-    await upload(bulk)
+    console.log("bulk: ", bulk.length)
+    return await upload(bulk)
+
 
 }
 

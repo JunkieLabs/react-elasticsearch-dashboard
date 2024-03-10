@@ -18,7 +18,7 @@ const extract = async () => {
      * any[]
      */
     const data = xlsx_1.default.utils.sheet_to_json(worksheet, { header: columnNames });
-    console.log(data); // Array of objects with column data
+    // console.log(data); // Array of objects with column data
     const index = 'cities';
     const bulk = [];
     for (const cityItem of data) {
@@ -46,6 +46,7 @@ const upload = async (bulk) => {
     const esIndex = 'cities';
     let client;
     if (process.env.CA_64_KEY) {
+        console.log("Upload 2: ", process.env.CA_64_KEY);
         client = new elasticsearch_1.Client({
             node: process.env.ELASTIC_URL,
             tls: {
@@ -68,7 +69,7 @@ const upload = async (bulk) => {
     let exist = await client.indices.exists({ index: esIndex });
     console.log("exits: ", exist);
     if (exist) {
-        let isDeleted = client.indices.delete({
+        let isDeleted = await client.indices.delete({
             index: esIndex
         });
         console.log("IsDeleted: ", isDeleted);
@@ -91,11 +92,13 @@ const upload = async (bulk) => {
     };
     let isCreated = await client.indices.create({
         index: esIndex,
-        mappings: { "properties": {
+        mappings: {
+            "properties": {
                 "location": {
                     "type": "geo_point"
                 }
-            } }
+            }
+        }
     });
     if (isCreated) {
         let result = await client.bulk({

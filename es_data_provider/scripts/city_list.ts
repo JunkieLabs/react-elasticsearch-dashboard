@@ -28,7 +28,7 @@ const extract = async (): Promise<any[]> => {
      */
     const data = XLSX.utils.sheet_to_json<CityEntity>(worksheet, { header: columnNames });
 
-    console.log(data); // Array of objects with column data
+    // console.log(data); // Array of objects with column data
 
     const index = 'cities';
 
@@ -72,11 +72,14 @@ const upload = async (bulk: any[]) => {
 
 
     if (process.env.CA_64_KEY) {
+
+        console.log("Upload 2: ", process.env.CA_64_KEY)
+
         client = new Client({
             node: process.env.ELASTIC_URL,
             tls: {
                 ca: Buffer.from(process.env.CA_64_KEY, 'base64').toString('utf8'),
-                checkServerIdentity : (host, cert) => {
+                checkServerIdentity: (host, cert) => {
                     return undefined
 
                 }
@@ -99,7 +102,7 @@ const upload = async (bulk: any[]) => {
     console.log("exits: ", exist)
 
     if (exist) {
-        let isDeleted = client.indices.delete({
+        let isDeleted = await client.indices.delete({
             index: esIndex
         })
 
@@ -129,11 +132,13 @@ const upload = async (bulk: any[]) => {
 
     let isCreated = await client.indices.create({
         index: esIndex,
-        mappings: {"properties": {
-            "location": {
-                "type": "geo_point"
+        mappings: {
+            "properties": {
+                "location": {
+                    "type": "geo_point"
+                }
             }
-        }}
+        }
     });
 
     if (isCreated) {
