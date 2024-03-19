@@ -36,7 +36,7 @@ services:
       - data01:/usr/share/elasticsearch/data
       - ./certs:$CERTS_DIR
       - ./certs/ca/ca.crt:/usr/local/share/ca-certificates/ca.crt
-      - ./changePassword.sh:/changePassword.sh
+      - ./changePassword.sh:/usr/share/elasticsearch/changePassword.sh
     ports:
       - ${ELASTIC_PORT}:9200
     networks:
