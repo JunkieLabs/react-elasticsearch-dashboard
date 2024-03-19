@@ -5,31 +5,27 @@ This dashboard is designed to analyze and visualize data retrieved from an Elast
 
 ## Tech Stack
 
-  - Next.js - A React framework for server-rendered applications.
-  - UI Library - @mui/joy for building user interfaces.
-  - State Management - Redux and Redux-Saga for managing application state.
-  - Charts - Chart.js and Highcharts for data visualization.
-  - @elastic/elasticsearch - JavaScript client for Elasticsearch.
+- Next.js - A React framework for server-rendered applications.
+- UI Library - @mui/joy for building user interfaces.
+- State Management - Redux and Redux-Saga for managing application state.
+- Charts - Chart.js and Highcharts for data visualization.
+- @elastic/elasticsearch - JavaScript client for Elasticsearch.
 
 ## For Development
+
 To run this dashboard locally, follow these steps:
 
+Node.js Runtime: 18.x or newer;
 
-Node.js Runtime: 18.x or newer; 
- 
 1. Install dependencies:
-
 
 ```bash
 npm install
 ```
 
+2. Configure Elasticsearch:
 
-2. Configure Elasticsearch: 
-   
    - Ensure you have Elasticsearch up and running, and configure the data.
-
-
 
 3. Start the development server:
 
@@ -37,8 +33,7 @@ npm install
 npm run dev
 ```
 
-This command will start the Next.js development server, and you can access the dashboard in your browser at http://localhost:3000.
-
+This command will start the Next.js development server, and you can access the dashboard in your browser at <http://localhost:3000>.
 
 ## Folder Structure
 
@@ -46,8 +41,7 @@ Here's the folder structure for the project:
 
 - **app/:** Next.js navigation related folder representing different sections of the `dashboard` and server side `api` related to elastic search and auth. For more detail [see here](https://nextjs.org/docs/app/building-your-application/routing).
 - **data/:** This directory contains the API repository and any data-related files.
--  **domain/:** Here we put business logics. In the domain folder we have [Redux Store](#redux-store) and module specific folder. 
-
+- **domain/:** Here we put business logics. In the domain folder we have [Redux Store](#redux-store) and module specific folder.
 
 ```csharp
 
@@ -142,8 +136,7 @@ swamped-dashboard/
 
 ```
 
-
-## Elastic Search Api:
+## Elastic Search Api
 
 The Elastic Search API is built using the following technology:
 
@@ -165,12 +158,10 @@ These apis is called from [`data/api/elastic`](src\data\api\elastic) folder, whi
 
 For example: Check [`this file`](src\domain\store\cities\saga.ts) for saga connection to api related to cities.
 
-
-
-
-## Redux Store:
+## Redux Store
 
 ### Tech Stack
+
 The project uses Redux, a predictable state container for webapp, to manage state. You can learn more about Redux in the [official Redux documentation](https://redux.js.org/).
 
 The Redux store in the project is built using the following technologies:
@@ -189,7 +180,7 @@ Each module within the `store/` directory represents a specific part of your app
   
 For other modules you can check into folder [`domain/store/`](/src/domain/store)
 
-## Dashboard Pages:
+## Dashboard Pages
 
 The dashboard consists of several pages, each dedicated to a specific information of the setup box data analysis. This is made according to nextJs navigation [more detail here](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts). Here's an overview of the available dashboard pages:
 
@@ -199,10 +190,9 @@ The dashboard consists of several pages, each dedicated to a specific informatio
 - **Device Monitor**: Offers real-time monitoring of device status and statistics.
 - **Configuration**: Allows users to view and manage setup box configurations.
 
+## UI
 
-## UI:
-
-### Sections:
+### Sections
 
 The user interface (UI) of the dashboard is organized into different sections, each responsible for presenting specific data and functionalities. These sections include:
 
@@ -212,18 +202,10 @@ The user interface (UI) of the dashboard is organized into different sections, e
 - **Device Monitor Section**: Displays real-time device monitoring data.
 - **Configuration Section**: Provides a user interface for managing setup box configurations.
 
+### Common
 
-### Common:
+### Widget
 
+## Other Parts
 
-### Widget:
-
-
-
-## Other Parts:
-
-
-### Dummy Auth API:
-
-
-
+### Dummy Auth API
