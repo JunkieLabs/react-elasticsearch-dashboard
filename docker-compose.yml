@@ -7,7 +7,7 @@ services:
       # target: runner
       dockerfile: Dockerfile
       args:
-        DOCKERFILE_ELASTIC_URL: ${DOCKERFILE_ELASTIC_URL}
+        DOCKERFILE_ELASTIC_URL: ${NEXT_ELASTIC_URL}
 
     container_name: web
     restart: always
