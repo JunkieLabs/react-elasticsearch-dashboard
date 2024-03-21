@@ -17,17 +17,23 @@ To run this dashboard locally, follow these steps:
 
 Node.js Runtime: 18.x or newer;
 
-1. Install dependencies:
+1. **Install dependencies:**
 
 ```bash
 npm install
 ```
 
-2. Configure Elasticsearch:
+2. **Configure Elasticsearch:**
 
    - Ensure you have Elasticsearch up and running, and configure the data.
+   - For simple setup, you can check [elasticdb](./elasticdb/readme.md) folder
+   - For secure setup, you can check [elastic_secure](./elastic_secure/readme.md) folder
 
-3. Start the development server:
+3. **Add dummy data to elastic search db:**
+
+- For initial data in the elastic db you can setup using [es_data_provider](./es_data_provider/readme.md)
+
+4. **Start the development server:**
 
 ```bash
 npm run dev

@@ -1,5 +1,6 @@
 FROM node:18.13.0
 
+ARG DOCKERFILE_ELASTIC_URL="http://localhost:9200"
 
 WORKDIR /usr/src/app
 
@@ -14,19 +15,26 @@ RUN apt-get install -y python
 # RUN npm install -g npm@latest --loglevel=error
 
 
+RUN echo $DOCKERFILE_ELASTIC_URL
+
 
 COPY . .
 
 
-# COPY .env.production .
+# COPY .env.docker .
 
 
+ENV NEXT_ELASTIC_URL="${DOCKERFILE_ELASTIC_URL}"
+
+
+RUN echo $NEXT_ELASTIC_URL
 
 RUN npm install  
 # --force 
 # --loglevel=error
 
-ENV NEXT_ELASTIC_URL http://192.168.0.102:9200
+
+# http://192.168.0.102:9200
 
 RUN npm run build
 

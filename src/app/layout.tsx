@@ -191,6 +191,7 @@ export default function RootLayout({
 
         <title>Title</title>
         <meta name='description' content='Description' />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-fork-ribbon-css/0.2.3/gh-fork-ribbon.min.css" />
 
       </head>
       <body className={inter.className}>
@@ -201,6 +202,8 @@ export default function RootLayout({
           </ReduxLayout>
 
         </Providers>
+        <a className="github-fork-ribbon right-top fixed" href="https://github.com/JunkieLabs/react-elasticsearch-dashboard" data-ribbon="Fork me on GitHub" title="Fork me on GitHub">Fork me on GitHub</a>
+
       </body>
     </html>
   );
