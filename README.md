@@ -19,27 +19,53 @@ Node.js Runtime: 18.x or newer;
 
 1. **Install dependencies:**
 
-```bash
-npm install
-```
+  ```bash
+  npm install
+  ```
 
 2. **Configure Elasticsearch:**
-
-   - Ensure you have Elasticsearch up and running, and configure the data.
-   - For simple setup, you can check [elasticdb](./elasticdb/readme.md) folder
-   - For secure setup, you can check [elastic_secure](./elastic_secure/readme.md) folder
+  
+- Ensure you have Elasticsearch up and running, and configure the data.
+- For simple setup, you can check [elasticdb](./elasticdb/readme.md) folder
+- For secure setup, you can check [elastic_secure](./elastic_secure/readme.md) folder
 
 3. **Add dummy data to elastic search db:**
 
 - For initial data in the elastic db you can setup using [es_data_provider](./es_data_provider/readme.md)
 
-4. **Start the development server:**
+4. **Setup .env:**
 
-```bash
-npm run dev
-```
+- Create .env file, and put env variables like in example.env file
+- For secure elastic connection  put env variables like in example.secure.env file
 
-This command will start the Next.js development server, and you can access the dashboard in your browser at <http://localhost:3000>.
+5. **Start the development server:**
+
+- install dependencies
+
+ ```bash
+  npm install
+  ```
+
+- run development server
+
+  ```bash
+  npm run dev
+  ```
+
+  This command will start the Next.js development server, and you can access the dashboard in your browser at <http://localhost:3000>.
+
+6. **Deploying using docker and nginx:**
+
+- Make sure to put proper elastic search url at NEXT_ELASTIC_URL. Avoid `http://localhost:9200` or `http://120.0.0.1:9200`.
+    If your elastic search is running locally on the machine,  you should use hosted domain or ip at the place of `localhost`.
+- In secure elastic connection, NEXT_ELASTIC_URL  with start with  `https://`.
+- Run docker compose
+
+  ```bash
+  docker-compose up -d
+  ```
+
+This command will serve the Next.js app, and you can access the dashboard in your browser at <http://localhost>.
 
 ## Folder Structure
 

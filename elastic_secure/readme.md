@@ -92,7 +92,6 @@ Follow these steps to set up Elastic DB and Kibana using Docker Desktop:
    - You should see the Kibana login page.
    - put user as: elastic and password value from your env file ELASTIC_PASSWORD.
 
-
 ## Notes
 
 - By default, this setup does not include any security or password protection. It's recommended to configure security settings according to your requirements before deploying to production.
@@ -100,4 +99,3 @@ Follow these steps to set up Elastic DB and Kibana using Docker Desktop:
 - Docker-compose follows Elastic's official documentation for creating a Elastic Stack on Docker. More information can be found on their official site.
 <https://www.elastic.co/guide/en/elastic-stack-get-started/current/get-started-docker.html>
 <https://www.elastic.co/guide/en/elasticsearch/reference/current/configuring-tls-docker.html>
- 
