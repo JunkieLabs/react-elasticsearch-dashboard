@@ -46,13 +46,13 @@ Follow these steps to set up Elastic DB and Kibana using Docker Desktop:
    - create private key
 
    ```bash
-   openssl genpkey -algorithm RSA -out certs/ca/ca.key
+   openssl genpkey -algorithm RSA -out certs/ca/ca.key 
    ```
 
    - private certificate
 
    ```bash
-   openssl req -x509 -new -key certs/ca/ca.key -out certs/ca/ca.crt
+   openssl req -x509 -new -key certs/ca/ca.key -out certs/ca/ca.crt -days 36500
    ```
 
    - after this you will see certs folder with ca certificates.
