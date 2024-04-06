@@ -26,10 +26,6 @@ services:
       - xpack.security.transport.ssl.key=$CERTS_DIR/es01/es01.key
       - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       - KIBANA_PASSWORD=$KIBANA_PASSWORD
-    ulimits:
-      nofile:
-        soft: 65536
-        hard: 65536
     mem_limit: 512m 
     cpus: 0.7
     volumes:
