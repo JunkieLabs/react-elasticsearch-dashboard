@@ -118,11 +118,11 @@ const upload = async (bulk: any[]) => {
     let client: Client;
 
 
-    if (process.env.CA_64_KEY) {
+    if (process.env.CA_64_CRT) {
         client = new Client({
             node: process.env.ELASTIC_URL,
             tls: {
-                ca: Buffer.from(process.env.CA_64_KEY, 'base64').toString('utf8'),
+                ca: Buffer.from(process.env.CA_64_CRT, 'base64').toString('utf8'),
                 checkServerIdentity : (host, cert) => {
                     return undefined
 

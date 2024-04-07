@@ -29,13 +29,13 @@ export const getElasticClient = async () => {
 function getElasticOptions(): ClientOptions {
     // this branch is for dev
 
-    if (process.env.NEXT_ELASTIC_CA_64_KEY) {
+    if (process.env.NEXT_ELASTIC_CA_64_CRT) {
 
         console.log("getElasticOptions elastic : ", )
         return {
             node: process.env.NEXT_ELASTIC_URL,
             tls: {
-                ca: Buffer.from(process.env.NEXT_ELASTIC_CA_64_KEY, 'base64').toString('utf8'),
+                ca: Buffer.from(process.env.NEXT_ELASTIC_CA_64_CRT, 'base64').toString('utf8'),
                 checkServerIdentity : (host, cert) => {
                     return undefined
 
