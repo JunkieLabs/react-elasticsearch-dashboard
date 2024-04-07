@@ -31,7 +31,7 @@ function getElasticOptions(): ClientOptions {
 
     if (process.env.NEXT_ELASTIC_CA_64_CRT) {
 
-        console.log("getElasticOptions elastic : ", )
+        console.log("getElasticOptions elastic : ",process.env.NEXT_ELASTIC_URL )
         return {
             node: process.env.NEXT_ELASTIC_URL,
             tls: {
