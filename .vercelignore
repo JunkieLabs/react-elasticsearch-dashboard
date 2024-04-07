@@ -5,3 +5,7 @@ elasticdb
 elastic_secure
 
 nginx
+
+.env
+
+*.env
