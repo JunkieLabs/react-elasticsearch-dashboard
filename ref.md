@@ -42,3 +42,7 @@
 ### map
 
 - <https://github.com/colbyfayock/next-leaflet-starter/blob/main/src/components/Map/DynamicMap.js>
+
+### indian map lines
+
+- https://jsfiddle.net/planemad/1oy4v5g2/26/
