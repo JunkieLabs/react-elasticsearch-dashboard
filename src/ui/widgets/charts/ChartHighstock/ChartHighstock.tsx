@@ -20,7 +20,7 @@ const ChartHighstock: FC<ChartHighstockProps> = (props) => {
   const highChartComponentRef = useRef<HighchartsReact.RefObject>(null);
 
 
-  const options = config('#1BBF6D', props.data?.series)
+  const options = config('#2080e7', props.data?.series)
 
   console.log("ChartHighstock data: ", (props.data?.series as any))
 

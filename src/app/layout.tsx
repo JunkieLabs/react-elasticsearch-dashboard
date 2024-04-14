@@ -98,11 +98,15 @@ const ThemeRegistry = (props: ThemeProps) => {
 
 
   return (
-    
+
 
     // <GoogleReCaptchaProvider reCaptchaKey={process.env.NEXT_GOOGLE_V3_SITE ?? ""}>
-    <CacheProvider value={cache}>
-      <CssVarsProvider theme={customTheme}>
+
+    // <ThemeRegistry>
+    //   {children}
+    // </ThemeRegistry>
+    <CacheProvider value={cache} >
+      <CssVarsProvider theme={customTheme} >
         {/* the custom theme is optional */}
         <CssBaseline />
         {children}
@@ -120,13 +124,13 @@ function ReduxLayout({ children,
 
   const dispatch = useDispatch();
   var routerPath = usePathname()
-  
+
   const stateAuth = useSelector((state: RootState) => state.Auth);
 
- 
+
 
   const router = useRouter()
-  
+
 
   console.log("router: ", routerPath)
 
@@ -150,7 +154,7 @@ function ReduxLayout({ children,
   //     }else {
   //       if(routerPath.includes("auth")){
   //         router.replace(`/analysis`)
-          
+
   //       }
   //       console.log("routerPath:", routerPath)
   //       // router.replace(`/analysis`)
@@ -161,7 +165,7 @@ function ReduxLayout({ children,
 
 
 
-  return (<ThemeRegistry options={{ key: 'joy' }}>
+  return (<ThemeRegistry options={{ key: 'joy', prepend: true }}>
 
     <Box className={`td-relative`}>
       <Box>

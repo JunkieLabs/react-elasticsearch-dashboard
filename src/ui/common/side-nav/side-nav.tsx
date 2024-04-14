@@ -10,7 +10,8 @@ import IconButton from '@mui/joy/IconButton';
 import BarChartRounded from '@mui/icons-material/BarChartRounded';
 import PublicRounded from '@mui/icons-material/PublicRounded';
 import TokenRounded from '@mui/icons-material/TokenRounded';
-import ElectricBoltRounded from '@mui/icons-material/ElectricBoltRounded';
+import SwampedDtvLogo from '../../../../public/logo/swampedtv_logo.svg';
+// import {ReactComponent  as  Next} from '../../../../public/next.svg';
 // import Link from '@mui/joy/Link';
 import List from '@mui/joy/List';
 import ListItem from '@mui/joy/ListItem';
@@ -111,11 +112,14 @@ const SideNav: FC<SideNavProps> = (props) => {
             lg: 'translateX(-100%)',
           },
         }}
-        onClick={() => {handleSidenavXsOpen(false)}}
+        onClick={() => { handleSidenavXsOpen(false) }}
       />
-      <Box sx={{ display: 'flex', gap: 2, minHeight: "4rem", alignItems: 'center', justifyContent: 'center' }}>
-        <ElectricBoltRounded />
-        <Typography fontWeight="xl">SwampedDtv</Typography>
+      <Box sx={{ display: 'flex', gap: 2, minHeight: "2rem", alignItems: 'center', justifyContent: 'center' }}>
+        <Box className={"td-size-12"}>
+
+          <SwampedDtvLogo />
+        </Box>  {/* <Next/> */}
+        <Typography fontWeight="md">Swamped-Dtv</Typography>
         {/* <ColorSchemeToggle sx={{ ml: 'auto' }} /> */}
       </Box>
       <Box
@@ -268,7 +272,7 @@ const SideNav: FC<SideNavProps> = (props) => {
           {/* <Typography fontSize="sm" fontWeight="lg">
             Admin
           </Typography> */}
-          <Typography level="body-xs">{emailStage??""}</Typography>
+          <Typography level="body-xs">{emailStage ?? ""}</Typography>
         </Box>
         <IconButton variant="plain" color="neutral">
           {/* <i data-feather="log-out" /> */}
