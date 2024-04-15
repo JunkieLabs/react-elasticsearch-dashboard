@@ -33,10 +33,10 @@ export class UiResourceColor {
         "#f9e370",
 
         //light Blue
-        "#81bDe9",
+        "#67a9d9",
 
         //pink:
-        "#f5afc8",
+        "#fb8eb4",
         //lightClay:
         "#cbc396",
 

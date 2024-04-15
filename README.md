@@ -1,4 +1,20 @@
 
+![A Banner](images/swampedtv_banner.webp)
+
+
+
+### Next.js Analytics with Redux: Harnessing Elasticsearch for Actionable Insights
+
+
+Swamped TV Dashboard is a Next.js-powered analytics platform tailored for setup box data analysis. Harnessing the power of Elasticsearch, it offers insights into channel performance, top channels, slow channels, device monitoring, and configuration. Built with a modular Redux store and intuitive UI components.
+
+
+[![A Screen](images/swampedtv_screen.webp)](https://react-elastic.junkielabs.in)
+
+
+
+
+
 ## Project Overview
 
 This dashboard is designed to analyze and visualize data retrieved from an Elasticsearch database. It offers insights into various aspects of setup box data, such as channel performance, top channels, slow channels, device monitoring, and configuration details.

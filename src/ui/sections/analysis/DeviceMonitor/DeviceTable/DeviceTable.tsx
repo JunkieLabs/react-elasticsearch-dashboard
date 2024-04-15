@@ -162,7 +162,7 @@ const DeviceTableRow: FC<DeviceTableRowProps> = (props) => {
 
   return (
     <React.Fragment>
-      <tr key={row?.id}  onClick={(event) => handleClick(event, row.deviceId)}>
+      <tr key={row?.id} className="td-cursor-pointer"  onClick={(event) => handleClick(event, row.deviceId)}>
         <td>
           <IconButton
             aria-label="expand row"
