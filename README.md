@@ -9,7 +9,7 @@
 Swamped TV Dashboard is a Next.js-powered analytics platform tailored for setup box data analysis. Harnessing the power of Elasticsearch, it offers insights into channel performance, top channels, slow channels, device monitoring, and configuration. Built with a modular Redux store and intuitive UI components.
 
 
-[![A Screen](images/swampedtv_screen.webp)](https://react-elastic.junkielabs.in)
+[![A Screen](images/swampedtv_light_screen.webp)](https://react-elastic.junkielabs.in)
 
 
 
