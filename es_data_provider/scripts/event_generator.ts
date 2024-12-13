@@ -55,11 +55,11 @@ const assign = async () => {
 
 }
 
-const extract = async (): Promise<any[]> => {
+const extract = async (start:number=0, end:number=1000): Promise<any[]> => {
 
 
     let data = [];
-    for (let i = 0; i < 10000; i++) {
+    for (let i = start; i < end; i++) {
 
 
         for (let j = 0; j < 4; j++) {
@@ -91,8 +91,8 @@ const extract = async (): Promise<any[]> => {
         }
     }
     const bulk = [];
-    for (const cityItem of data) {
-        const document = cityItem;
+    for (const item of data) {
+        const document = item;
     
         // console.log("event_logs index: ", cityItem,)
     
@@ -110,10 +110,7 @@ const extract = async (): Promise<any[]> => {
 }
 
 
-const upload = async (bulk: any[]) => {
-
-    console.log("Upload: ", process.env.ELASTIC_URL)
-
+const clearAndCreate = async () =>{
 
     let client: Client;
 
@@ -141,9 +138,6 @@ const upload = async (bulk: any[]) => {
         });
     }
     let exist = await client.indices.exists({ index: esIndex })
-
-    console.log("exits: ", exist)
-
     if (exist) {
         let isDeleted = await client.indices.delete({
             index: esIndex
@@ -204,7 +198,103 @@ const upload = async (bulk: any[]) => {
         }
     });
 
-    if (isCreated) {
+    return isCreated;
+}
+
+const upload = async (bulk: any[]) => {
+
+    console.log("Upload: ", process.env.ELASTIC_URL)
+
+
+    let client: Client;
+
+
+    if (process.env.CA_64_CRT) {
+        client = new Client({
+            node: process.env.ELASTIC_URL,
+            tls: {
+                ca: Buffer.from(process.env.CA_64_CRT, 'base64').toString('utf8'),
+                checkServerIdentity : (host, cert) => {
+                    return undefined
+
+                }
+            },
+            auth: {
+                username: process.env.ELASTIC_USERNAME ?? "",
+                password: process.env.ELASTIC_PASSWORD ?? ""
+            }
+
+        });
+    } else {
+        client = new Client({
+            node: process.env.ELASTIC_URL,
+
+        });
+    }
+    // let exist = await client.indices.exists({ index: esIndex })
+
+    // console.log("exits: ", exist)
+
+    // if (exist) {
+    //     let isDeleted = await client.indices.delete({
+    //         index: esIndex
+    //     })
+
+    //     console.log("IsDeleted: ", isDeleted)
+    //     // , (err, res) => {
+    //     //     if (err) {
+    //     //         console.error(err);
+    //     //     } else {
+    //     //         console.log('Index deleted successfully');
+    //     //     }
+    //     // });
+    // }
+
+    // let isCreated = await client.indices.create({
+    //     index: esIndex,
+    //     mappings: {
+    //         "properties": {
+    //             // "channel_name": {
+    //             //     "type": "text"
+    //             // },
+    //             // "bouquet_name": { "type": "text" },
+    //             // "deviceId": { "type": "text" },
+    //             "user_age": { "type": "integer" },
+    //             "event": { "type": "text" },
+    //             "timestamp": {
+    //                 "type": "date",
+    //                 "store": true
+    //             },
+    //             "message": { "type": "text" },
+    //             "location": {
+    //                 "type": "geo_point"
+    //             }
+    //         },
+    //         "dynamic_templates": [
+    //             {
+    //                 "timestamps": {
+    //                     "match_mapping_type": "date",
+    //                     "mapping": {
+    //                         "type": "date",
+    //                         "format": "strict_date_optional_time||epoch_millis",
+    //                         "store": true
+    //                     }
+    //                 }
+    //             }
+    //         ],
+    //         "date_detection": true
+    //     },
+    //     settings: {
+    //         "index": {
+    //             "mapping": {
+    //                 "total_fields": {
+    //                     "limit": 2000
+    //                 }
+    //             }
+    //         }
+    //     }
+    // });
+
         let result = await client.bulk({
             body: bulk
         })
@@ -212,8 +302,7 @@ const upload = async (bulk: any[]) => {
 
         return true
 
-    }
-
+    
     return false
     // console.log("bulk: ", bulk[1])
 
@@ -223,11 +312,23 @@ const upload = async (bulk: any[]) => {
 
 const complete = async () => {
 
-    assign()
-    let bulk = await extract()
-    console.log("bulk: ", bulk.length)
-    return await upload(bulk)
+   await  assign()
 
+    var isCreated = await clearAndCreate();
+
+    if(!isCreated){
+        return false;
+    }
+    console.log("created: ")
+    let bulk = await extract(0, 500)
+    console.log("bulk: ", bulk.length)
+    var isuploaded =  await upload(bulk)
+
+    console.log("isuploaded: ", isuploaded);
+     bulk = await extract(500, 1000)
+    console.log("bulk 2: ", bulk.length)
+    return await upload(bulk)
+    // return isuploaded;
 
 }
 

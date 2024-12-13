@@ -40,9 +40,9 @@ const assign = async () => {
         deviceToPincode[`${deviceId}`] = pincode;
     });
 };
-const extract = async () => {
+const extract = async (start = 0, end = 1000) => {
     let data = [];
-    for (let i = 0; i < 10000; i++) {
+    for (let i = start; i < end; i++) {
         for (let j = 0; j < 4; j++) {
             const num_users = Math.floor(Math.random() * 4) + 1; // Decide number of users for this record (between 1 to 4)
             const users_gender = Array.from({ length: num_users }, () => genders[Math.floor(Math.random() * genders.length)]);
@@ -69,8 +69,8 @@ const extract = async () => {
         }
     }
     const bulk = [];
-    for (const cityItem of data) {
-        const document = cityItem;
+    for (const item of data) {
+        const document = item;
         // console.log("event_logs index: ", cityItem,)
         bulk.push({
             "index": {
@@ -82,8 +82,7 @@ const extract = async () => {
     }
     return bulk;
 };
-const upload = async (bulk) => {
-    console.log("Upload: ", process.env.ELASTIC_URL);
+const clearAndCreate = async () => {
     let client;
     if (process.env.CA_64_CRT) {
         client = new elasticsearch_1.Client({
@@ -106,7 +105,6 @@ const upload = async (bulk) => {
         });
     }
     let exist = await client.indices.exists({ index: esIndex });
-    console.log("exits: ", exist);
     if (exist) {
         let isDeleted = await client.indices.delete({
             index: esIndex
@@ -164,21 +162,113 @@ const upload = async (bulk) => {
             }
         }
     });
-    if (isCreated) {
-        let result = await client.bulk({
-            body: bulk
+    return isCreated;
+};
+const upload = async (bulk) => {
+    console.log("Upload: ", process.env.ELASTIC_URL);
+    let client;
+    if (process.env.CA_64_CRT) {
+        client = new elasticsearch_1.Client({
+            node: process.env.ELASTIC_URL,
+            tls: {
+                ca: Buffer.from(process.env.CA_64_CRT, 'base64').toString('utf8'),
+                checkServerIdentity: (host, cert) => {
+                    return undefined;
+                }
+            },
+            auth: {
+                username: process.env.ELASTIC_USERNAME ?? "",
+                password: process.env.ELASTIC_PASSWORD ?? ""
+            }
         });
-        // console.log("result: ", result)
-        return true;
     }
+    else {
+        client = new elasticsearch_1.Client({
+            node: process.env.ELASTIC_URL,
+        });
+    }
+    // let exist = await client.indices.exists({ index: esIndex })
+    // console.log("exits: ", exist)
+    // if (exist) {
+    //     let isDeleted = await client.indices.delete({
+    //         index: esIndex
+    //     })
+    //     console.log("IsDeleted: ", isDeleted)
+    //     // , (err, res) => {
+    //     //     if (err) {
+    //     //         console.error(err);
+    //     //     } else {
+    //     //         console.log('Index deleted successfully');
+    //     //     }
+    //     // });
+    // }
+    // let isCreated = await client.indices.create({
+    //     index: esIndex,
+    //     mappings: {
+    //         "properties": {
+    //             // "channel_name": {
+    //             //     "type": "text"
+    //             // },
+    //             // "bouquet_name": { "type": "text" },
+    //             // "deviceId": { "type": "text" },
+    //             "user_age": { "type": "integer" },
+    //             "event": { "type": "text" },
+    //             "timestamp": {
+    //                 "type": "date",
+    //                 "store": true
+    //             },
+    //             "message": { "type": "text" },
+    //             "location": {
+    //                 "type": "geo_point"
+    //             }
+    //         },
+    //         "dynamic_templates": [
+    //             {
+    //                 "timestamps": {
+    //                     "match_mapping_type": "date",
+    //                     "mapping": {
+    //                         "type": "date",
+    //                         "format": "strict_date_optional_time||epoch_millis",
+    //                         "store": true
+    //                     }
+    //                 }
+    //             }
+    //         ],
+    //         "date_detection": true
+    //     },
+    //     settings: {
+    //         "index": {
+    //             "mapping": {
+    //                 "total_fields": {
+    //                     "limit": 2000
+    //                 }
+    //             }
+    //         }
+    //     }
+    // });
+    let result = await client.bulk({
+        body: bulk
+    });
+    // console.log("result: ", result)
+    return true;
     return false;
     // console.log("bulk: ", bulk[1])
 };
 const complete = async () => {
-    assign();
-    let bulk = await extract();
+    await assign();
+    var isCreated = await clearAndCreate();
+    if (!isCreated) {
+        return false;
+    }
+    console.log("created: ");
+    let bulk = await extract(0, 500);
     console.log("bulk: ", bulk.length);
+    var isuploaded = await upload(bulk);
+    console.log("isuploaded: ", isuploaded);
+    bulk = await extract(500, 1000);
+    console.log("bulk 2: ", bulk.length);
     return await upload(bulk);
+    // return isuploaded;
 };
 require("dotenv").config();
 complete().then((result) => {
