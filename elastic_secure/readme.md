@@ -68,7 +68,12 @@ Follow these steps to set up Elastic DB and Kibana using Docker Desktop:
 4. **Run Docker Compose:**
 
    ```bash
-   docker-compose up -d
+   docker-compose up -d 
+   ```
+   *or*
+
+   ``` 
+   docker-compose -p react-elastic up --build -d
    ```
 
    This command will start Elastic DB and Kibana containers in the background.
@@ -82,10 +87,13 @@ Follow these steps to set up Elastic DB and Kibana using Docker Desktop:
    ```  
 
    - run changePassword.sh mounted inside the container
+   
+   *make sure changepassword.sh file is in LF*
 
    ```bash
    sh /usr/share/elasticsearch/changePassword.sh
    ```
+
 
 6. **Access Elastic Kibana:**
    - Open your web browser and go to [https://localhost:5601](https://localhost:5601).

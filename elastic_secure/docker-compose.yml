@@ -37,7 +37,7 @@ services:
       - ${ELASTIC_PORT}:9200
     networks:
       - elastic
-    restart: always
+    restart: unless-stopped
     healthcheck:
       test: curl --cacert $CERTS_DIR/ca/ca.crt -s https://localhost:${ELASTIC_PORT} >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
       interval: 30s
@@ -74,7 +74,7 @@ services:
       - ./certs:$CERTS_DIR
     networks:
       - elastic
-    restart: always
+    restart: unless-stopped
 
  
 
