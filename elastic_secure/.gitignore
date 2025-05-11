@@ -31,9 +31,12 @@ yarn-error.log*
 
 /certs/
 
+/nginx/
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+docker-compose-cloudflared.yml
