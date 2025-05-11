@@ -118,13 +118,13 @@ const clearAndCreate = async () =>{
     if (process.env.CA_64_CRT) {
         client = new Client({
             node: process.env.ELASTIC_URL,
-            tls: {
-                ca: Buffer.from(process.env.CA_64_CRT, 'base64').toString('utf8'),
-                checkServerIdentity : (host, cert) => {
-                    return undefined
+            // tls: {
+            //     ca: Buffer.from(process.env.CA_64_CRT, 'base64').toString('utf8'),
+            //     checkServerIdentity : (host, cert) => {
+            //         return undefined
 
-                }
-            },
+            //     }
+            // },
             auth: {
                 username: process.env.ELASTIC_USERNAME ?? "",
                 password: process.env.ELASTIC_PASSWORD ?? ""
@@ -212,13 +212,13 @@ const upload = async (bulk: any[]) => {
     if (process.env.CA_64_CRT) {
         client = new Client({
             node: process.env.ELASTIC_URL,
-            tls: {
-                ca: Buffer.from(process.env.CA_64_CRT, 'base64').toString('utf8'),
-                checkServerIdentity : (host, cert) => {
-                    return undefined
+            // tls: {
+            //     ca: Buffer.from(process.env.CA_64_CRT, 'base64').toString('utf8'),
+            //     checkServerIdentity : (host, cert) => {
+            //         return undefined
 
-                }
-            },
+            //     }
+            // },
             auth: {
                 username: process.env.ELASTIC_USERNAME ?? "",
                 password: process.env.ELASTIC_PASSWORD ?? ""

@@ -49,6 +49,18 @@ function getElasticOptions(): ClientOptions {
             }
 
         };
+    } else if (process.env.NEXT_ELASTIC_USERNAME) {
+
+        console.log("getElasticOptions elastic : ",process.env.NEXT_ELASTIC_URL )
+        return {
+            node: process.env.NEXT_ELASTIC_URL,
+            
+            auth: {
+                username: process.env.NEXT_ELASTIC_USERNAME ?? "",
+                password: process.env.NEXT_ELASTIC_PASSWORD ?? ""
+            }
+
+        };
     } else {
        return {
             node: process.env.NEXT_ELASTIC_URL,
